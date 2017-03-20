@@ -13,7 +13,7 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 
 module.exports = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+    rules: utils.styleLoaders({sourceMap: config.dev.cssSourceMap})
   },
   // cheap-module-eval-source-map is faster for development
   devtool: '#cheap-module-eval-source-map',
@@ -26,9 +26,16 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true
+      filename: 'app.html',
+      template: 'app.html',
+      inject: true,
+      chunks: ['app']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'login.html',
+      template: 'login.html',
+      inject: true,
+      chunks: ['login']
     }),
     new FriendlyErrorsPlugin()
   ]

@@ -46,8 +46,8 @@ var webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: config.build.index,
-      template: 'index.html',
+      filename: config.build.app,
+      template: 'app.html',
       inject: true,
       minify: {
         removeComments: true,
@@ -57,7 +57,20 @@ var webpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
+      chunksSortMode: 'dependency',
+      chunks: ['manifest','vendor','app']//需要引入的Chunk，不配置就会引入所有页面的资源
+    }),
+    new HtmlWebpackPlugin({
+      filename: config.build.login,
+      template: 'login.html',
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency',
+      chunks: ['manifest','vendor','login']//需要引入的Chunk，不配置就会引入所有页面的资源
     }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
