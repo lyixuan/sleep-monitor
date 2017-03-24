@@ -1,0 +1,55 @@
+<template>
+  <div class="header">
+    <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" >
+      <el-menu-item index="2"><i><img src="../assets/hospital-bed.png" alt="logo" style="vertical-align: top;margin-top: 5px;" height="50"><img src="../assets/logo-wenzi.png" alt="睡眠监测管理系统" height="34" style="vertical-align: top;margin-top: 13px;"></i></el-menu-item>
+      <el-submenu index="1">
+        <template slot="title">张三丰</template>
+        <el-menu-item index="1-1">系统配置</el-menu-item>
+        <el-menu-item index="1-2">退出</el-menu-item>
+      </el-submenu>
+    </el-menu>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'header',
+    data () {
+      return {
+        activeIndex:'1',
+        uusessions_name: '未登录'
+      }
+    },
+    mounted (){
+      this.getSession()
+    },
+    methods: {
+      getSession(){
+        let uusessions = JSON.parse(window.sessionStorage.getItem('uusessions'))
+        if (uusessions) {
+          this.uusessions_name = uusessions.userName
+        } else {
+//          var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.html";
+//          window.location.href = url;
+        }
+      },
+      handleSelect(key, keyPath) {
+        if ('logout' == key) {
+          this.$resource(PATH_LOGIN + 'logout').get().then((response) => {
+            if (response.status == 200) {
+              sessionStorage.removeItem('uusessions')
+              var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.html";
+              window.location.href = url;
+            } else {
+              this.alertMsg("error", response.status + " - " + response.url)
+            }
+          })
+        }
+      }
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>
