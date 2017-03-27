@@ -1,155 +1,629 @@
 <template>
-  <div class="search-index">
-    <el-row class="page-info">
-      <el-col :span="12" class="x-title">信息检索</el-col>
-    </el-row>
-    <el-row :gutter="10" class="row">
-      <el-col :span="2">
-        录入日期:
-      </el-col>
-      <el-col :span="5">
-        <el-date-picker v-model="date_range" type="daterange" placeholder="选择日期范围"></el-date-picker>
-      </el-col>
-      <el-col :span="1">
-        &nbsp;
-      </el-col>
-      <el-col :span="2">
-        就诊卡号:
-      </el-col>
-      <el-col :span="5">
-        <el-input v-model="card_id" placeholder="卡号"></el-input>
-      </el-col>
-      <el-col :span="5">
-        <el-button type="primary" @click="search" size="mini">检索</el-button>
-      </el-col>
-    </el-row>
-    <div class="cont">
-      <el-table
-        :data="tableData" border style="width: 100%" stripe empty-text>
-        <el-table-column prop="name" label="姓名" min-width="100" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="card_id" label="诊疗卡号" min-width="100" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="visit_date" label="就诊日期" min-width="110" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="sex" label="性别" min-width="70" :formatter="sexFormat"
-                         show-overflow-tooltip></el-table-column>
-        <el-table-column prop="age" label="年龄" min-width="70" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="birthday" label="出生日期" min-width="110" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="mobile" label="联系电话" min-width="120" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="addr" label="住址" min-width="120" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="create_date" label="录入日期" min-width="110" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="sick_type" label="疾病分类" min-width="100" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="sick_name" label="疾病名称" min-width="100" show-overflow-tooltip></el-table-column>
-        <el-table-column label="操作" width="90">
-          <template scope="scope">
-            <el-button type="text" size="small">详情</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+  <div class="dashboard">
+    <s-navi :data="navi_text" class="dashboard-navi"></s-navi>
+
+    <div class="box">
+      <div class="left">
+        <div class="row1">
+          <div class="l-h h1">楼层信息</div>
+          <div class="l-c" :class="{active:floor_active==item.floor_id}" v-for="item in floors"
+               @click="changeFloor(item.floor_id)">
+            <img src="../assets/img-dash/floor1.png" v-if="floor_active==item.floor_id"/>
+            <img src="../assets/img-dash/floor2.png" v-if="floor_active!=item.floor_id"/>
+            <i>{{item.floor_id}}F</i>
+            {{item.floor_des}}
+          </div>
+        </div>
+
+        <div class="row2">
+          <div class="l-h h2">详情统计</div>
+          <div class="l-c-2">
+            总共床位: <i>{{total.bed_sum}}</i>张
+          </div>
+          <div class="l-c-2">
+            运行床位: <i>{{total.bed_run}}</i>张
+          </div>
+          <div class="l-c-2">
+            空闲床位: <i>{{total.bed_down}}</i>张
+          </div>
+          <div class="l-c-2">
+            故障床位: <i>{{total.bed_break}}</i>张
+          </div>
+        </div>
+
+        <div class="row3">
+          <div class="l-h h3">报警详情</div>
+          <div class="l-c-3">
+            (最近24小时)
+          </div>
+          <div class="l-c-3-1">
+            详情
+          </div>
+          <table>
+            <tr style="font-weight: 600">
+              <td>时间</td>
+              <td>姓名</td>
+              <td>床位</td>
+              <td>报警信息</td>
+            </tr>
+            <tr v-if="alarm.lenght == 0">
+              <td colspan="4">暂无数据</td>
+            </tr>
+            <tr v-else v-for="item in alarm">
+              <td :title="item.alarm_time">{{(item.alarm_time).substr(11,5)}}</td>
+              <td :title="item.cust_name">{{item.cust_name}}</td>
+              <td :title="item.bed_id">{{item.bed_id}}</td>
+              <td :title="item.alarm_state_des">{{item.alarm_state_des}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <el-row class="center">
+        <el-col :span="24">
+          <el-row>
+            <el-col :span="24" class="row1">
+              <div class="c-t"><img src="../assets/img-dash/home.png" height="32" width="32"/>{{floor_detail.floor_id}}楼
+              </div>
+              <div class="c-s">共{{floor_detail.room_sum}}个房间</div>
+              <div class="c-m">
+                <div>床位状态:</div>
+                <div class="status ss1"><i></i>在床</div>
+                <div class="status ss2"><i></i>离床</div>
+                <div class="status ss3"><i></i>空闲</div>
+                <div class="status ss4"><i></i>空置</div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row class="room-row" v-for="room_row in floor_detail.room" :key="room_row.floor_id">
+            <el-col :span="6" class="room" v-for="room in room_row" :key="room.room_id">
+              <div class="r-header">房间:{{room.room_id}}</div>
+              <div class="r-cont">
+                <div class="room-item" v-for="bed in room.bed" :key="bed.bed_id">
+                  <div class="ri-l">
+                    <div class="ri-l-t">床位{{bed.bed_id}}</div>
+                    <div class="ri-l-p">
+                      <img src="../assets/img-dash/bed-1.png" height="26" v-if="bed.bed_state_id == 1"/>
+                      <img src="../assets/img-dash/bed-2.png" height="26" v-if="bed.bed_state_id == 2"/>
+                      <img src="../assets/img-dash/bed-3.png" height="26" v-if="bed.bed_state_id == 3"/>
+                      <img src="../assets/img-dash/bed-4.png" height="26" v-if="bed.bed_state_id == 0"/>
+                    </div>
+                  </div>
+                  <div class="ri-r">
+                    <div class="ri-r-t">工号：{{bed.cust_id == ''?'--':bed.cust_id }}</div>
+                    <div class="ri-r-s">姓名：{{bed.cust_name==''?'--':bed.cust_name}}</div>
+                  </div>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+      <div class="right">
+        <div class="row1">
+          <div class="r-h h4">床位总体信息</div>
+          <div id="pie" style="width: 200px;height: 280px;"></div>
+        </div>
+        <div class="row2">
+          <div class="r-h h5">楼层床位信息</div>
+          <s-e-b :pData="item" :sId="item.id" v-for="item in echart_bar" :key="item.id"></s-e-b>
+        </div>
+      </div>
     </div>
-    <div class="pagination">
-      <el-pagination
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
-        :current-page="current_page"
-        :page-size="page_size"
-        :page-sizes="[10, 50, 100, 200, 500]"
-        layout="total,sizes, prev, pager, next"
-        :total="total">
-      </el-pagination>
-    </div>
+
   </div>
 </template>
 
 <script>
+  import SNavi from '../components/Navi.vue'
+  import SEB from '../components/EchartBar.vue'
+  var echarts = require('echarts');
   export default {
-    name: 'search-index',
-    components: {},
+    name: 'dashboard',
+    components: {
+      SNavi, SEB
+    },
     data () {
       return {
-        date_range: [null, null],
-        card_id: null,
-        tableData: [],
-        current_page: 1,
-        page_size: 10,
-        total: 0
+        // 返回原始数据
+        return_data: {},
+        // 导航信息
+        navi_text: {
+          title: '公寓监控概览',
+          subTitle: '(更新时间:' + new Date() + ' 提示:数据每5分钟更新一次)',
+          btn: '手动更新'
+        },
+        //楼层信息
+        floors: [],
+        //楼层状态
+        floor_active: '1',
+        //详情统计
+        total: {
+          bed_sum: '',
+          bed_run: '',
+          bed_run_normal: '',
+          bed_run_alarm: '',
+          bed_down: '',
+          bed_break: ''
+        },
+        //报警信息
+        alarm: [],
+        //楼层详情——center
+        floor_detail: {
+          floor_id: 1,
+          room: []
+        },
+        echart_pie: {
+          xA: [],
+          yA: []
+        },
+        echart_bar: []
       }
     },
     mounted () {
-      this.search()
+      this.requestData()
     },
     methods: {
-      sexFormat(row, col){
-        let result = '未知'
-        if (row.sex == 'male') {
-          result = '男'
-        } else if (row.sex == 'female') {
-          result = '女'
-        }
-        return result
-      },
-      search(){
-        let params = {
-          start_date: this.date_range[0] ? this.formatDate(new Date(this.date_range[0])) : null,
-          end_date: this.date_range[1] ? this.formatDate(new Date(this.date_range[1])) : null,
-          card_id: this.card_id,
-          current_page: this.current_page,
-          page_size: this.page_size
-        }
-        this.$resource(PATH_SEARCH + 'list').get(params).then((response) => {
-          if (response.status == 200 && response.body.code == 200) {
-            this.tableData = response.body.data
-            this.total = response.body.total
-            this.page_size = response.body.page_size
-            this.current_page = response.body.current_page
-          } else {
-            this.alertMsg("error", response.status + " - " + response.url)
-          }
+      requestData(){
+        this.$resource(P_MONITOR + 'dashboard').get().then((response) => {
+          let r_data = response.body.data;
+          // 存储原始数据
+          this.return_data = r_data;
+
+          // 处理数据
+          this.getFloors(r_data.floors);
+          this.getTotal(r_data.total);
+          this.getAlarm(r_data.alarm);
+          this.getPie(r_data.total);
+          this.getBar(r_data.floors);
+
+          // 图表渲染
+          this.createPie(this.echart_pie)
+
         })
       },
-      handleCurrentChange(val){
-        this.current_page = val;
-        this.search()
+      getFloors(floors){
+        this.floors = [];
+        for (let key in floors) {
+          this.floors.push({
+            floor_id: floors[key].floor_id,
+            floor_des: floors[key].floor_des
+          })
+        }
+        this.changeFloor(floors[Object.getOwnPropertyNames(floors)[0]].floor_id)
       },
-      handleSizeChange(val){
-        this.current_page = 1;
-        this.page_size = val;
-        this.search()
-      }
+      getTotal(total){
+        this.total = total;
+      },
+      getAlarm(alarm){
+        this.alarm = alarm;
+      },
+      changeFloor(floor_id){
+        this.floor_active = floor_id;
+        this.getFloorDetail(floor_id, this.return_data.floors)
+      },
+      getFloorDetail(floor_id, return_floors){
+        console.log(floor_id)
+        let f_detail = return_floors['floor_' + floor_id];
+        console.log(f_detail)
+        this.floor_detail = {
+          floor_id: f_detail.floor_id,
+          room_sum: f_detail.room_sum,
+          room: []
+        };
+        // 将一维数组构造为二维数组
+        for (let i = 0; i < f_detail.room.length; i++) {
+          if (i % 4 == 0) {
+            this.floor_detail.room.push([])
+          }
+          this.floor_detail.room[this.floor_detail.room.length - 1].push(f_detail.room[i])
+        }
+      },
+      getPie(total){
+        this.echart_pie.xA = ['正常', '报警', '空闲', '故障']
+        this.echart_pie.yA = [
+          {value: total.bed_run_normal, name: '正常'},
+          {value: total.bed_run_alarm, name: '报警'},
+          {value: total.bed_down, name: '空闲'},
+          {value: total.bed_break, name: '故障'}
+        ]
+      },
+      getBar(floors){
+        this.echart_bar = [];
+        for (let key in floors) {
+          let fb = floors[key].floor_bed;
+          this.echart_bar.push({
+              title: floors[key].floor_des,
+              id: floors[key].floor_id,
+              xA: ['正常', '报警', '空闲', '故障'],
+              yA: [
+                {value: fb.bed_run_normal, name: '正常'},
+                {value: fb.bed_run_alarm, name: '报警'},
+                {value: fb.bed_down, name: '空闲'},
+                {value: fb.bed_break, name: '故障'}
+              ]
+            }
+          )
+        }
+      },
+      createPie(p_data){
+        var myChart = echarts.init(document.getElementById('pie'));
+        var option = {
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+          },
+          color: ['#91C7AE', '#C23531', '#D48265', '#2F4554'],
+          legend: {
+            x: 'center',
+            y: 'bottom',
+            data: p_data.xA,
+            formatter: function (name) {
+              var oa = option.series[0].data;
+              var num = oa[0].value + oa[1].value;
+              for (var i = 0; i < option.series[0].data.length; i++) {
+                if (name == oa[i].name) {
+                  return name + ' ' + oa[i].value + ' ' + (oa[i].value / num * 100).toFixed(2) + '%';
+                }
+              }
+            }
+          },
+          series: [
+            {
+              name: '床位总体信息',
+              type: 'pie',
+              radius: ['45%', '80%'],
+              center: ['50%', '35%'],
+              data: p_data.yA,
+              label: {
+                normal: {
+                  show: false,
+                  position: 'center'
+                },
+                emphasis: {
+                  show: true,
+                  textStyle: {
+                    fontSize: '28',
+                    fontWeight: 'bold'
+                  }
+                }
+              },
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              }
+            }
+          ]
+        };
+        myChart.setOption(option);
+      },
     }
   }
 </script>
 
 <style scoped>
-  .row {
-    height: 50px;
-    line-height: 50px;
-    padding: 0 10px;
+
+  .dashboard-navi {
+    margin-bottom: 5px;
   }
 
-  .page-info {
+  .box {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .left, .right {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+  }
+
+  .left {
+    margin-right: 5px;
+  }
+
+  .right {
+    margin-left: 5px;
+  }
+
+  .center {
+    width: 100%;
+  }
+
+  .left .row1, .left .row2, .left .row3 {
+    background: #fff;
+  }
+
+  .left .row1 {
+    min-height: 200px;
+    border-top: 1px solid #20C3A9;
+    padding-bottom: 10px;
+  }
+
+  .left .row2 {
+    height: 170px;
+    margin-top: 5px;
+    border-top: 1px solid #FFAD30;
+  }
+
+  .left .row3 {
+    min-height: 330px;
+    max-height: 380px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 5px;
+    border-top: 1px solid #E73D3D;
+    padding-bottom: 10px;
+
+  }
+
+  .right .row1, .right .row2 {
+    background: #fff;
+  }
+
+  .right .row1 {
+    min-height: 300px;
+    overflow: hidden;
+    border-top: 1px solid #88C657;
+  }
+
+  .right .row2 {
+    min-height: 415px;
+    max-height: 465px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 5px;
+    border-top: 1px solid #2D9BF5;
+  }
+
+  /*center */
+
+  .center .row1 {
     height: 40px;
     line-height: 40px;
-    border-bottom: 1px solid #D7D7D7;
-    padding: 0 10px;
-    box-sizing: border-box;
-    overflow: hidden;
+    border-top: 1px solid #87C556;
+    background: #fff;
   }
 
-  .cont {
-    padding: 0 10px;
-    margin-top: 20px;
+  .center .row1 > div {
+    float: left;
   }
 
-  .pagination {
-    margin: 20px 10px;
+  .center .row1 > div.c-t {
+    font-size: 16px;
+    color: #1D8CE0;
+    margin-right: 10px;
+  }
+
+  .center .row1 > div.c-t img {
+    width: 26px;
+    height: 26px;
+    margin-top: -5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  .center .row1 > div.c-s {
+    color: #888888;
+    font-size: 12px;
+  }
+
+  .center .row1 > div.c-m {
     float: right;
   }
 
-  .el-input {
+  .center .row1 > div.c-m > div {
+    float: left;
+    color: #888;
+    margin-right: 5px;
+  }
+
+  .center .row1 > div.c-m > div.status > i {
+    width: 12px;
+    height: 12px;
     display: inline-block;
+    border-radius: 6px;
+    background: #2986CC;
+    vertical-align: middle;
+    margin-top: -3px;
   }
 
-  .el-button--primary {
-    padding: 6px 12px;
+  .center .row1 > div.c-m > div.ss2 > i {
+    background: #EB9CC1;
   }
 
+  .center .row1 > div.c-m > div.ss3 > i {
+    background: #CDCDCD;
+  }
+
+  .center .row1 > div.c-m > div.ss4 > i {
+    background: #707070;
+  }
+
+  .room-row {
+    margin-top: 6px;
+  }
+
+  /*room */
+  .room {
+    padding-right: 3px;
+    box-sizing: border-box;
+  }
+
+  .room:last-child {
+    padding-right: 0;
+  }
+
+  .r-header {
+    box-sizing: border-box;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    background: #1D8CE0;
+    opacity: .9;
+    border-radius: 4px 4px 0 0;
+    padding: 0 5px;
+    color: #fff;
+  }
+
+  .r-cont {
+    background: #fff;
+    width: 98%;
+    margin: 0 auto;
+    min-height: 100px;
+    padding-bottom: 5px;
+    overflow: hidden;
+  }
+
+  .room-item {
+    border: 1px solid #58B7FF;
+    border-radius: 4px;
+    margin: 5px 5px 0 5px;
+    height: 50px;
+  }
+
+  .ri-l, .ri-r {
+    float: left;
+  }
+
+  .ri-l {
+    padding: 0 6px;
+  }
+
+  .ri-r {
+    padding-top: 8px;
+    padding-left: 5px;
+  }
+
+  /*left-con*/
+  .l-h {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .h1 {
+    color: #20C3A9;
+  }
+
+  .h2 {
+    color: #FFAE30;
+  }
+
+  .h3 {
+    color: #E73D3D;
+  }
+
+  .l-c {
+    position: relative;
+    padding-left: 40px;
+    color: #bebebe;
+    margin-top: 10px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .l-c.active {
+    color: #20C3A9;
+  }
+
+  .l-c img {
+    height: 24px;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
+  .l-c i {
+    position: absolute;
+    z-index: 2;
+    left: 45px;
+    top: 4px;
+  }
+
+  .l-c-2 {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .l-c-2 > i {
+    display: inline-block;
+    width: 26px;
+  }
+
+  .l-c-3 {
+    color: #bbb;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .l-c-3-1 {
+    color: #1D8CE0;
+    text-align: right;
+    font-size: 12px;
+    padding-right: 10px;
+    cursor: pointer;
+  }
+
+  .tb-1 > div {
+    float: left;
+  }
+
+  .tb-1 > div:not(:first-child) {
+    margin-left: 10px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  tr {
+    border: 1px solid #cdcdcd;
+    border-right: none;
+    border-left: none;
+  }
+
+  td {
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  td:nth-child(1) {
+    max-width: 40px;
+  }
+
+  td:nth-child(2) {
+    max-width: 40px;
+  }
+
+  td:nth-child(3) {
+    max-width: 40px;
+  }
+
+  td:nth-child(4) {
+    max-width: 70px;
+  }
+
+  /*right-con*/
+  .r-h {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .h4 {
+    color: #88C657;
+  }
+
+  .h5 {
+    color: #2D9BF5;
+  }
 </style>

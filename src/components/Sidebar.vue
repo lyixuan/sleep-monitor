@@ -2,7 +2,7 @@
   <div class="sidebar" id="sidebar">
     <!--<div class="sidebar-header" @click="changeSidebar">济南公寓<i class="el-icon-more"></i></div>-->
     <div class="menu logo-menu" @click="changeSidebar">
-      <i class="icon-logo"><img src="../assets/jinan-logo.png" width="25" style="margin-top: 8px;vertical-align: top"></i>
+      <i class="icon-logo"><img src="../assets/img-com/jinan-logo.png" width="25" style="margin-top: 8px;vertical-align: top"></i>
       <span style="font-size: 16px;color:#fff;font-weight: bold;letter-spacing: 3px;margin-right: 24px;">济南公寓</span>
       <i class="el-icon-arrow-left icon-r" :class="{rShow:rIsShow === 3}"></i>
       <i class="el-icon-arrow-left icon-r" :class="{rShow:rIsShow === 2}"></i>
@@ -11,37 +11,37 @@
 
     <router-link to="/dashboard">
       <div class="menu">
-        <i class="el-icon-search icon"></i>
+        <img class="icon" src="../assets/img-com/icon-jiankong.png"/>
         <span>公寓监控概览</span>
       </div>
     </router-link>
     <router-link to="/bedStatusMonitor">
       <div class="menu">
-        <i class="el-icon-document icon"></i>
+        <img class="icon" src="../assets/img-com/icon-chuang.png"/>
         <span>床位状态监控</span>
       </div>
     </router-link>
     <router-link to="/hAlertMonitor">
       <div class="menu">
-        <i class="el-icon-document icon"></i>
+        <img class="icon" src="../assets/img-com/icon-baojing.png" style="width: 22px;margin-left: -2px;"/>
         <span>24小时报警监控</span>
       </div>
     </router-link>
     <router-link to="/hSleepMonitor">
       <div class="menu">
-        <i class="el-icon-document icon"></i>
+        <img class="icon"  src="../assets/img-com/icon-shuimian.png"/>
         <span>24小时睡眠监控</span>
       </div>
     </router-link>
     <router-link to="/alertSearch">
       <div class="menu">
-        <i class="el-icon-document icon"></i>
+        <img class="icon" src="../assets/img-com/icon-bjjiansuo.png"/>
         <span>报警检索</span>
       </div>
     </router-link>
     <router-link to="/reportSearch">
       <div class="menu">
-        <i class="el-icon-document icon"></i>
+        <img class="icon" src="../assets/img-com/icon-jiansuo.png"/>
         <span>报告检索</span>
       </div>
     </router-link>
@@ -58,12 +58,13 @@
       }
     },
     mounted(){
-      this.animation()
+//      this.animation()
     },
     methods: {
       animation(){
+//        会导致内存溢出,怀疑rIsShow无限增加导致,尚未验证
         let that = this;
-        setInterval(fn,800)
+        setInterval(fn,400)
         function fn() {
           that.rIsShow = ((that.rIsShow)%3)+1;
         }
@@ -138,12 +139,12 @@
 
   .sidebar {
     position: fixed;
-    top: 60px;
+    top: 50px;
     left: 0;
     bottom: 0;
     width: 160px;
     background: #324157;
-    z-index: 100;
+    z-index: 200;
   }
 
   .menu {
@@ -152,7 +153,7 @@
     width: 160px;
     background: #4A5064;
     text-align: left;
-    padding-left: 20px;
+    padding-left: 15px;
     color: #fff;
     overflow: hidden;
     margin-top: 1px;
@@ -175,8 +176,9 @@
   }
 
   .icon {
-    margin-right: 10px;
-    color: #fff;
+    margin-right: 5px;
+    width: 18px;
+    vertical-align: text-bottom;
   }
 
   .icon-logo {
@@ -189,7 +191,7 @@
   }
 
   .icon-r {
-    margin-left: -15px;
+    margin-left: -16px;
     color: #ddd;
     opacity: 0;
   }

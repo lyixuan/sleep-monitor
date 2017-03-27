@@ -3,13 +3,19 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import VueResource from 'vue-resource'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
-import './assets/cover.css'
+import './assets/css/cover.css'
 
 Vue.config.productionTip = false
+Vue.use(VueResource)
 Vue.use(ElementUI)
 /* eslint-disable no-new */
+
+require('./root-conf')
+require('./common')
+
 new Vue({
   el: '#app',
   router,

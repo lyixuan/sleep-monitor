@@ -17,6 +17,7 @@
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 100;
     width: 100%;
     background: #f3f3f3;
     height: 30px;
