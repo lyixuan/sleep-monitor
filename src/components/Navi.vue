@@ -1,8 +1,8 @@
 <template>
   <div class="navi">
-    <p class="title">{{data.title}}</p>
-    <p class="subTitle">{{data.subTitle}}</p>
-    <p class="subTtn">{{data.btn}}</p>
+    <p class="title">{{nData.title}}</p>
+    <p class="subTitle">{{nData.subTitle}}</p>
+    <p class="subTtn" v-on:click="custEvt">{{nData.btn}}</p>
   </div>
 </template>
 
@@ -10,8 +10,13 @@
   export default {
     name: 'navi',
     props: {
-      data: {}
+      nData: {}
     },
+    methods:{
+      custEvt(){
+        this.$emit('custevt')
+      }
+    }
   }
 </script>
 
@@ -29,6 +34,7 @@
     margin-right: 10px;
     font-weight: 500;
     color: #333;
+    font-size: 14px;
   }
   .subTitle{
     float: left;

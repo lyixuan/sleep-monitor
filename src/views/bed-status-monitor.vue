@@ -1,6 +1,6 @@
 <template>
   <div class="bed-monitor">
-    <s-navi :data="naviText"></s-navi>
+    <!--<s-navi :data="naviText"></s-navi>-->
   </div>
 </template>
 
@@ -21,7 +21,7 @@
       }
     },
     mounted () {
-      this.search()
+//      this.search()
     },
     methods: {
       sexFormat(row, col){

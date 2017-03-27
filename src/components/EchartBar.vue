@@ -10,11 +10,16 @@
     props: {
       pData: Object,
       sId: {
-        type:[String,Number]
+        type: [String, Number]
       }
     },
     mounted () {
-      this.createEcharts(this.sId,this.pData)
+      this.createEcharts(this.sId, this.pData)
+    },
+    watch: {
+      pData: function (newVal, oldVal) {
+        this.createEcharts(this.sId, this.pData)
+      }
     },
     methods: {
       createEcharts(sId, pData){
@@ -37,7 +42,7 @@
             left: '3%',
             right: '4%',
             bottom: '30',
-            top:'30',
+            top: '30',
             containLabel: true
           },
           xAxis: [{
@@ -56,7 +61,7 @@
             itemStyle: {
               normal: {
                 color: function (params) {
-                  var colorList = ['#91C7AE', '#C23531','#D48265','#2F4554'];
+                  var colorList = ['#91C7AE', '#C23531', '#D48265', '#2F4554'];
                   return colorList[params.dataIndex]
                 }
               }
