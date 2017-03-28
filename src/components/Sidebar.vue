@@ -15,31 +15,31 @@
         <span>公寓监控概览</span>
       </div>
     </router-link>
-    <router-link to="/bedStatusMonitor">
+    <router-link to="/bed_state">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-chuang.png"/>
         <span>床位状态监控</span>
       </div>
     </router-link>
-    <router-link to="/hAlertMonitor">
+    <router-link to="/alarm_24monitor">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-baojing.png" style="width: 22px;margin-left: -2px;"/>
         <span>24小时报警监控</span>
       </div>
     </router-link>
-    <router-link to="/hSleepMonitor">
+    <router-link to="/sleep_24monitor">
       <div class="menu">
         <img class="icon"  src="../assets/img-com/icon-shuimian.png"/>
         <span>24小时睡眠监控</span>
       </div>
     </router-link>
-    <router-link to="/alertSearch">
+    <router-link to="/alarm_search">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-bjjiansuo.png"/>
         <span>报警检索</span>
       </div>
     </router-link>
-    <router-link to="/reportSearch">
+    <router-link to="/report_search">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-jiansuo.png"/>
         <span>报告检索</span>

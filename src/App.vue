@@ -45,6 +45,9 @@
   i {
     font-style: normal;
   }
+  th{
+    font-weight: normal;
+  }
 
   #view-wrap {
     width: 100%;

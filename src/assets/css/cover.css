@@ -24,3 +24,6 @@
 .header .el-menu--horizontal .el-submenu>.el-menu{
   top:55px;
 }
+.el-checkbox__label,.el-radio__label{
+  font-size: 13px;
+}

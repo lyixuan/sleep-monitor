@@ -8,20 +8,20 @@
       width="800"
       trigger="click">
       <el-table :data="alarm">
-        <el-table-column width="100" property="cust_id" label="工号"></el-table-column>
-        <el-table-column width="100" property="cust_name" label="姓名"></el-table-column>
-        <el-table-column show-overflow-tooltip property="sche_begin_time" label="计划入寓时间"></el-table-column>
-        <el-table-column show-overflow-tooltip property="sche_end_time" label="计划出寓时间"></el-table-column>
-        <el-table-column show-overflow-tooltip property="workshop_des" label="车间"></el-table-column>
-        <el-table-column show-overflow-tooltip property="fleet_des" label="车队"></el-table-column>
-        <el-table-column show-overflow-tooltip property="group_des" label="指导组"></el-table-column>
-        <el-table-column show-overflow-tooltip property="apart_des" label="公寓"></el-table-column>
-        <el-table-column show-overflow-tooltip property="floor_des" label="楼层"></el-table-column>
-        <el-table-column show-overflow-tooltip property="room_des" label="房间"></el-table-column>
-        <el-table-column show-overflow-tooltip property="bed_des" label="床位"></el-table-column>
-        <el-table-column show-overflow-tooltip property="bed_state_des" label="床位状态"></el-table-column>
-        <el-table-column show-overflow-tooltip property="alarm_state_des" label="报警类型"></el-table-column>
-        <el-table-column show-overflow-tooltip property="alarm_time" label="报警时间"></el-table-column>
+        <el-table-column min-width="100"  property="cust_id" label="工号"></el-table-column>
+        <el-table-column min-width="100"  property="cust_name" label="姓名"></el-table-column>
+        <el-table-column min-width="180" show-overflow-tooltip property="sche_begin_time" label="计划入寓时间"></el-table-column>
+        <el-table-column min-width="180" show-overflow-tooltip property="sche_end_time" label="计划出寓时间"></el-table-column>
+        <el-table-column min-width="100" show-overflow-tooltip property="workshop_des" label="车间"></el-table-column>
+        <el-table-column min-width="100" show-overflow-tooltip property="fleet_des" label="车队"></el-table-column>
+        <el-table-column min-width="100" show-overflow-tooltip property="group_des" label="指导组"></el-table-column>
+        <el-table-column min-width="100" show-overflow-tooltip property="apart_des" label="公寓"></el-table-column>
+        <el-table-column min-width="100" show-overflow-tooltip property="floor_des" label="楼层"></el-table-column>
+        <el-table-column min-width="100" show-overflow-tooltip property="room_des" label="房间"></el-table-column>
+        <el-table-column min-width="100" show-overflow-tooltip property="bed_des" label="床位"></el-table-column>
+        <el-table-column min-width="120" show-overflow-tooltip property="bed_state_des" label="床位状态"></el-table-column>
+        <el-table-column min-width="120" show-overflow-tooltip property="alarm_state_des" label="报警类型"></el-table-column>
+        <el-table-column min-width="180" show-overflow-tooltip property="alarm_time" label="报警时间"></el-table-column>
       </el-table>
     </el-popover>
 
@@ -218,7 +218,7 @@
           this.getPie(r_data.total);
           this.getBar(r_data.floors);
           // 图表渲染
-          this.createPie(this.echart_pie)
+          this.createPie(this.echart_pie);
 
           // 更新时间
           this.navi_text.subTitle = '(更新时间:' + (new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes() ) ) + '   提示:数据每5分钟更新一次)'
@@ -535,8 +535,7 @@
   }
 
   .room-item {
-    border: 1px solid #20A0FF;
-    background: #fcfcfc;
+    background: #E5E9F2;
     border-radius: 4px;
     margin: 5px 5px 0 5px;
     height: 50px;

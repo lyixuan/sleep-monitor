@@ -1,20 +1,19 @@
 <template>
-  <div class="h-sleep-monitor">
+  <div class="h-alert-monitor">
     <s-navi :nData="navi_text"></s-navi>
 
     <div class="chart">
-      <div class="c-h">睡眠质量统计图</div>
+      <div class="c-h">报警状态统计图</div>
       <div class="c-b">
         <div id="left-ct"></div>
-        <div id="right-ct"></div>
       </div>
     </div>
 
     <div class="table">
-      <div class="t-h">24小时睡眠监控详情</div>
+      <div class="t-h">24小时报警监控详情</div>
       <div class="t-b">
         <div class="t-bd">
-          <el-table :data="sleepArr" style="width: 100%" border
+          <el-table :data="alarmArr" style="width: 100%" border
                     :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
             <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
@@ -22,10 +21,6 @@
             <el-table-column prop="sche_begin_time" label="计划入寓时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="sche_end_time" label="计划出寓时间" min-width="180" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="in_time" label="实际入寓时间" min-width="180" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="out_time" label="实际出寓时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="workshop_des" label="车间" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
@@ -40,25 +35,22 @@
             <el-table-column prop="room_des" label="房间" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="monitor_time" label="监控时长" min-width="120" show-overflow-tooltip
+            <el-table-column prop="bed_state_des" label="床位状态" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="sleep_time" label="睡眠时长" min-width="120" show-overflow-tooltip
+            <el-table-column prop="alarm_state_des" label="报警类型" min-width="150" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="sleep_per" label="睡眠占比" min-width="120" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="assess_state_des" label="睡眠评估" min-width="120" show-overflow-tooltip
+            <el-table-column prop="alarm_time" label="报警时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
           </el-table>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-  import SNavi from '../components/Navi.vue'
   var echarts = require('echarts');
+  import SNavi from '../components/Navi.vue'
   export default {
     name: 'search-index',
     components: {
@@ -67,11 +59,11 @@
     data () {
       return {
         navi_text: {
-          title: '24小时睡眠监控',
+          title: '24小时报警监控',
           subTitle: '',
           btn: ''
         },
-        sleepArr: []
+        alarmArr: [],
       }
     },
     mounted () {
@@ -80,7 +72,7 @@
       var timer = null;
       timer = setInterval(update, 1000 * 60 * 5)
       function update() {
-        if (window.location.hash.indexOf('sleep_24monitor') > 0) {
+        if (window.location.hash.indexOf('alarm_24monitor') > 0) {
           _this.requestData()
         } else {
           clearInterval(timer)
@@ -89,14 +81,13 @@
     },
     methods: {
       requestData(){
-        this.$resource(P_MONITOR + 'sleep_24monitor').get().then((response) => {
+        this.$resource(P_MONITOR + 'alarm_24monitor').get().then((response) => {
           let r_data = response.body.data;
           // 处理数据
-          this.sleepArr = r_data.sleep_data
+          this.alarmArr = r_data.alarm_data
 
           // 图表渲染
-          this.createBar(r_data.sleep_info)
-          this.createPie(r_data.sleep_info)
+          this.createBar(r_data.alarm_info)
 
           // 更新时间
           this.navi_text.subTitle = '(更新时间:' + (new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes() ) ) + '   提示:数据每5分钟更新一次)'
@@ -106,11 +97,22 @@
       createBar(data){
         let myChart = echarts.init(document.getElementById('left-ct'));
 
-        var xData = data.per
-        var num = data.num
+        var xData = data.time
+        var a1 = data.a1
+        var a2 = data.a2
+        var a3 = data.a3
+        var a4 = data.a4
+        var a5 = data.a5
+        var a6 = data.a6
+        var total = []
+        for (let i = 0; i < xData.length; i++) {
+          total[i] = a1[i] + a2[i] + a3[i] + a4[i] + a5[i] + a6[i]
+        }
+
         let option = {
           title: {
-            text: "24小时睡眠时间占比统计",
+            text: "24小时报警统计",
+            subtext:"统计时间点前一个小时数据",
             x: "1%",
             textStyle: {
               color: '#446699',
@@ -118,25 +120,37 @@
             }
           },
           tooltip: {
-//            "trigger": "axis",
+            "trigger": "axis",
             "axisPointer": {
               "type": "shadow",
               textStyle: {
                 color: "#fff"
               }
+
             },
           },
           grid: {
             "borderWidth": 0,
-            "top": '18%',
+            "top": '25%',
+            "left":"5%",
+            "right":"5%",
             "bottom": '15%',
             textStyle: {
               color: "#fff"
             }
           },
+          legend: {
+            x: '30%',
+            top: '2%',
+            textStyle: {
+              color: '#90979c',
+            },
+            "data": ['设备故障', '睡眠时间不足60%', '在床未睡1小时', '离床3次', '离床30分钟', '频繁体动']
+          },
+
           calculable: true,
           xAxis: [{
-            "name": '睡眠时间比',
+            "name": '时间',
             "nameGap": '5',
             "type": "category",
             "axisLine": {
@@ -183,14 +197,51 @@
           }],
 
           series: [{
-              "name": "睡眠时间占比",
+            "name": "设备故障",
+            "type": "bar",
+            "stack": "总数",
+            "itemStyle": {
+              "normal": {
+                "color": "#c23531",
+                "barBorderRadius": 0,
+                "label": {
+                  "show": true,
+                  "position": "top",
+                  formatter: function (p) {
+                    return p.value > 0 ? (p.value) : '';
+                  }
+                }
+              }
+            },
+            "data": a1
+          },
+            {
+              "name": "睡眠时间不足60%",
+              "type": "bar",
+              "stack": "总数",
+              "itemStyle": {
+                "normal": {
+                  "color": "#2f4554",
+                  "barBorderRadius": 0,
+                  "label": {
+                    "show": true,
+                    "position": "inside",
+                    formatter: function (p) {
+                      return p.value > 0 ? (p.value) : '';
+                    }
+                  }
+                }
+              },
+              "data": a2
+            }, {
+              "name": "在床未睡1小时",
               "type": "bar",
               "stack": "总数",
               "barMaxWidth": 25,
               "barGap": "10%",
               "itemStyle": {
                 "normal": {
-                  "color": "#61A0A8",
+                  "color": "#61a0a8",
                   "label": {
                     "show": true,
                     "textStyle": {
@@ -203,9 +254,68 @@
                   }
                 }
               },
-              "data": num,
+              "data": a3,
             }, {
-              "name": "睡眠时间占比",
+              "name": "离床3次",
+              "type": "bar",
+              "stack": "总数",
+              "itemStyle": {
+                "normal": {
+                  "color": "#d48265",
+                  "barBorderRadius": 0,
+                  "label": {
+                    "show": true,
+                    "position": "top",
+                    formatter: function (p) {
+                      return p.value > 0 ? (p.value) : '';
+                    }
+                  }
+                }
+              },
+              "data": a4
+            },
+            {
+              "name": "离床30分钟",
+              "type": "bar",
+              "stack": "总数",
+              "itemStyle": {
+                "normal": {
+                  "color": "#91c7ae",
+                  "barBorderRadius": 0,
+                  "label": {
+                    "show": true,
+                    "position": "inside",
+                    formatter: function (p) {
+                      return p.value > 0 ? (p.value) : '';
+                    }
+                  }
+                }
+              },
+              "data": a5
+            }, {
+              "name": "频繁体动",
+              "type": "bar",
+              "stack": "总数",
+              "barMaxWidth": 25,
+              "barGap": "10%",
+              "itemStyle": {
+                "normal": {
+                  "color": "#749f83",
+                  "label": {
+                    "show": true,
+                    "textStyle": {
+                      "color": "#fff"
+                    },
+                    "position": "insideTop",
+                    formatter: function (p) {
+                      return p.value > 0 ? (p.value) : '';
+                    }
+                  }
+                }
+              },
+              "data": a6,
+            },{
+              "name": "累计",
               "type": "line",
               "stack": "总数",
               symbolSize: 8,
@@ -223,77 +333,12 @@
                   }
                 }
               },
-              "data": num
+              "data": total
             },
           ]
         };
         myChart.setOption(option);
       },
-      createPie(data){
-        let myChart = echarts.init(document.getElementById('right-ct'));
-
-        let good_sum = data.good
-        let ok_sum = data.ok
-        let bad_sum = data.bad
-
-        let yA = [
-          {value: good_sum, name: '良好'},
-          {value: ok_sum, name: '一般'},
-          {value: bad_sum, name: '差'},
-        ];
-        let total = good_sum + ok_sum + bad_sum
-
-        let option = {
-          title: {
-            text: "24小时睡眠质量占比统计",
-            x: "1%",
-            subtext: "统计人次:" + total,
-            textStyle: {
-              color: '#446699',
-              fontSize: '13'
-            }
-          },
-          tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
-          },
-          color: ['#61A0A8', '#D48265', '#C23531'],
-          legend: {
-            orient: 'vertical',
-            x: 'right',
-            data: ['良好', '一般', '差'],
-            formatter: function (name) {
-              var oa = option.series[0].data;
-              var num = oa[0].value + oa[1].value + oa[2].value;
-              for (var i = 0; i < option.series[0].data.length; i++) {
-                if (name == oa[i].name) {
-                  return name + '     ' + oa[i].value + '     ' + (oa[i].value / num * 100).toFixed(2) + '%';
-                }
-              }
-            }
-          },
-          series: [
-            {
-              name: '睡眠质量占比',
-              type: 'pie',
-              radius: '55%',
-              center: ['50%', '58%'],
-              data: yA,
-              itemStyle: {
-                normal: {
-                  label: {
-                    show: true,
-                    formatter: '{b} : {c} ({d}%)'
-                  }
-                },
-                labelLine: {show: true}
-              }
-            }
-          ]
-        };
-
-        myChart.setOption(option);
-      }
     }
   }
 </script>
@@ -303,16 +348,6 @@
 
   #left-ct {
     height: 100%;
-    width: 60%;
-    float: left;
-  }
-
-  #right-ct {
-    height: 100%;
-    width: 40%;
-    float: right;
-  }
-  .t-bd{
-    padding: 10px;
+    width: 100%;
   }
 </style>

@@ -1,0 +1,40 @@
+/*图表*/
+.chart {
+  width: 100%;
+  overflow: hidden;
+  background: #fff;
+  margin-top: 5px;
+}
+
+.c-h {
+  height: 25px;
+  line-height: 25px;
+  width: 100%;
+  background: #36A9FE;
+  color: #fff;
+  padding-left: 5px;
+  box-sizing: border-box;
+}
+
+.c-b {
+  height: 300px;
+  width: 100%;
+}
+
+/*表格*/
+.table {
+  margin-top: 5px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.t-h {
+  height: 25px;
+  line-height: 25px;
+  padding-left: 5px;
+  border-bottom: 1px solid #E5E9F2;
+}
+
+.t-b {
+  min-height: 400px;
+}

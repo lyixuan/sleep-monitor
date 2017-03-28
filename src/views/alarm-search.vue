@@ -1,5 +1,5 @@
 <template>
-  <div class="report-search">
+  <div class="alarm-search">
     <s-navi :nData="navi_text"></s-navi>
     <div class="condition">
       <div class="bg-blue">检索条件</div>
@@ -19,7 +19,6 @@
           <el-radio :label="1">个人检索</el-radio>
           <el-radio :label="2">床位检索</el-radio>
           <el-radio :label="3">分级检索</el-radio>
-          <el-radio :label="4">时间范围检索</el-radio>
         </el-radio-group>
       </div>
 
@@ -27,17 +26,17 @@
 
       <div class="condition3">
         <div class="fl c3f">检索内容：</div>
-        <!--<div class="c3-1">-->
-        <!--<el-input class="m-input" size="small" placeholder="请输入工号或姓名" v-model="cust_info"></el-input>-->
-        <!--</div>-->
-        <!--<div class="c3-2">-->
-        <!--<el-autocomplete class="m-input" size="small" v-model="bed_id" :fetch-suggestions="querySearchAsync"-->
-        <!--placeholder="请输入床位号"-->
-        <!--@select="handleSelect"></el-autocomplete>-->
-        <!--<el-date-picker class="date_p" v-model="date_range" size="small" type="daterange"-->
-        <!--placeholder="选择日期范围"></el-date-picker>-->
-        <!--</div>-->
-        <div class="c3-3">
+        <div class="c3-1" v-show="1==radio">
+        <el-input class="m-input" size="small" placeholder="请输入工号或姓名" v-model="cust_info"></el-input>
+        </div>
+        <div class="c3-2" v-show="2==radio">
+          <el-autocomplete class="m-input" size="small" v-model="bed_id" :fetch-suggestions="querySearchAsync"
+                           placeholder="请输入床位号"
+                           @select="handleSelect"></el-autocomplete>
+          <el-date-picker class="date_p" v-model="date_range" size="small" type="daterange"
+                          placeholder="选择日期范围"></el-date-picker>
+        </div>
+        <div class="c3-3" v-show="3==radio">
           <el-cascader class="m-cas" size="small" :options="options" v-model="selectedOptions"
                        @change="handleChange"></el-cascader>
         </div>
@@ -59,10 +58,6 @@
                              sortable></el-table-column>
             <el-table-column prop="sche_end_time" label="计划出寓时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="in_time" label="实际入寓时间" min-width="180" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="out_time" label="实际出寓时间" min-width="180" show-overflow-tooltip
-                             sortable></el-table-column>
             <el-table-column prop="workshop_des" label="车间" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="fleet_des" label="车队" min-width="100" show-overflow-tooltip
@@ -75,18 +70,13 @@
                              sortable></el-table-column>
             <el-table-column prop="room_des" label="房间" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip
+            <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip sortable></el-table-column>
+            <el-table-column prop="bed_state_des" label="床位状态" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="monitor_time" label="监控时长" min-width="120" show-overflow-tooltip
+            <el-table-column prop="alarm_state_des" label="报警类型" min-width="150" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="sleep_time" label="睡眠时长" min-width="120" show-overflow-tooltip
+            <el-table-column prop="alarm_time" label="报警时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="sleep_per" label="睡眠占比" min-width="120" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="assess_state_des" label="睡眠评估" min-width="120" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="" label="报告预览" min-width="120" show-overflow-tooltip
-                             ></el-table-column>
           </el-table>
         </div>
       </div>
@@ -108,24 +98,36 @@
     data () {
       return {
         navi_text: {
-          title: '报告检索',
+          title: '报警检索',
           subTitle: '',
           btn: ''
         },
         checkAll: false,
         checked: [],
         types: [
-          {id: 1, des: '良好'},
-          {id: 2, des: '一般'},
-          {id: 3, des: '差'}
-        ],
+          {id: 1, des: '设备故障'},
+          {id: 2, des: '睡眠时间不足60%'},
+          {id: 3, des: '在床未睡1小时'},
+          {id: 4, des: '在床未睡1小时'},
+          {id: 5, des: '离床30分钟'},
+          {id: 6, des: '频繁体动'}],
         radio: 1,
         alarmArr: []
       }
     },
     mounted () {
+      this.requestData()
     },
     methods: {
+      search(){
+      },
+      requestData(params){
+        this.$resource(P_MONITOR + 'alarm_search').get(params).then((response) => {
+          let r_data = response.body.data;
+          // 处理数据
+          this.alarmArr = r_data.alarm_data
+        })
+      },
       handleCheckAllChange(event) {
         this.checked = event.target.checked ? [1, 2, 3, 4, 5, 6] : [];
       },
