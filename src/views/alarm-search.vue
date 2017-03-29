@@ -25,10 +25,13 @@
       <div class="bg-blue">检索内容</div>
 
       <div class="condition3">
-        <div class="fl c3f">检索内容：</div>
+        <div class="fl c3f" v-show="1==radio">个人检索：</div>
+        <div class="fl c3f" v-show="2==radio">床位检索：</div>
+        <div class="fl c3f" v-show="3==radio">分级检索：</div>
         <div class="c3-1" v-show="1==radio">
-        <el-input class="m-input" size="small" placeholder="请输入工号或姓名" v-model="cust_info"></el-input>
+          <el-input class="m-input" size="small" placeholder="请输入工号或姓名" v-model="cust_info"></el-input>
         </div>
+
         <div class="c3-2" v-show="2==radio">
           <el-autocomplete class="m-input" size="small" v-model="bed_id" :fetch-suggestions="querySearchAsync"
                            placeholder="请输入床位号"
@@ -36,11 +39,13 @@
           <el-date-picker class="date_p" v-model="date_range" size="small" type="daterange"
                           placeholder="选择日期范围"></el-date-picker>
         </div>
+
         <div class="c3-3" v-show="3==radio">
-          <el-cascader class="m-cas" size="small" :options="options" v-model="selectedOptions"
+          <el-cascader :options="levels" change-on-select class="m-cas" size="small"
                        @change="handleChange"></el-cascader>
         </div>
-        <el-button type="primary" class="m-btn">开始检索</el-button>
+
+        <el-button type="primary" class="m-btn" @click="search">开始检索</el-button>
       </div>
     </div>
 
@@ -51,8 +56,8 @@
         <div class="t-bd">
           <el-table :data="alarmArr" style="width: 100%" border
                     :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
-            <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
+            <el-table-column fixed prop="cust_id" label="工号" min-width="100" show-overflow-tooltip sortable></el-table-column>
+            <el-table-column fixed prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="sche_begin_time" label="计划入寓时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
@@ -102,8 +107,9 @@
           subTitle: '',
           btn: ''
         },
-        checkAll: false,
-        checked: [],
+        // 多选
+        checkAll: true,
+        checked: [1, 2, 3, 4, 5, 6],
         types: [
           {id: 1, des: '设备故障'},
           {id: 2, des: '睡眠时间不足60%'},
@@ -111,21 +117,55 @@
           {id: 4, des: '在床未睡1小时'},
           {id: 5, des: '离床30分钟'},
           {id: 6, des: '频繁体动'}],
+        // 单选
         radio: 1,
-        alarmArr: []
+        // 个人
+        cust_info: '',
+        // 床位
+        bed_id: '',
+        date_range: [],
+        // 分级
+        levels: [],
+        checkedLevels:[],
+
+        timer: null,
+        alarmArr: [],
       }
     },
     mounted () {
-      this.requestData()
+      this.search()
+      this.getLevels()
     },
     methods: {
       search(){
+        let params = {
+          alarm_type: this.checked,
+          search_type: this.radio
+        };
+        if (this.radio == 1) {
+          params.search_content = {cust_info: this.cust_info}
+        }
+        if (this.radio == 2) {
+          let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
+          let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
+          params.search_content = {bed_id: this.bed_id, start_time: start, end_time: end}
+        }
+        if (this.radio == 3) {
+          params.search_content = {level: this.checkedLevels}
+        }
+        this.requestData(params)
       },
       requestData(params){
-        this.$resource(P_MONITOR + 'alarm_search').get(params).then((response) => {
+        this.$resource(P_MONITOR + 'alarm_search').save({}, params).then((response) => {
           let r_data = response.body.data;
           // 处理数据
           this.alarmArr = r_data.alarm_data
+        }, (response) => {
+        })
+      },
+      getLevels(){
+        this.$resource(P_BASE + 'level_list').get().then((response) => {
+          this.levels = response.body.data;
         })
       },
       handleCheckAllChange(event) {
@@ -134,6 +174,24 @@
       handleChecked(value) {
         let checkedCount = value.length;
         this.checkAll = checkedCount === this.types.length;
+      },
+      querySearchAsync(queryString, cb) {
+        clearTimeout(this.timer)
+        this.timer = setTimeout(query, 1000);
+        let that = this
+        function query() {
+          let results = [];
+          that.$resource(P_BASE + 'bed_no_list').get({str: queryString}).then((response) => {
+            results = response.body.data;
+            cb(results);
+          })
+        }
+      },
+      handleSelect(item) {
+        this.bed_id = item.value
+      },
+      handleChange(value){
+        this.checkedLevels = value
       }
     }
   }
@@ -207,6 +265,7 @@
 
   .m-cas {
     float: left;
+    width: 300px;
 
   }
 </style>
