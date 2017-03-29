@@ -11,7 +11,7 @@
     </div>
 
     <div class="table">
-      <div class="t-h">床位状态监控详情</div>
+      <div class="t-h">床位状态监控详情 <span class="export" @click="exportExcel">导出Excel</span></div>
       <div class="t-b">
         <div class="t-tb">
           <span @click="changeTab(1)">故障 <i :class="{'active':tabState == 1}"></i></span>

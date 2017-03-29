@@ -42,7 +42,7 @@
   }
   .subTtn{
     float: right;
-    color: #1D8CE0;
+    color: #36A9FE;
     cursor: pointer;
   }
   .subTtn:hover{

@@ -16,6 +16,17 @@
   box-sizing: border-box;
 }
 
+.export {
+  float: right;
+  padding-right: 10px;
+  color: #36A9FE;
+  cursor: pointer;
+}
+
+.export:hover {
+  color: #20A0FF;
+}
+
 .c-b {
   height: 300px;
   width: 100%;

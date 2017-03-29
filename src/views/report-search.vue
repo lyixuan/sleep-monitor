@@ -58,12 +58,13 @@
 
     <div style="clear: both"></div>
     <div class="table">
-      <div class="t-h">检索详情</div>
+      <div class="t-h">检索详情 <span class="export" @click="exportExcel">导出Excel</span></div>
       <div class="t-b">
         <div class="t-bd">
           <el-table :data="reportArr" style="width: 100%" border
                     :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
-            <el-table-column fixed prop="cust_id" label="工号" min-width="100" show-overflow-tooltip sortable></el-table-column>
+            <el-table-column fixed prop="cust_id" label="工号" min-width="100" show-overflow-tooltip
+                             sortable></el-table-column>
             <el-table-column fixed prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="sche_begin_time" label="计划入寓时间" min-width="180" show-overflow-tooltip
@@ -98,7 +99,7 @@
                              sortable></el-table-column>
             <el-table-column fixed="right" label="报告预览" width="100">
               <template scope="scope">
-                <el-button @click="reportPrint" type="text" size="small">生成报告</el-button>
+                <el-button @click="reportPrint(scope.row)" type="text" size="small">生成报告</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -133,7 +134,7 @@
           {id: 1, des: '良好'},
           {id: 2, des: '一般'},
           {id: 3, des: '差'}
-          ],
+        ],
         // 单选
         radio: 1,
         // 个人
@@ -143,9 +144,9 @@
         date_range: [],
         // 分级
         levels: [],
-        checkedLevels:[],
+        checkedLevels: [],
         // 时间
-        date_range2:[],
+        date_range2: [],
 
         timer: null,
         reportArr: [],
@@ -204,6 +205,7 @@
         clearTimeout(this.timer)
         this.timer = setTimeout(query, 1000);
         let that = this
+
         function query() {
           let results = [];
           that.$resource(P_BASE + 'bed_no_list').get({str: queryString}).then((response) => {
@@ -218,9 +220,9 @@
       handleChange(value){
         this.checkedLevels = value
       },
-      reportPrint(){
-        console.log(window.location.href.replace('app.html','report.html'))
-        window.open(window.location.href.replace('app.html','report.html'))
+      reportPrint(row){
+        let url = window.location.href.replace('report_search', row.report_id)
+        window.open(url.replace('app.html', 'report.html'))
       }
 
     }

@@ -10,7 +10,7 @@
     </div>
 
     <div class="table">
-      <div class="t-h">24小时报警监控详情</div>
+      <div class="t-h">24小时报警监控详情 <span class="export" @click="exportExcel">导出Excel</span></div>
       <div class="t-b">
         <div class="t-bd">
           <el-table :data="alarmArr" style="width: 100%" border
