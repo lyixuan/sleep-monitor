@@ -1,12 +1,26 @@
 <template>
   <div id="login">
     <div class="head"><img src="./assets/img-com/logo.png" height="50"
-                           style="vertical-align: middle;margin-top: -10px;margin-right: 10px;"/>睡眠监测管理系统
+                           style="vertical-align: middle;margin-top: -10px;margin-right: 10px;"/>司乘人员睡眠监测管理系统
     </div>
     <div class="content">
-      <div class="wrap"></div>
+      <div class="pic"><img src="./assets/img-com/train.png" height="420"/></div>
+      <div class="wrap">
+        <div class="ying"></div>
+        <div class="ying g2"></div>
+        <div class="account input-wrapper">
+          <input type="text" id="account" placeholder="账号">
+        </div>
+        <div class="verification input-wrapper">
+          <input type="password" id="password" placeholder="密码">
+          <span id="error" class="error" style="right: -100px;">用户名或密码错误</span>
+        </div>
+        <div class="button-wrapper">
+          <button class="sign-button" id="submit">登录</button>
+        </div>
+      </div>
     </div>
-    <div class="foot">Copyrignt © 2016-2017 All Rights Reserved </div>
+    <div class="foot">Copyrignt © 2016-2017 All Rights Reserved</div>
   </div>
 </template>
 
@@ -30,7 +44,6 @@
     box-sizing: border-box;
   }
 
-
   .head {
     width: 100%;
     height: 140px;
@@ -43,27 +56,142 @@
   }
 
   .content {
+    position: relative;
     box-sizing: border-box;
-    margin-top: 20px;
+    margin-top: 30px;
     width: 100%;
-    height: 450px;
+    height: 420px;
     background-image: url(./assets/img-com/bg.png);
     background-repeat: repeat;
     background-position: center 0;
   }
-  .foot{
-    margin-top: 20px;
+
+  .foot {
+    margin-top: 50px;
     text-align: center;
     margin-bottom: 30px;
   }
-  .wrap{
-    height: 400px;
+  .pic{
+    float: left;
+    padding: 0 0 0 20px;
+  }
+
+
+  .wrap {
+    height: 380px;
     width: 350px;
-    opacity: .2;
-    background: #fff;
-    margin-top: 20px;
-    border-radius: 10px;
+    /*opacity: .2;*/
+    background: #48A1CF;
+    margin-top: -30px;
+    border-radius: 0 0 10px 10px;
     float: right;
     margin-right: 50px;
+    padding: 50px 15px 15px 15px;
+    box-sizing: border-box;
+    position: relative;
   }
+
+  .ying {
+    width: 40px;
+    height: 40px;
+    background: #48A1CF;
+    opacity: .7;
+    position: absolute;
+    top: 8px;
+    left: -13px;
+    transform: rotate(-60deg);
+    -ms-transform: rotate(-60deg); /* IE 9 */
+    -moz-transform: rotate(-60deg); /* Firefox */
+    -webkit-transform: rotate(-60deg); /* Safari 和 Chrome */
+    -o-transform: rotate(-60deg); /* Opera */
+    z-index: -1;
+
+  }
+
+  .g2 {
+    left: auto;
+    right: -13px;
+    transform: rotate(60deg);
+    -ms-transform: rotate(60deg); /* IE 9 */
+    -moz-transform: rotate(60deg); /* Firefox */
+    -webkit-transform: rotate(60deg); /* Safari 和 Chrome */
+    -o-transform: rotate(60deg); /* Opera */
+  }
+
+  .input-wrapper {
+    padding: 15px;
+  }
+
+  .input-wrapper input {
+    padding: 1em .8em;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    line-height: 19px;
+    border: 0;
+    border-radius: 4px;
+    background: #fff;
+    color: #555;
+    font-size: 14px;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: #555;
+    opacity: .5;
+    font-size: 14px;
+  }
+
+  input:-moz-placeholder, textarea:-moz-placeholder {
+    color: #555;
+    opacity: .5;
+    font-size: 14px;
+  }
+
+  input::-moz-placeholder, textarea::-moz-placeholder {
+    color: #555;
+    opacity: .5;
+    font-size: 14px;
+  }
+
+  input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: #555;
+    opacity: .5;
+    font-size: 14px;
+  }
+
+  input:-webkit-autofill {
+    background-color: #fff !important;
+  }
+
+  .button-wrapper {
+    padding: 15px;
+  }
+
+  .sign-button {
+    background: #1D8CE0;
+    box-shadow: none;
+    border: 0;
+    border-radius: 4px;
+    line-height: 50px;
+    color: #fff;
+    display: block;
+    padding: 0;
+    width: 100%;
+    font-size: 18px;
+    letter-spacing: 10px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+    outline: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+
+  .sign-button:hover {
+    background: #20A0FF;
+  }
+
 </style>
