@@ -56,7 +56,8 @@
         <div class="t-bd">
           <el-table :data="alarmArr" style="width: 100%" border
                     :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
-            <el-table-column fixed prop="cust_id" label="工号" min-width="100" show-overflow-tooltip sortable></el-table-column>
+            <el-table-column fixed prop="cust_id" label="工号" min-width="100" show-overflow-tooltip
+                             sortable></el-table-column>
             <el-table-column fixed prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="sche_begin_time" label="计划入寓时间" min-width="180" show-overflow-tooltip
@@ -83,6 +84,16 @@
             <el-table-column prop="alarm_time" label="报警时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
           </el-table>
+
+          <el-pagination class="m-paging"
+                         @size-change="handleSizeChange"
+                         @current-change="handleCurrentChange"
+                         :current-page="currentPage"
+                         :page-sizes="[10, 20, 50, 100]"
+                         :page-size="pageSize"
+                         layout="total, sizes, prev, pager, next"
+                         :total="totalNum">
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -126,18 +137,22 @@
         date_range: [],
         // 分级
         levels: [],
-        checkedLevels:[],
+        checkedLevels: [],
 
         timer: null,
         alarmArr: [],
+
+        currentPage: 1,
+        pageSize: 10,
+        totalNum: 0
       }
     },
     mounted () {
-      this.search()
+      this.search();
       this.getLevels()
     },
     methods: {
-      search(){
+      exportExcel(){
         let params = {
           alarm_type: this.checked,
           search_type: this.radio
@@ -153,6 +168,51 @@
         if (this.radio == 3) {
           params.search_content = {level: this.checkedLevels}
         }
+
+        window.open(P_MONITOR + 'alarm_search_excel' + this.serialize(params));
+      },
+      serialize(params) {
+        let result = '?'
+        for (let key in params) {
+          if (key == 'search_content') {
+            for (let c in params[key]) {
+              result += c + '=' + params[key][c] + '&'
+            }
+          } else {
+            result += key + '=' + params[key] + '&'
+          }
+        }
+        return result.substr(0, result.length - 1)
+      },
+      search(type){
+        let params = {
+          alarm_type: this.checked,
+          search_type: this.radio
+        };
+        if (this.radio == 1) {
+          params.search_content = {cust_info: this.cust_info}
+        }
+        if (this.radio == 2) {
+          let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
+          let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
+          params.search_content = {bed_id: this.bed_id, start_time: start, end_time: end}
+        }
+        if (this.radio == 3) {
+          params.search_content = {level: this.checkedLevels}
+        }
+        if (type == 1) {
+          // 点击分页
+          params.page_size = this.pageSize
+          params.current_page = this.currentPage
+        } else {
+          // 点击查询
+          this.pageSize = 10
+          this.currentPage = 1
+          params.page_size = this.pageSize
+          params.current_page = this.currentPage
+
+        }
+
         this.requestData(params)
       },
       requestData(params){
@@ -160,6 +220,9 @@
           let r_data = response.body.data;
           // 处理数据
           this.alarmArr = r_data.alarm_data
+
+          this.paging(r_data.paging)
+
         }, (response) => {
         })
       },
@@ -179,6 +242,7 @@
         clearTimeout(this.timer)
         this.timer = setTimeout(query, 1000);
         let that = this
+
         function query() {
           let results = [];
           that.$resource(P_BASE + 'bed_no_list').get({str: queryString}).then((response) => {
@@ -192,6 +256,18 @@
       },
       handleChange(value){
         this.checkedLevels = value
+      },
+
+      handleSizeChange(val) {
+        this.pageSize = val
+        this.search(1)
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.search(1)
+      },
+      paging(p){
+        this.totalNum = p.total_num;
       }
     }
   }

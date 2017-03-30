@@ -123,6 +123,9 @@
       }
     },
     methods: {
+      exportExcel(){
+        window.open(P_MONITOR + 'bed_state_excel');
+      },
       requestData(){
         this.$resource(P_MONITOR + 'bed_state').get().then((response) => {
           let r_data = response.body.data;

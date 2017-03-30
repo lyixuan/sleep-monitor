@@ -42,6 +42,15 @@
             <el-table-column prop="alarm_time" label="报警时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
           </el-table>
+          <el-pagination class="m-paging"
+                         @size-change="handleSizeChange"
+                         @current-change="handleCurrentChange"
+                         :current-page="currentPage"
+                         :page-sizes="[10, 20, 50, 100]"
+                         :page-size="pageSize"
+                         layout="total, sizes, prev, pager, next"
+                         :total="totalNum">
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -64,6 +73,10 @@
           btn: ''
         },
         alarmArr: [],
+
+        currentPage: 1,
+        pageSize: 10,
+        totalNum: 0
       }
     },
     mounted () {
@@ -80,9 +93,17 @@
       }
     },
     methods: {
+      exportExcel(){
+        window.open(P_MONITOR + 'alarm_24monitor_excel');
+      },
       requestData(){
-        this.$resource(P_MONITOR + 'alarm_24monitor').get().then((response) => {
+        let params = {
+          page_size: this.pageSize,
+          current_page: this.currentPage
+        };
+        this.$resource(P_MONITOR + 'alarm_24monitor').get(params).then((response) => {
           let r_data = response.body.data;
+
           // 处理数据
           this.alarmArr = r_data.alarm_data
 
@@ -92,6 +113,7 @@
           // 更新时间
           this.navi_text.subTitle = '(更新时间:' + (new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes() ) ) + '   提示:数据每5分钟更新一次)'
 
+          this.paging(r_data.paging)
         })
       },
       createBar(data){
@@ -112,7 +134,7 @@
         let option = {
           title: {
             text: "24小时报警统计",
-            subtext:"统计时间点前一个小时数据",
+            subtext: "统计时间点前一个小时数据",
             x: "1%",
             textStyle: {
               color: '#446699',
@@ -132,8 +154,8 @@
           grid: {
             "borderWidth": 0,
             "top": '25%',
-            "left":"5%",
-            "right":"5%",
+            "left": "5%",
+            "right": "5%",
             "bottom": '15%',
             textStyle: {
               color: "#fff"
@@ -314,7 +336,7 @@
                 }
               },
               "data": a6,
-            },{
+            }, {
               "name": "累计",
               "type": "line",
               "stack": "总数",
@@ -339,6 +361,18 @@
         };
         myChart.setOption(option);
       },
+
+      handleSizeChange(val) {
+        this.pageSize = val
+        this.requestData()
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.requestData()
+      },
+      paging(p){
+        this.totalNum = p.total_num;
+      }
     }
   }
 </script>
@@ -349,5 +383,9 @@
   #left-ct {
     height: 100%;
     width: 100%;
+  }
+
+  .t-bd {
+    padding: 10px;
   }
 </style>

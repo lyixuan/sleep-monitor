@@ -49,6 +49,16 @@
             <el-table-column prop="assess_state_des" label="睡眠评估" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>
           </el-table>
+
+          <el-pagination class="m-paging"
+                         @size-change="handleSizeChange"
+                         @current-change="handleCurrentChange"
+                         :current-page="currentPage"
+                         :page-sizes="[10, 20, 50, 100]"
+                         :page-size="pageSize"
+                         layout="total, sizes, prev, pager, next"
+                         :total="totalNum">
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -71,7 +81,11 @@
           subTitle: '',
           btn: ''
         },
-        sleepArr: []
+        sleepArr: [],
+
+        currentPage: 1,
+        pageSize: 10,
+        totalNum: 0
       }
     },
     mounted () {
@@ -88,8 +102,15 @@
       }
     },
     methods: {
+      exportExcel(){
+        window.open(P_MONITOR + 'sleep_24monitor_excel');
+      },
       requestData(){
-        this.$resource(P_MONITOR + 'sleep_24monitor').get().then((response) => {
+        let params = {
+          page_size: this.pageSize,
+          current_page: this.currentPage
+        };
+        this.$resource(P_MONITOR + 'sleep_24monitor').get(params).then((response) => {
           let r_data = response.body.data;
           // 处理数据
           this.sleepArr = r_data.sleep_data
@@ -101,6 +122,7 @@
           // 更新时间
           this.navi_text.subTitle = '(更新时间:' + (new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes() ) ) + '   提示:数据每5分钟更新一次)'
 
+          this.paging(r_data.paging)
         })
       },
       createBar(data){
@@ -293,6 +315,17 @@
         };
 
         myChart.setOption(option);
+      },
+      handleSizeChange(val) {
+        this.pageSize = val
+        this.requestData()
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.requestData()
+      },
+      paging(p){
+        this.totalNum = p.total_num;
       }
     }
   }

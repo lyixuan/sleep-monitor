@@ -2,7 +2,7 @@
   <div class="sidebar" id="sidebar">
     <!--<div class="sidebar-header" @click="changeSidebar">济南公寓<i class="el-icon-more"></i></div>-->
     <div class="menu logo-menu" @click="changeSidebar">
-      <i class="icon-logo"><img src="../assets/img-com/jinan-logo.png" width="25" style="margin-top: 8px;vertical-align: top"></i>
+      <i class="icon-logo"><img src="../assets/img-com/jinan.png" width="25" style="margin-top: 8px;vertical-align: top"></i>
       <span style="font-size: 16px;color:#fff;font-weight: bold;letter-spacing: 3px;margin-right: 24px;">济南公寓</span>
       <i class="el-icon-arrow-left icon-r" :class="{rShow:rIsShow === 3}"></i>
       <i class="el-icon-arrow-left icon-r" :class="{rShow:rIsShow === 2}"></i>
