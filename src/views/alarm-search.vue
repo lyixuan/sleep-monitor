@@ -169,7 +169,7 @@
           params.search_content = {level: this.checkedLevels}
         }
 
-        window.open(P_MONITOR + 'alarm_search_excel' + this.serialize(params));
+        window.open(P_MONITOR + 'alarm_search_excel.php' + this.serialize(params));
       },
       serialize(params) {
         let result = '?'

@@ -6,17 +6,18 @@
     <div class="content">
       <div class="pic"><img src="./assets/img-com/train.png" height="420"/></div>
       <div class="wrap">
+        <div class="icon"><img src="./assets/img-com/login_icon.png"/></div>
         <div class="ying"></div>
         <div class="ying g2"></div>
-        <div class="account input-wrapper">
-          <input type="text" id="account" placeholder="账号">
+        <div class="input-wrapper">
+          <input type="text" v-focus v-model="user_name" placeholder="账号">
         </div>
-        <div class="verification input-wrapper">
-          <input type="password" id="password" placeholder="密码">
-          <span id="error" class="error" style="right: -100px;">用户名或密码错误</span>
+        <div class="input-wrapper">
+          <input type="password" v-model="password" placeholder="密码">
+          <span class="error" :class="{show:isShow}">用户名或密码错误</span>
         </div>
         <div class="button-wrapper">
-          <button class="sign-button" id="submit">登录</button>
+          <button class="sign-button" @click="submit">登录</button>
         </div>
       </div>
     </div>
@@ -26,8 +27,34 @@
 
 <script>
   export default {
-    name: 'login'
+    name: 'login',
+    data(){
+      return {
+        user_name: '',
+        password: '',
+        isShow: false
+      }
+    },
+    methods: {
 
+      submit(){
+        let param = {
+          user_name: this.user_name,
+          password: this.password
+        };
+        this.isShow = false;
+        this.$resource(P_LOGIN + 'login.php').save({}, param).then((response) => {
+          if (response.body.code != 200) {
+            this.isShow = true
+          } else {
+            window.sessionStorage.setItem('u_session', JSON.stringify(response.body.data))
+            window.location.href = window.location.href.replace('login.html', 'app.html')
+          }
+        }, (response) => {
+          console.log(response.body)
+        })
+      }
+    }
   }
 </script>
 
@@ -71,11 +98,17 @@
     text-align: center;
     margin-bottom: 30px;
   }
-  .pic{
+
+  .pic {
     float: left;
-    padding: 0 0 0 20px;
+    padding: 0 0 0 0px;
   }
 
+  .icon {
+    position: absolute;
+    top: 20px;
+    left: 135px;
+  }
 
   .wrap {
     height: 380px;
@@ -86,7 +119,7 @@
     border-radius: 0 0 10px 10px;
     float: right;
     margin-right: 50px;
-    padding: 50px 15px 15px 15px;
+    padding: 70px 15px 15px 15px;
     box-sizing: border-box;
     position: relative;
   }
@@ -164,6 +197,10 @@
   }
 
   input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+  }
+
+  input:-webkit-autofill {
     background-color: #fff !important;
   }
 
@@ -172,6 +209,7 @@
   }
 
   .sign-button {
+    margin-top: 10px;
     background: #1D8CE0;
     box-shadow: none;
     border: 0;
@@ -194,4 +232,13 @@
     background: #20A0FF;
   }
 
+  .error {
+    color: #CC3333;
+    position: absolute;
+    display: none;
+  }
+
+  .show {
+    display: block;
+  }
 </style>

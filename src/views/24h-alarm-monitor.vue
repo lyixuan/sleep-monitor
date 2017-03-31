@@ -94,7 +94,7 @@
     },
     methods: {
       exportExcel(){
-        window.open(P_MONITOR + 'alarm_24monitor_excel');
+        window.open(P_MONITOR + 'alarm_24monitor_excel.php');
       },
       requestData(){
         let params = {

@@ -2,8 +2,9 @@
   <div class="sidebar" id="sidebar">
     <!--<div class="sidebar-header" @click="changeSidebar">济南公寓<i class="el-icon-more"></i></div>-->
     <div class="menu logo-menu" @click="changeSidebar">
-      <i class="icon-logo"><img src="../assets/img-com/jinan.png" width="25" style="margin-top: 8px;vertical-align: top"></i>
-      <span style="font-size: 16px;color:#fff;font-weight: bold;letter-spacing: 3px;margin-right: 24px;">济南公寓</span>
+      <i class="icon-logo"><img :src="logo_url" width="25"
+                                style="margin-top: 8px;vertical-align: top"></i>
+      <span style="font-size: 16px;color:#fff;font-weight: bold;letter-spacing: 3px;margin-right: 24px;">{{apart_name}}公寓</span>
       <i class="el-icon-arrow-left icon-r" :class="{rShow:rIsShow === 3}"></i>
       <i class="el-icon-arrow-left icon-r" :class="{rShow:rIsShow === 2}"></i>
       <i class="el-icon-arrow-left icon-r" :class="{rShow:rIsShow === 1}"></i>
@@ -29,7 +30,7 @@
     </router-link>
     <router-link to="/sleep_24monitor">
       <div class="menu">
-        <img class="icon"  src="../assets/img-com/icon-shuimian.png"/>
+        <img class="icon" src="../assets/img-com/icon-shuimian.png"/>
         <span>24小时睡眠监控</span>
       </div>
     </router-link>
@@ -54,19 +55,31 @@
     data () {
       return {
         rIsShow: 1,
-        isClose: false
+        isClose: false,
+        apart_name: '未知',
+        logo_url:'x.png'
       }
     },
     mounted(){
 //      this.animation()
+      this.getSession()
     },
     methods: {
+      getSession(){
+        let u_session = JSON.parse(window.sessionStorage.getItem('u_session'))
+        if (u_session) {
+          this.apart_name = u_session.apart_name
+          this.logo_url = u_session.logo_url
+        } else {
+          window.location.href = window.location.href.replace('app.html', 'login.html')
+        }
+      },
       animation(){
 //        会导致内存溢出,怀疑rIsShow无限增加导致,尚未验证
         let that = this;
-        setInterval(fn,400)
+        setInterval(fn, 400)
         function fn() {
-          that.rIsShow = ((that.rIsShow)%3)+1;
+          that.rIsShow = ((that.rIsShow) % 3) + 1;
         }
       },
       changeSidebar () {
@@ -195,7 +208,8 @@
     color: #ddd;
     opacity: 0;
   }
+
   .rShow {
-    opacity:1;
+    opacity: 1;
   }
 </style>

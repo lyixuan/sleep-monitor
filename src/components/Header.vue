@@ -3,7 +3,7 @@
     <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" >
       <el-menu-item index="2"><i><img src="../assets/img-com/logo.png" alt="logo" style="vertical-align: top;margin-top: 5px;margin-left: -10px;margin-right: 5px;" height="40"><img src="../assets/img-com/logo-wenzi.png" alt="睡眠监测管理系统" height="30" style="vertical-align: top;margin-top: 10px;"></i></el-menu-item>
       <el-submenu index="1">
-        <template slot="title">张三丰</template>
+        <template slot="title">{{s_name}}</template>
         <el-menu-item index="1-1">系统配置</el-menu-item>
         <el-menu-item index="1-2">退出</el-menu-item>
       </el-submenu>
@@ -17,7 +17,7 @@
     data () {
       return {
         activeIndex:'1',
-        uusessions_name: '未登录'
+        s_name: '未登录'
       }
     },
     mounted (){
@@ -25,12 +25,11 @@
     },
     methods: {
       getSession(){
-        let uusessions = JSON.parse(window.sessionStorage.getItem('uusessions'))
-        if (uusessions) {
-          this.uusessions_name = uusessions.userName
+        let u_session = JSON.parse(window.sessionStorage.getItem('u_session'))
+        if (u_session) {
+          this.s_name = u_session.user_name
         } else {
-//          var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.html";
-//          window.location.href = url;
+          window.location.href = window.location.href.replace('app.html', 'login.html')
         }
       },
       handleSelect(key, keyPath) {

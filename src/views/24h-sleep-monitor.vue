@@ -103,7 +103,7 @@
     },
     methods: {
       exportExcel(){
-        window.open(P_MONITOR + 'sleep_24monitor_excel');
+        window.open(P_MONITOR + 'sleep_24monitor_excel.php');
       },
       requestData(){
         let params = {

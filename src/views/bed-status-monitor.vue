@@ -124,7 +124,7 @@
     },
     methods: {
       exportExcel(){
-        window.open(P_MONITOR + 'bed_state_excel');
+        window.open(P_MONITOR + 'bed_state_excel.php');
       },
       requestData(){
         this.$resource(P_MONITOR + 'bed_state').get().then((response) => {

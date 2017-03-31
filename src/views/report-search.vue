@@ -194,7 +194,7 @@
           params.search_content = {start_time2: start, end_time2: end}
         }
 
-        window.open(P_MONITOR + 'report_search_excel' + this.serialize(params));
+        window.open(P_MONITOR + 'report_search_excel.php' + this.serialize(params));
       },
       serialize(params) {
         let result = '?'

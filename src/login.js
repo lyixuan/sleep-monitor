@@ -8,6 +8,11 @@ Vue.use(VueResource)
 Vue.config.productionTip = false
 require('./root-conf')
 /* eslint-disable no-new */
+Vue.directive('focus', {
+  inserted: function (el) {
+    el.focus()
+  }
+})
 new Vue({
   el: '#login',
   template: '<login/>',
