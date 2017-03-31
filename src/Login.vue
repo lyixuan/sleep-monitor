@@ -48,7 +48,7 @@
             this.isShow = true
           } else {
             window.sessionStorage.setItem('u_session', JSON.stringify(response.body.data))
-            window.location.href = window.location.href.replace('login.html', 'app.html')
+            window.location.href = window.location.href.replace('login.html', 'app.html#/dashboard')
           }
         }, (response) => {
           console.log(response.body)

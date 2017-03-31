@@ -5,7 +5,7 @@
       <el-submenu index="1">
         <template slot="title">{{s_name}}</template>
         <el-menu-item index="1-1">系统配置</el-menu-item>
-        <el-menu-item index="1-2">退出</el-menu-item>
+        <el-menu-item index="1-2" @click="logout">退出</el-menu-item>
       </el-submenu>
     </el-menu>
   </div>
@@ -29,21 +29,20 @@
         if (u_session) {
           this.s_name = u_session.user_name
         } else {
-          window.location.href = window.location.href.replace('app.html', 'login.html')
+          var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.html";
+          window.location.href = url;
         }
       },
-      handleSelect(key, keyPath) {
-        if ('logout' == key) {
-          this.$resource(PATH_LOGIN + 'logout').get().then((response) => {
-            if (response.status == 200) {
-              sessionStorage.removeItem('uusessions')
-              var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.html";
-              window.location.href = url;
-            } else {
-              this.alertMsg("error", response.status + " - " + response.url)
-            }
-          })
-        }
+      logout(){
+        this.$resource(P_LOGIN + 'logout').get().then((response) => {
+          if (response.body.code == 200) {
+            sessionStorage.removeItem('u_session')
+            var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.html";
+            window.location.href = url;
+          } else {
+            this.alertMsg("error", response.status + " - " + response.url)
+          }
+        })
       }
     }
   }

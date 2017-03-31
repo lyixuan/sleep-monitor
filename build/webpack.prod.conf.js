@@ -82,7 +82,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true
       },
       chunksSortMode: 'dependency',
-      chunks: ['manifest','vendor','login']//需要引入的Chunk，不配置就会引入所有页面的资源
+      chunks: ['manifest','vendor','report']//需要引入的Chunk，不配置就会引入所有页面的资源
     }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
