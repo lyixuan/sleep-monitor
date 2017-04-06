@@ -16,10 +16,8 @@
         <el-table-column min-width="100" show-overflow-tooltip property="fleet_des" label="车队"></el-table-column>
         <el-table-column min-width="100" show-overflow-tooltip property="group_des" label="指导组"></el-table-column>
         <el-table-column min-width="100" show-overflow-tooltip property="apart_des" label="公寓"></el-table-column>
-        <el-table-column min-width="100" show-overflow-tooltip property="floor_des" label="楼层"></el-table-column>
         <el-table-column min-width="100" show-overflow-tooltip property="room_des" label="房间"></el-table-column>
         <el-table-column min-width="100" show-overflow-tooltip property="bed_des" label="床位"></el-table-column>
-        <el-table-column min-width="120" show-overflow-tooltip property="bed_state_des" label="床位状态"></el-table-column>
         <el-table-column min-width="120" show-overflow-tooltip property="alarm_state_des" label="报警类型"></el-table-column>
         <el-table-column min-width="180" show-overflow-tooltip property="alarm_time" label="报警时间"></el-table-column>
       </el-table>
@@ -102,13 +100,13 @@
           <transition-group v-on:before-enter="beforeEnter" v-on:enter="enter">
             <el-row class="room-row" v-for="room_row in floor_detail.room" :key="room_row">
               <el-col :span="6" class="room" v-for="room in room_row" :key="room.room_id">
-                <div class="r-header">房间:{{room.room_id}}</div>
+                <div class="r-header">{{room.room_des}}</div>
                 <div class="r-cont">
                   <div class="room-item"
                        :class="{'red-color':bed.bed_state_id == 4,'yellow-color':bed.bed_state_id == 5}"
                        v-for="bed in room.bed" :key="bed.bed_id">
                     <div class="ri-l">
-                      <div class="ri-l-t">床位{{bed.bed_id}}</div>
+                      <div class="ri-l-t">{{bed.bed_des}}</div>
                       <div class="ri-l-p">
                         <img src="../assets/img-dash/bed-1.png" height="26"
                              v-if="bed.bed_state_id == 1 || bed.bed_state_id == 5"/>

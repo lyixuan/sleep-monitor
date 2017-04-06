@@ -30,13 +30,9 @@
                              sortable></el-table-column>
             <el-table-column prop="apart_des" label="公寓" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="floor_des" label="楼层" min-width="100" show-overflow-tooltip
-                             sortable></el-table-column>
             <el-table-column prop="room_des" label="房间" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="bed_state_des" label="床位状态" min-width="120" show-overflow-tooltip
-                             sortable></el-table-column>
             <el-table-column prop="alarm_state_des" label="报警类型" min-width="150" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="alarm_time" label="报警时间" min-width="180" show-overflow-tooltip

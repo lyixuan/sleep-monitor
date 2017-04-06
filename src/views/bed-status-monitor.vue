@@ -23,7 +23,6 @@
           <el-table :data="breakArr" style="width: 100%" border
                     :default-sort="{prop: 'create_time', order: 'descending'}" max-height="500">
             <el-table-column prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="floor_des" label="楼层" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="device_no" label="设备号" show-overflow-tooltip sortable></el-table-column>
@@ -43,7 +42,6 @@
             <el-table-column prop="fleet_des" label="车队" min-width="100" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="group_des" label="指导组" min-width="100" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="apart_des" label="公寓" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="floor_des" label="楼层" min-width="100" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="room_des" label="房间" min-width="100" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="bed_state_des" label="床位状态" min-width="120" show-overflow-tooltip sortable></el-table-column>
@@ -62,7 +60,6 @@
             <el-table-column min-width="100" prop="fleet_des" label="车队" show-overflow-tooltip sortable></el-table-column>
             <el-table-column min-width="100" prop="group_des" label="指导组" show-overflow-tooltip sortable></el-table-column>
             <el-table-column min-width="100" prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="100" prop="floor_des" label="楼层" show-overflow-tooltip sortable></el-table-column>
             <el-table-column min-width="100" prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
             <el-table-column min-width="100" prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
             <el-table-column min-width="120" prop="bed_state_des" label="床位状态" show-overflow-tooltip sortable></el-table-column>
@@ -73,7 +70,6 @@
           <el-table :data="downArr" style="width: 100%" border
                     :default-sort="{prop: 'create_time', order: 'descending'}" max-height="500">
             <el-table-column prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="floor_des" label="楼层" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="device_no" label="设备号" show-overflow-tooltip sortable></el-table-column>

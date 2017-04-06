@@ -83,15 +83,13 @@
                              sortable></el-table-column>
             <el-table-column prop="apart_des" label="公寓" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="floor_des" label="楼层" min-width="100" show-overflow-tooltip
-                             sortable></el-table-column>
             <el-table-column prop="room_des" label="房间" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="monitor_time" label="监控时长" min-width="120" show-overflow-tooltip
+            <el-table-column prop="monitor_duration" label="监控时长" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="sleep_time" label="睡眠时长" min-width="120" show-overflow-tooltip
+            <el-table-column prop="sleep_duration" label="睡眠时长" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="sleep_per" label="睡眠占比" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>

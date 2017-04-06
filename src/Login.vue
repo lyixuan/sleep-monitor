@@ -10,7 +10,7 @@
         <div class="ying"></div>
         <div class="ying g2"></div>
         <div class="input-wrapper">
-          <input type="text" v-focus v-model="user_name" placeholder="账号">
+          <input type="text" v-focus v-model="user_id" placeholder="账号">
         </div>
         <div class="input-wrapper">
           <input type="password" v-model="password" placeholder="密码">
@@ -30,7 +30,7 @@
     name: 'login',
     data(){
       return {
-        user_name: '',
+        user_id: '',
         password: '',
         isShow: false
       }
@@ -39,7 +39,7 @@
 
       submit(){
         let param = {
-          user_name: this.user_name,
+          user_id: this.user_id,
           password: this.password
         };
         this.isShow = false;
@@ -100,6 +100,7 @@
   }
 
   .pic {
+    position: absolute;
     float: left;
     padding: 0 0 0 0px;
   }

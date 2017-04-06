@@ -1,13 +1,7 @@
 <template>
   <div class="sidebar" id="sidebar">
-    <!--<div class="sidebar-header" @click="changeSidebar">济南公寓<i class="el-icon-more"></i></div>-->
     <div class="menu logo-menu" @click="changeSidebar">
-      <i class="icon-logo"><img :src="logo_url" width="25"
-                                style="margin-top: 8px;vertical-align: top"></i>
-      <span style="font-size: 16px;color:#fff;font-weight: bold;letter-spacing: 3px;margin-right: 24px;">{{apart_name}}公寓</span>
-      <i class="el-icon-arrow-left icon-r" :class="{rShow:rIsShow === 3}"></i>
-      <i class="el-icon-arrow-left icon-r" :class="{rShow:rIsShow === 2}"></i>
-      <i class="el-icon-arrow-left icon-r" :class="{rShow:rIsShow === 1}"></i>
+      <i class="el-icon-more"></i>
     </div>
 
     <router-link to="/dashboard">
@@ -56,32 +50,11 @@
       return {
         rIsShow: 1,
         isClose: false,
-        apart_name: '未知',
-        logo_url:'x.png'
       }
     },
     mounted(){
-//      this.animation()
-      this.getSession()
     },
     methods: {
-      getSession(){
-        let u_session = JSON.parse(window.sessionStorage.getItem('u_session'))
-        if (u_session) {
-          this.apart_name = u_session.apart_name
-          this.logo_url = u_session.logo_url
-        } else {
-          window.location.href = window.location.href.replace('app.html', 'login.html')
-        }
-      },
-      animation(){
-//        会导致内存溢出,怀疑rIsShow无限增加导致,尚未验证
-        let that = this;
-        setInterval(fn, 400)
-        function fn() {
-          that.rIsShow = ((that.rIsShow) % 3) + 1;
-        }
-      },
       changeSidebar () {
         let view = document.getElementById("view-wrap")
         let sidebar = document.getElementById("sidebar")
@@ -194,19 +167,12 @@
     vertical-align: text-bottom;
   }
 
-  .icon-logo {
-    margin-right: 6px;
-  }
-
   .logo-menu {
-    padding-left: 12px !important;
+    text-align: center;
+    padding-right: 12px;
     cursor: pointer;
-  }
-
-  .icon-r {
-    margin-left: -16px;
-    color: #ddd;
-    opacity: 0;
+    height: 30px;
+    line-height: 30px;
   }
 
   .rShow {

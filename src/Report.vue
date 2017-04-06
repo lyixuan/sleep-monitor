@@ -2,8 +2,8 @@
   <div id="report">
     <div class="wrap">
       <div class="wrap-in">
-        <h1><img :src="report.info.logo" width="50"
-                 style="vertical-align: text-bottom;margin-right: 10px;"/>{{report.info.locomotive_depot}}</h1>
+        <h1><img :src="report.info.logo_path" width="50"
+                 style="vertical-align: text-bottom;margin-right: 10px;"/>{{report.info.depot_des}}机务段</h1>
         <div class="subTitle">司乘人员睡眠监测总结报告</div>
         <div class="dep">个人信息:</div>
         <table>
@@ -17,17 +17,17 @@
           </tr>
           <tr>
             <td class="label">段别:</td>
-            <td class="cont">{{report.people_info.locomotive_depot}}</td>
+            <td class="cont">{{report.people_info.depot_des}}</td>
             <td class="label">车间:</td>
-            <td class="cont">{{report.people_info.workshop}}</td>
+            <td class="cont">{{report.people_info.workshop_des}}</td>
             <td class="label">车队:</td>
-            <td class="cont">{{report.people_info.fleet}}</td>
+            <td class="cont">{{report.people_info.fleet_des}}</td>
           </tr>
           <tr>
             <td class="label">指导组:</td>
-            <td class="cont">{{report.people_info.group}}</td>
+            <td class="cont">{{report.people_info.group_des}}</td>
             <td class="label">职位:</td>
-            <td class="cont">{{report.people_info.position}}</td>
+            <td class="cont">{{report.people_info.job}}</td>
             <td class="label">联系方式:</td>
             <td class="cont">{{report.people_info.phone}}</td>
           </tr>
@@ -36,27 +36,27 @@
         <table>
           <tr>
             <td class="label">保休公寓:</td>
-            <td class="cont">{{report.relax_info.apart}}</td>
+            <td class="cont">{{report.relax_info.apart_des}}</td>
             <td class="label">房间号:</td>
-            <td class="cont">{{report.relax_info.room}}</td>
+            <td class="cont">{{report.relax_info.room_des}}</td>
             <td class="label">床位号:</td>
-            <td class="cont">{{report.relax_info.bed}}</td>
+            <td class="cont">{{report.relax_info.bed_des}}</td>
           </tr>
           <tr>
             <td class="label">计划入寓:</td>
-            <td class="cont">{{report.relax_info.sche_start}}</td>
+            <td class="cont">{{report.relax_info.sche_begin_time}}</td>
             <td class="label">计划出寓:</td>
-            <td class="cont">{{report.relax_info.sche_end}}</td>
+            <td class="cont">{{report.relax_info.sche_end_time}}</td>
             <td class="label">计划在寓时长:</td>
-            <td class="cont">{{report.relax_info.sche_time}}</td>
+            <td class="cont">{{report.relax_info.sche_duration}}</td>
           </tr>
           <tr>
             <td class="label">实际入寓:</td>
-            <td class="cont">{{report.relax_info.in}}</td>
-            <td class="label">实际出寓:</td>
-            <td class="cont">{{report.relax_info.out}}</td>
-            <td class="label">实际在寓时长:</td>
             <td class="cont">{{report.relax_info.in_time}}</td>
+            <td class="label">实际出寓:</td>
+            <td class="cont">{{report.relax_info.out_time}}</td>
+            <td class="label">实际在寓时长:</td>
+            <td class="cont">{{report.relax_info.in_duration}}</td>
           </tr>
         </table>
         <div class="pingu">睡眠评估: {{report.assess_state}}</div>
@@ -71,14 +71,14 @@
               <td>在床时长</td>
               <td>离床时长</td>
             </tr>
-            <tr v-for="item in report.weak_up" v-if="report.weak_up.length>0">
+            <tr v-for="item in report.qiju" v-if="report.qiju.length>0">
               <td>{{item.id}}</td>
-              <td>{{item.in_bed}}</td>
-              <td>{{item.out_bed}}</td>
-              <td>{{item.in_time}}</td>
-              <td>{{item.out_time}}</td>
+              <td>{{item.in_bed_time}}</td>
+              <td>{{item.out_bed_time}}</td>
+              <td>{{item.onbed_duration}}</td>
+              <td>{{item.outbed_duration?item.outbed_duration:'/'}}</td>
             </tr>
-            <tr v-if="report.weak_up.length==0">
+            <tr v-if="report.qiju.length==0">
               <td colspan="5">暂无数据</td>
             </tr>
           </table>
@@ -94,9 +94,9 @@
             </tr>
             <tr v-for="item in report.sleep_stat">
               <td>{{item.state}}</td>
-              <td>{{item.in_bed}}</td>
-              <td>{{item.out_bed}}</td>
-              <td>{{item.sleep}}</td>
+              <td>{{item.in_bed_duration}}</td>
+              <td>{{item.out_bed_duration}}</td>
+              <td>{{item.sleep_duration}}</td>
             </tr>
           </table>
         </div>
@@ -108,8 +108,8 @@
               <td>报警时间</td>
             </tr>
             <tr v-for="item in report.alarm_stat" v-if="report.alarm_stat.length>0">
-              <td>{{item.state}}</td>
-              <td>{{item.time}}</td>
+              <td>{{item.alarm_des}}</td>
+              <td>{{item.alarm_time}}</td>
             </tr>
             <tr v-if="report.alarm_stat.length==0">
               <td colspan="2" style="text-align: center">没有信息</td>
@@ -117,13 +117,13 @@
           </table>
         </div>
         <div class="nt">四、总结</div>
-        <div class="zj">记录时间: {{report.sum_up.report_start}} ~ {{report.sum_up.report_end}} , 共
-          {{report.sum_up.report_time}}
+        <div class="zj">记录时间: {{report.sum_up.report_begin_time}} ~ {{report.sum_up.report_end_time}} , 共
+          {{report.sum_up.report_duration}}
         </div>
-        <div class="zj">睡眠时长: {{report.sum_up.sleep_time}} ({{report.sum_up.sleep_per}}) ,
-          觉醒时长:{{report.sum_up.weak_time}} ({{report.sum_up.weak_per}})
+        <div class="zj">睡眠时长: {{report.sum_up.sleep_duration}} ({{report.sum_up.sleep_per}}) ,
+          觉醒时长:{{report.sum_up.wakeup_duration}} ({{report.sum_up.wakeup_per}})
         </div>
-        <div class="zj">离床时长: {{report.sum_up.out_bed}} ({{report.sum_up.out_per}}) , 起床次数:{{report.sum_up.weak_num}}次,
+        <div class="zj">离床时长: {{report.sum_up.out_bed_duration}} ({{report.sum_up.out_bed_per}}) , 起床次数:{{report.sum_up.offbed_num}}次,
           报警次数:{{report.sum_up.alarm_num}}次
         </div>
       </div>
