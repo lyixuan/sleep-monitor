@@ -1,9 +1,9 @@
 <template>
   <div class="header">
     <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-      <el-menu-item index="2"><i style="vertical-align: sub;"><img :src="logo_url" alt="logo" class="h_logo"
+      <el-menu-item index="2"><i style="vertical-align: text-bottom; "><img :src="logo_url"  class="h_logo"
                                                                    height="30">
-        <img src="../assets/img-com/logo-wenzi.png" alt="睡眠监测管理系统" height="30"
+        <img src="../assets/img-com/logo-wenzi.png" height="30"
              class="h_logo_text">[{{apart_name}}机务段]</i></el-menu-item>
       <el-submenu index="1">
         <template slot="title">{{s_name}}</template>
@@ -72,16 +72,15 @@
   }
 
   .h_logo {
-    vertical-align: top;
-    margin-top: 12px;
+    vertical-align: middle;
     margin-left: -10px;
     margin-right: 5px;
   }
 
   .h_logo_text {
-    vertical-align: top;
-    margin-top: 10px;
+    vertical-align: middle;
     margin-right: 5px;
+    margin-top: -3px;
   }
 
 </style>
