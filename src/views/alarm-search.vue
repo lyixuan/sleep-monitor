@@ -4,6 +4,12 @@
     <div class="condition">
       <div class="bg-blue">检索条件</div>
 
+      <div class="condition0">
+        <div class="fl" style="margin-top: 5px;">时间范围：</div>
+        <el-date-picker class="date_p fl" v-model="date_range" size="small" type="daterange"
+                        placeholder="选择日期范围" :editable="false" :clearable="false"></el-date-picker>
+      </div>
+
       <div class="condition1">
         <div class="fl">报警类型：</div>
         <el-checkbox class="fl" v-model="checkAll" @change="handleCheckAllChange">全选
@@ -16,6 +22,7 @@
       <div class="condition2">
         <div class="fl">检索方式：</div>
         <el-radio-group v-model="radio">
+          <el-radio :label="0">全部</el-radio>
           <el-radio :label="1">个人检索</el-radio>
           <el-radio :label="2">床位检索</el-radio>
           <el-radio :label="3">分级检索</el-radio>
@@ -25,6 +32,7 @@
       <div class="bg-blue">检索内容</div>
 
       <div class="condition3">
+        <div class="fl c3f" v-show="0==radio">时间范围：</div>
         <div class="fl c3f" v-show="1==radio">个人检索：</div>
         <div class="fl c3f" v-show="2==radio">床位检索：</div>
         <div class="fl c3f" v-show="3==radio">分级检索：</div>
@@ -36,8 +44,6 @@
           <el-autocomplete class="m-input" size="small" v-model="bed_id" :fetch-suggestions="querySearchAsync"
                            placeholder="请输入床位号"
                            @select="handleSelect"></el-autocomplete>
-          <el-date-picker class="date_p" v-model="date_range" size="small" type="daterange"
-                          placeholder="选择日期范围"></el-date-picker>
         </div>
 
         <div class="c3-3" v-show="3==radio">
@@ -125,7 +131,7 @@
           {id: 5, des: '离床30分钟'},
           {id: 6, des: '频繁体动'}],
         // 单选
-        radio: 1,
+        radio: 0,
         // 个人
         cust_info: '',
         // 床位
@@ -144,22 +150,26 @@
       }
     },
     mounted () {
+      let a = new Date().getTime() - 24 * 1000 * 60 * 60
+      this.date_range = [this.formatDate(new  Date(a)), this.formatDate(new Date())]
       this.search();
       this.getLevels()
     },
     methods: {
       exportExcel(){
+        let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
+        let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
         let params = {
-          alarm_type: this.checked,
-          search_type: this.radio
+          sleep_type: this.checked,
+          search_type: this.radio,
+          start_time: start,
+          end_time: end
         };
         if (this.radio == 1) {
           params.search_content = {cust_info: this.cust_info}
         }
         if (this.radio == 2) {
-          let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
-          let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
-          params.search_content = {bed_id: this.bed_id, start_time: start, end_time: end}
+          params.search_content = {bed_id: this.bed_id}
         }
         if (this.radio == 3) {
           params.search_content = {level: this.checkedLevels}
@@ -181,17 +191,19 @@
         return result.substr(0, result.length - 1)
       },
       search(type){
+        let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
+        let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
         let params = {
-          alarm_type: this.checked,
-          search_type: this.radio
+          sleep_type: this.checked,
+          search_type: this.radio,
+          start_time: start,
+          end_time: end
         };
         if (this.radio == 1) {
           params.search_content = {cust_info: this.cust_info}
         }
         if (this.radio == 2) {
-          let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
-          let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
-          params.search_content = {bed_id: this.bed_id, start_time: start, end_time: end}
+          params.search_content = {bed_id: this.bed_id}
         }
         if (this.radio == 3) {
           params.search_content = {level: this.checkedLevels}
@@ -288,9 +300,9 @@
     box-sizing: border-box;
   }
 
-  .condition1, .condition2, .condition3 {
+  .condition0,.condition1, .condition2, .condition3 {
     width: 100%;
-    height: 20px;
+    height: 30px;
     padding: 10px;
   }
 

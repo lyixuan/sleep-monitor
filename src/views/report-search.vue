@@ -4,6 +4,12 @@
     <div class="condition">
       <div class="bg-blue">检索条件</div>
 
+      <div class="condition0">
+        <div class="fl" style="margin-top: 5px;">时间范围：</div>
+        <el-date-picker class="date_p fl" v-model="date_range" size="small" type="daterange"
+                        placeholder="选择日期范围" :editable="false" :clearable="false"></el-date-picker>
+      </div>
+
       <div class="condition1">
         <div class="fl">睡眠质量：</div>
         <el-checkbox class="fl" v-model="checkAll" @change="handleCheckAllChange">全选
@@ -16,10 +22,10 @@
       <div class="condition2">
         <div class="fl">检索方式：</div>
         <el-radio-group v-model="radio">
+          <el-radio :label="0">全部</el-radio>
           <el-radio :label="1">个人检索</el-radio>
           <el-radio :label="2">床位检索</el-radio>
           <el-radio :label="3">分级检索</el-radio>
-          <el-radio :label="4">时间范围检索</el-radio>
         </el-radio-group>
       </div>
 
@@ -29,7 +35,7 @@
         <div class="fl c3f" v-show="1==radio">个人检索：</div>
         <div class="fl c3f" v-show="2==radio">床位检索：</div>
         <div class="fl c3f" v-show="3==radio">分级检索：</div>
-        <div class="fl c3f" v-show="4==radio">时间范围：</div>
+        <div class="fl c3f" v-show="0==radio">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
         <div v-show="1==radio">
           <el-input class="m-input" size="small" placeholder="请输入工号或姓名" v-model="cust_info"></el-input>
         </div>
@@ -38,19 +44,13 @@
           <el-autocomplete class="m-input" size="small" v-model="bed_id" :fetch-suggestions="querySearchAsync"
                            placeholder="请输入床位号"
                            @select="handleSelect"></el-autocomplete>
-          <el-date-picker class="date_p" v-model="date_range" size="small" type="daterange"
-                          placeholder="选择日期范围"></el-date-picker>
         </div>
 
         <div v-show="3==radio">
           <el-cascader :options="levels" change-on-select class="m-cas" size="small"
-                       @change="handleChange"></el-cascader>
+                       @change="handleChange" placeholder="请依次选择级别"></el-cascader>
         </div>
 
-        <div v-show="4==radio">
-          <el-date-picker class="date_p" v-model="date_range2" size="small" type="daterange"
-                          placeholder="选择日期范围"></el-date-picker>
-        </div>
 
         <el-button type="primary" class="m-btn" @click="search">开始检索</el-button>
       </div>
@@ -144,17 +144,17 @@
           {id: 3, des: '差'}
         ],
         // 单选
-        radio: 1,
+        radio: 0,
         // 个人
         cust_info: '',
         // 床位
         bed_id: '',
-        date_range: [],
+
         // 分级
         levels: [],
         checkedLevels: [],
         // 时间
-        date_range2: [],
+        date_range: [],
 
         timer: null,
         reportArr: [],
@@ -165,33 +165,30 @@
       }
     },
     mounted () {
+      let a = new Date().getTime() - 24 * 1000 * 60 * 60
+      this.date_range = [this.formatDate(new  Date(a)), this.formatDate(new Date())]
       this.search();
-      this.getLevels()
+      this.getLevels();
     },
     methods: {
       exportExcel(){
+        let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
+        let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
         let params = {
           sleep_type: this.checked,
-          search_type: this.radio
+          search_type: this.radio,
+          start_time: start,
+          end_time: end
         };
         if (this.radio == 1) {
           params.search_content = {cust_info: this.cust_info}
         }
         if (this.radio == 2) {
-          let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
-          let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
-          params.search_content = {bed_id: this.bed_id, start_time: start, end_time: end}
+          params.search_content = {bed_id: this.bed_id}
         }
         if (this.radio == 3) {
           params.search_content = {level: this.checkedLevels}
         }
-
-        if (this.radio == 4) {
-          let start = this.date_range2[0] != null ? this.formatDate(new Date(this.date_range2[0])) : null
-          let end = this.date_range2[1] != null ? this.formatDate(new Date(this.date_range2[1])) : null
-          params.search_content = {start_time2: start, end_time2: end}
-        }
-
         window.open(P_MONITOR + 'report_search_excel.php' + this.serialize(params));
       },
       serialize(params) {
@@ -208,26 +205,22 @@
         return result.substr(0, result.length - 1)
       },
       search(type){
+        let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
+        let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
         let params = {
           sleep_type: this.checked,
-          search_type: this.radio
+          search_type: this.radio,
+          start_time: start,
+          end_time: end
         };
         if (this.radio == 1) {
           params.search_content = {cust_info: this.cust_info}
         }
         if (this.radio == 2) {
-          let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
-          let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
-          params.search_content = {bed_id: this.bed_id, start_time: start, end_time: end}
+          params.search_content = {bed_id: this.bed_id}
         }
         if (this.radio == 3) {
           params.search_content = {level: this.checkedLevels}
-        }
-
-        if (this.radio == 4) {
-          let start = this.date_range2[0] != null ? this.formatDate(new Date(this.date_range2[0])) : null
-          let end = this.date_range2[1] != null ? this.formatDate(new Date(this.date_range2[1])) : null
-          params.search_content = {start_time2: start, end_time2: end}
         }
 
         if (type == 1) {
@@ -324,9 +317,9 @@
     box-sizing: border-box;
   }
 
-  .condition1, .condition2, .condition3 {
+  .condition0, .condition1, .condition2, .condition3 {
     width: 100%;
-    height: 20px;
+    height: 30px;
     padding: 10px;
   }
 
