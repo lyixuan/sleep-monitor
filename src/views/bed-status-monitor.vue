@@ -150,9 +150,9 @@
       createBar(bed){
         let myChart = echarts.init(document.getElementById('left-ct'));
 
-        let total = bed.bed_break + bed.bed_run_alarm + bed.bed_run_normal + bed.bed_down
+        let total = bed.bed_break + bed.bed_run_alarm + bed.bed_run_normal + bed.bed_empty
         let xA = ['空闲', '正常', '报警', '故障']
-        let yA = [bed.bed_break, bed.bed_run_alarm, bed.bed_run_normal, bed.bed_down]
+        let yA = [bed.bed_break, bed.bed_run_alarm, bed.bed_run_normal, bed.bed_empty]
 
         let option = {
           title: {

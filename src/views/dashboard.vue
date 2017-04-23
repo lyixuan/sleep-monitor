@@ -47,7 +47,7 @@
             运行床位: <i>{{total.bed_run}}</i>张
           </div>
           <div class="l-c-2">
-            空闲床位: <i>{{total.bed_down}}</i>张
+            空闲床位: <i>{{total.bed_empty}}</i>张
           </div>
           <div class="l-c-2">
             故障床位: <i>{{total.bed_break}}</i>张
@@ -173,7 +173,7 @@
           bed_run: '',
           bed_run_normal: '',
           bed_run_alarm: '',
-          bed_down: '',
+          bed_empty: '',
           bed_break: ''
         },
         //报警信息
@@ -263,7 +263,7 @@
         this.echart_pie.yA = [
           {value: total.bed_run_normal, name: '正常'},
           {value: total.bed_run_alarm, name: '报警'},
-          {value: total.bed_down, name: '空闲'},
+          {value: total.bed_empty, name: '空闲'},
           {value: total.bed_break, name: '故障'}
         ]
       },
@@ -278,7 +278,7 @@
               yA: [
                 {value: fb.bed_run_normal, name: '正常'},
                 {value: fb.bed_run_alarm, name: '报警'},
-                {value: fb.bed_down, name: '空闲'},
+                {value: fb.bed_empty, name: '空闲'},
                 {value: fb.bed_break, name: '故障'}
               ]
             }

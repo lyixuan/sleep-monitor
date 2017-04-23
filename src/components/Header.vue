@@ -36,20 +36,16 @@
           this.apart_name = u_session.apart_name
           this.logo_url = u_session.logo_url
         } else {
-          var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.html";
+          var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.php";
           window.location.href = url;
-
-//          window.location.href = window.location.href.replace('app.html', 'login.html')
         }
       },
       logout(){
         this.$resource(P_LOGIN + 'logout').get().then((response) => {
           if (response.body.code == 200) {
             sessionStorage.removeItem('u_session')
-            var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.html";
+            var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.php";
             window.location.href = url;
-
-//            window.location.href = window.location.href.replace('app.html', 'login.html')
           } else {
             this.alertMsg("error", response.status + " - " + response.url)
           }
