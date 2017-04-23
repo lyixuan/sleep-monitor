@@ -69,7 +69,7 @@
               <td>床位</td>
               <td>报警信息</td>
             </tr>
-            <tr v-if="alarm.lenght == 0">
+            <tr v-if="alarm.length == 0">
               <td colspan="4">暂无数据</td>
             </tr>
             <tr v-else v-for="item in alarm">
