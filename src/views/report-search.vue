@@ -265,7 +265,7 @@
 
         function query() {
           let results = [];
-          that.$resource(P_BASE + 'bed_no_list').get({str: queryString}).then((response) => {
+          that.$resource(P_BASE + 'bed_no_list').get({bed_id_like: queryString}).then((response) => {
             results = response.body.data;
             cb(results);
           })

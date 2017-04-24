@@ -194,7 +194,7 @@
         let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
         let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
         let params = {
-          sleep_type: this.checked,
+          alarm_type: this.checked,
           search_type: this.radio,
           start_time: start,
           end_time: end
@@ -253,7 +253,7 @@
 
         function query() {
           let results = [];
-          that.$resource(P_BASE + 'bed_no_list').get({str: queryString}).then((response) => {
+          that.$resource(P_BASE + 'bed_no_list').get({bed_id_like: queryString}).then((response) => {
             results = response.body.data;
             cb(results);
           })
