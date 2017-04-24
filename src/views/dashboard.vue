@@ -480,7 +480,7 @@
     height: 12px;
     display: inline-block;
     border-radius: 6px;
-    background: #2986CC;
+    background: #13CE66;
     vertical-align: middle;
     margin-top: -3px;
   }
@@ -490,7 +490,7 @@
   }
 
   .center .row1 > div.c-m > div.ss3 > i {
-    background: #CDCDCD;
+    background: #2986CC;
   }
 
   .center .row1 > div.c-m > div.ss4 > i {
