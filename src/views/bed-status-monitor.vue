@@ -28,7 +28,7 @@
             <el-table-column prop="device_no" label="设备号" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="device_ip" label="设备IP" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="bed_state_des" label="床位状态" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="create_time" label="故障时间"  min-width="180" show-overflow-tooltip sortable></el-table-column>
+            <el-table-column prop="state_time" label="故障时间"  min-width="180" show-overflow-tooltip sortable></el-table-column>
           </el-table>
         </div>
         <div class="t-bd t-b2" v-show="tabState == 2">
@@ -63,7 +63,7 @@
             <el-table-column min-width="100" prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
             <el-table-column min-width="100" prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
             <el-table-column min-width="120" prop="bed_state_des" label="床位状态" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="180" prop="create_time" label="监控时间" show-overflow-tooltip sortable></el-table-column>
+            <el-table-column min-width="180" prop="state_time" label="监控时间" show-overflow-tooltip sortable></el-table-column>
           </el-table>
         </div>
         <div class="t-bd t-b4" v-show="tabState == 4">
@@ -75,7 +75,7 @@
             <el-table-column prop="device_no" label="设备号" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="device_ip" label="设备IP" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="bed_state_des" label="床位状态" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="create_time" label="监控时间"  min-width="180"  show-overflow-tooltip sortable></el-table-column>
+            <el-table-column prop="state_time" label="监控时间"  min-width="180"  show-overflow-tooltip sortable></el-table-column>
           </el-table>
         </div>
       </div>
@@ -110,11 +110,14 @@
       this.requestData();
       var timer = null;
       timer = setInterval(update, 1000 * 60 * 5)
+      console.log('bed-state:begin')
       function update() {
         if (window.location.hash.indexOf('bed_state') > 0) {
           _this.requestData()
+          console.log('刷新'+new Date())
         } else {
           clearInterval(timer)
+          console.log('bed-state:end')
         }
       }
     },
@@ -123,13 +126,14 @@
         window.open(P_MONITOR + 'bed_state_excel.php');
       },
       requestData(){
+        console.log('更新'+new Date())
         this.$resource(P_MONITOR + 'bed_state').get().then((response) => {
           let r_data = response.body.data;
           // 处理数据
           this.breakArr = r_data.breaky
           this.alarmArr = r_data.alarm
           this.normalArr = r_data.normal
-          this.downArr = r_data.down
+          this.downArr = r_data.empty
 
 
           // 图表渲染
@@ -152,7 +156,7 @@
 
         let total = bed.bed_break + bed.bed_run_alarm + bed.bed_run_normal + bed.bed_empty
         let xA = ['空闲', '正常', '报警', '故障']
-        let yA = [bed.bed_break, bed.bed_run_alarm, bed.bed_run_normal, bed.bed_empty]
+        let yA = [bed.bed_empty,bed.bed_run_normal,bed.bed_run_alarm,bed.bed_break]
 
         let option = {
           title: {
@@ -196,7 +200,7 @@
             label: {
               normal: {
                 show: true,
-                position: 'top',
+                position: 'right',
                 formatter: '{c}'
               }
             }
