@@ -42,7 +42,7 @@
             left: '3%',
             right: '4%',
             bottom: '30',
-            top: '30',
+            top: '40',
             containLabel: true
           },
           xAxis: [{

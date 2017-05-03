@@ -28,11 +28,11 @@ Vue.http.interceptors.push((request, next) => {
 
   // 统一拦截错误提示
   next((response) => {
-    if (response.status != 200) {
+    if (response.status != 200 && response.status != 304) {
       Vue.prototype.alertMsg("error", response.statusText + ": " + response.url)
     }
     // 服务器内部错误提示
-    if (response.body.code < 0) {
+    if (response.body && response.body.code < 0) {
       Vue.prototype.alertMsg("error", '服务器错误:\n' +response.body.code + ": " + response.body.msg)
     }
   });

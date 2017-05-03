@@ -52,7 +52,7 @@
                          @size-change="handleSizeChange"
                          @current-change="handleCurrentChange"
                          :current-page="currentPage"
-                         :page-sizes="[10, 20, 50, 100]"
+                         :page-sizes="[10, 20, 30]"
                          :page-size="pageSize"
                          layout="total, sizes, prev, pager, next"
                          :total="totalNum">
@@ -108,19 +108,31 @@
           page_size: this.pageSize,
           current_page: this.currentPage
         };
+        var _this= this;
         this.$resource(P_MONITOR + 'sleep_24monitor').get(params).then((response) => {
-          let r_data = response.body.data;
-          // 处理数据
-          this.sleepArr = r_data.sleep_data
+          if(response.status == 200){
+            if(response.body.code == 200){
+              let r_data = response.body.data;
+              // 处理数据
+              _this.sleepArr = r_data.sleep_data
 
-          // 图表渲染
-          this.createBar(r_data.sleep_info)
-          this.createPie(r_data.sleep_info)
+              // 图表渲染
+              _this.createBar(r_data.sleep_info)
+              _this.createPie(r_data.sleep_info)
 
-          // 更新时间
-          this.navi_text.subTitle = '(更新时间:' + (new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes() ) ) + '   提示:数据每5分钟更新一次)'
+              // 更新时间
+              _this.navi_text.subTitle = '(更新时间:' + (new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes() ) ) + '   提示:数据每5分钟更新一次)'
 
-          this.paging(r_data.paging)
+              _this.paging(r_data.paging)
+            } else {
+              _this.alertMsg("error", response.body.msg?response.body.msg:'服务器端错误' )
+            }
+
+          } else {
+            _this.alertMsg("error", '请求错误:' +response.status + " - " + response.url)
+          }
+
+
         })
       },
       createBar(data){

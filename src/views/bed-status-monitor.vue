@@ -21,7 +21,7 @@
         </div>
         <div class="t-bd t-b1" v-show="tabState == 1">
           <el-table :data="breakArr" style="width: 100%" border
-                    :default-sort="{prop: 'create_time', order: 'descending'}" max-height="500">
+                    :default-sort="{prop: 'create_time', order: 'descending'}">
             <el-table-column prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
@@ -68,7 +68,7 @@
         </div>
         <div class="t-bd t-b4" v-show="tabState == 4">
           <el-table :data="downArr" style="width: 100%" border
-                    :default-sort="{prop: 'create_time', order: 'descending'}" max-height="500">
+                    :default-sort="{prop: 'create_time', order: 'descending'}">
             <el-table-column prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
             <el-table-column prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>

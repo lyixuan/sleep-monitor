@@ -65,18 +65,18 @@
         <div class="border-table">
           <table>
             <tr>
-              <td>事件</td>
-              <td>上床时间</td>
-              <td>离床时间</td>
-              <td>在床时长</td>
-              <td>离床时长</td>
+              <td>编号</td>
+              <td>开始时间</td>
+              <td>结束时间</td>
+              <td>起居状态</td>
+              <td>状态时长</td>
             </tr>
             <tr v-for="item in report.qiju" v-if="report.qiju.length>0">
               <td>{{item.id}}</td>
-              <td>{{item.in_bed_time}}</td>
-              <td>{{item.out_bed_time}}</td>
-              <td>{{item.onbed_duration}}</td>
-              <td>{{item.outbed_duration?item.outbed_duration:'/'}}</td>
+              <td>{{item.start_time}}</td>
+              <td>{{item.end_time}}</td>
+              <td>{{item.qiju_state}}</td>
+              <td>{{item.state_duration}}</td>
             </tr>
             <tr v-if="report.qiju.length==0">
               <td colspan="5">暂无数据</td>

@@ -4,7 +4,7 @@
                            style="vertical-align: middle;margin-top: -10px;margin-right: 10px;"/>司乘人员睡眠监测管理系统
     </div>
     <div class="content">
-      <div class="pic"><img src="./assets/img-com/train.png" height="420"/></div>
+      <div class="pic"><img src="./assets/img-com/train.png"/></div>
       <div class="wrap">
         <div class="icon"><img src="./assets/img-com/login_icon.png"/></div>
         <div class="ying"></div>
@@ -13,7 +13,7 @@
           <input type="text" v-focus v-model="user_id" placeholder="账号">
         </div>
         <div class="input-wrapper">
-          <input type="password" v-model="password" placeholder="密码">
+          <input type="password" v-model="password"  @keyup.enter="submit" placeholder="密码">
           <span class="error" :class="{show:isShow}">用户名或密码错误</span>
         </div>
         <div class="button-wrapper">
@@ -88,12 +88,11 @@
     box-sizing: border-box;
     margin-top: 30px;
     width: 100%;
-    height: 420px;
+    height: 520px;
     background-image: url(./assets/img-com/bg.png);
     background-repeat: repeat;
     background-position: center 0;
   }
-
   .foot {
     margin-top: 50px;
     text-align: center;
@@ -101,11 +100,31 @@
   }
 
   .pic {
+    height: 520px;
     position: absolute;
     float: left;
     padding: 0 0 0 0px;
   }
 
+
+  @media screen and (max-width: 1460px){
+    .content{
+      height: 420px;
+    }
+    .pic{
+      height: 420px;
+    }
+  }
+
+
+
+  .pic img{
+    height: 100%;
+  }
+
+  .pic img{
+    height: 100%;
+  }
   .icon {
     position: absolute;
     top: 20px;
@@ -124,6 +143,21 @@
     padding: 70px 15px 15px 15px;
     box-sizing: border-box;
     position: relative;
+  }
+  @media screen and (min-width: 1650px){
+    .wrap{
+      margin-right: 100px;
+    }
+  }
+  @media screen and (min-width: 1650px){
+    .wrap{
+      height: 430px;
+      width: 400px;
+      margin-right: 200px;
+    }
+    .icon {
+      left: 155px;
+    }
   }
 
   .ying {

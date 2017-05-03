@@ -18,8 +18,7 @@
         <el-table-column min-width="100" show-overflow-tooltip property="apart_des" label="公寓"></el-table-column>
         <el-table-column min-width="100" show-overflow-tooltip property="room_des" label="房间"></el-table-column>
         <el-table-column min-width="100" show-overflow-tooltip property="bed_des" label="床位"></el-table-column>
-        <el-table-column min-width="120" show-overflow-tooltip property="alarm_state_des" label="报警类型"></el-table-column>
-        <el-table-column min-width="180" show-overflow-tooltip property="alarm_time" label="报警时间"></el-table-column>
+        <el-table-column min-width="100" show-overflow-tooltip property="depot_des" label="机务段"></el-table-column>
       </el-table>
     </el-popover>
 
@@ -55,9 +54,9 @@
         </div>
 
         <div class="row3">
-          <div class="l-h h3">报警详情</div>
+          <div class="l-h h3">入寓信息</div>
           <div class="l-c-3">
-            (最近24小时)
+            (近24小时)
           </div>
           <div class="l-c-3-1" v-popover:popover>
             详情
@@ -67,16 +66,14 @@
               <td>时间</td>
               <td>姓名</td>
               <td>床位</td>
-              <td>报警信息</td>
             </tr>
             <tr v-if="alarm.length == 0">
-              <td colspan="4">暂无数据</td>
+              <td colspan="3">暂无数据</td>
             </tr>
             <tr v-else v-for="item in alarm">
-              <td :title="item.alarm_time">{{(item.alarm_time).substr(11,5)}}</td>
+              <td :title="item.alarm_time">{{(item.sche_begin_time).substr(11,5)}}</td>
               <td :title="item.cust_name">{{item.cust_name}}</td>
               <td :title="item.bed_id">{{item.bed_id}}</td>
-              <td :title="item.alarm_state_des">{{item.alarm_state_des}}</td>
             </tr>
           </table>
         </div>
@@ -176,7 +173,7 @@
           bed_empty: '',
           bed_break: ''
         },
-        //报警信息
+        //报警信息--已改为入寓信息
         alarm: [],
         //楼层详情——center
         floor_detail: {
@@ -212,7 +209,7 @@
           // 处理数据
           this.getFloors(r_data.floors);
           this.getTotal(r_data.total);
-          this.getAlarm(r_data.alarm);
+          this.getAlarm(r_data.apart_event);
           this.getPie(r_data.total);
           this.getBar(r_data.floors);
           // 图表渲染
@@ -237,6 +234,7 @@
         this.total = total;
       },
       getAlarm(alarm){
+        console.log(alarm)
         this.alarm = alarm;
       },
       changeFloor(floor_id){
@@ -299,10 +297,10 @@
             data: p_data.xA,
             formatter: function (name) {
               var oa = option.series[0].data;
-              var num = oa[0].value + oa[1].value;
+              var num = oa[0].value + oa[1].value+oa[2].value+oa[3].value;
               for (var i = 0; i < option.series[0].data.length; i++) {
                 if (name == oa[i].name) {
-                  return name + ' ' + oa[i].value + ' ' + (oa[i].value / num * 100).toFixed(2) + '%';
+                  return name + ' ' + oa[i].value + ' (' + (oa[i].value / num * 100).toFixed(2) + '%)';
                 }
               }
             }
@@ -347,7 +345,7 @@
         el.style.transformOrigin = 'left'
       },
       enter: function (el, done) {
-        Velocity(el, {opacity: 1}, {duration: 1000})
+        Velocity(el, {opacity: 1}, {duration: 300})
         Velocity(el, {opacity: 1}, {complete: done})
       }
     }

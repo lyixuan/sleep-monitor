@@ -62,9 +62,9 @@
         <div class="t-bd">
           <el-table :data="alarmArr" style="width: 100%" border
                     :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
-            <el-table-column fixed prop="cust_id" label="工号" min-width="100" show-overflow-tooltip
+            <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column fixed prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
+            <el-table-column prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="sche_begin_time" label="计划入寓时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
@@ -91,7 +91,7 @@
                          @size-change="handleSizeChange"
                          @current-change="handleCurrentChange"
                          :current-page="currentPage"
-                         :page-sizes="[10, 20, 50, 100]"
+                         :page-sizes="[10, 20, 30]"
                          :page-size="pageSize"
                          layout="total, sizes, prev, pager, next"
                          :total="totalNum">
@@ -127,7 +127,7 @@
           {id: 1, des: '设备故障'},
           {id: 2, des: '睡眠时间不足60%'},
           {id: 3, des: '在床未睡1小时'},
-          {id: 4, des: '在床未睡1小时'},
+          {id: 4, des: '离床3次'},
           {id: 5, des: '离床30分钟'},
           {id: 6, des: '频繁体动'}],
         // 单选

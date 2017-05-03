@@ -41,3 +41,7 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
+.el-popover .el-table{
+  max-height:400px;
+  overflow: auto;
+}
