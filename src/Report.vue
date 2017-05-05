@@ -156,7 +156,7 @@
     },
     methods: {
       getReport(id){
-        this.$resource(P_BASE + 'print_report').get({report_id: id}).then((response) => {
+        this.$resource(P_BASE + 'print_report.php').get({report_id: id}).then((response) => {
           this.report = response.body.data;
         })
       },

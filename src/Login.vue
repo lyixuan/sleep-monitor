@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <div class="head"><img src="./assets/img-com/logo.png" height="50"
+    <div class="head"><img src="./assets/img-com/logo.png" height="55"
                            style="vertical-align: middle;margin-top: -10px;margin-right: 10px;"/>司乘人员睡眠监测管理系统
     </div>
     <div class="content">
@@ -78,7 +78,7 @@
     line-height: 180px;
     border-bottom: 1px solid #E8EAEB;
     color: #2291C6;
-    font-size: 25px;
+    font-size: 30px;
     padding-left: 100px;
     box-sizing: border-box;
   }

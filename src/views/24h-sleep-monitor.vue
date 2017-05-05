@@ -2,6 +2,7 @@
   <div class="h-sleep-monitor">
     <s-navi :nData="navi_text"></s-navi>
 
+    <div style="width: 100%;height: 100%;" v-loading.body="t_loading">
     <div class="chart">
       <div class="c-h">睡眠质量统计图</div>
       <div class="c-b">
@@ -60,6 +61,7 @@
         </div>
       </div>
     </div>
+    </div>
 
   </div>
 </template>
@@ -83,7 +85,8 @@
 
         currentPage: 1,
         pageSize: 10,
-        totalNum: 0
+        totalNum: 0,
+        t_loading:true
       }
     },
     mounted () {
@@ -110,6 +113,7 @@
         };
         var _this= this;
         this.$resource(P_MONITOR + 'sleep_24monitor').get(params).then((response) => {
+          this.t_loading = false
           if(response.status == 200){
             if(response.body.code == 200){
               let r_data = response.body.data;

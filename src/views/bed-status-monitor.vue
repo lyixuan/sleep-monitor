@@ -2,81 +2,83 @@
   <div class="bed-monitor">
     <s-navi :nData="navi_text" v-on:custevt="fatherEvt"></s-navi>
 
-    <div class="chart">
-      <div class="c-h">床位状态监控统计图</div>
-      <div class="c-b">
-        <div id="left-ct"></div>
-        <div id="right-ct"></div>
+    <div style="width: 100%;height: 100%;" v-loading.body="t_loading">
+      <div class="chart">
+        <div class="c-h">床位状态监控统计图</div>
+        <div class="c-b">
+          <div id="left-ct"></div>
+          <div id="right-ct"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="table">
-      <div class="t-h">床位状态监控详情 <span class="export" @click="exportExcel">导出Excel</span></div>
-      <div class="t-b">
-        <div class="t-tb">
-          <span @click="changeTab(1)">故障 <i :class="{'active':tabState == 1}"></i></span>
-          <span @click="changeTab(2)">报警 <i :class="{'active':tabState == 2}"></i></span>
-          <span @click="changeTab(3)">正常 <i :class="{'active':tabState == 3}"></i></span>
-          <span @click="changeTab(4)">空闲 <i :class="{'active':tabState == 4}"></i></span>
-        </div>
-        <div class="t-bd t-b1" v-show="tabState == 1">
-          <el-table :data="breakArr" style="width: 100%" border
-                    :default-sort="{prop: 'create_time', order: 'descending'}">
-            <el-table-column prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="device_no" label="设备号" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="device_ip" label="设备IP" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="bed_state_des" label="床位状态" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="state_time" label="故障时间"  min-width="180" show-overflow-tooltip sortable></el-table-column>
-          </el-table>
-        </div>
-        <div class="t-bd t-b2" v-show="tabState == 2">
-          <el-table :data="alarmArr" style="width: 100%" border
-                    :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
-            <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip  sortable></el-table-column>
-            <el-table-column prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="sche_begin_time" label="计划入寓时间"  min-width="180" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="sche_end_time" label="计划出寓时间"  min-width="180" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="workshop_des" label="车间" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="fleet_des" label="车队" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="group_des" label="指导组" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="apart_des" label="公寓" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="room_des" label="房间" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="bed_state_des" label="床位状态" min-width="120" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="alarm_state_des" label="报警类型" min-width="150" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="alarm_time" label="报警时间"  min-width="180" show-overflow-tooltip sortable></el-table-column>
-          </el-table>
-        </div>
-        <div class="t-bd t-b3" v-show="tabState == 3">
-          <el-table :data="normalArr" style="width: 100%" border
-                    :default-sort="{prop: 'create_time', order: 'descending'}" max-height="500">
-            <el-table-column min-width="100" prop="cust_id" label="工号" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="100" prop="cust_name" label="姓名" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="180" prop="sche_begin_time" label="计划入寓时间" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="180" prop="sche_end_time" label="计划出寓时间"  show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="100" prop="workshop_des" label="车间" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="100" prop="fleet_des" label="车队" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="100" prop="group_des" label="指导组" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="100" prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="100" prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="100" prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="120" prop="bed_state_des" label="床位状态" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column min-width="180" prop="state_time" label="监控时间" show-overflow-tooltip sortable></el-table-column>
-          </el-table>
-        </div>
-        <div class="t-bd t-b4" v-show="tabState == 4">
-          <el-table :data="downArr" style="width: 100%" border
-                    :default-sort="{prop: 'create_time', order: 'descending'}">
-            <el-table-column prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="device_no" label="设备号" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="device_ip" label="设备IP" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="bed_state_des" label="床位状态" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="state_time" label="监控时间"  min-width="180"  show-overflow-tooltip sortable></el-table-column>
-          </el-table>
+      <div class="table">
+        <div class="t-h">床位状态监控详情 <span class="export" @click="exportExcel">导出Excel</span></div>
+        <div class="t-b">
+          <div class="t-tb">
+            <span @click="changeTab(1)">故障 <i :class="{'active':tabState == 1}"></i></span>
+            <span @click="changeTab(2)">报警 <i :class="{'active':tabState == 2}"></i></span>
+            <span @click="changeTab(3)">正常 <i :class="{'active':tabState == 3}"></i></span>
+            <span @click="changeTab(4)">空闲 <i :class="{'active':tabState == 4}"></i></span>
+          </div>
+          <div class="t-bd t-b1" v-show="tabState == 1">
+            <el-table :data="breakArr" style="width: 100%" border
+                      :default-sort="{prop: 'create_time', order: 'descending'}">
+              <el-table-column prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="device_no" label="设备号" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="device_ip" label="设备IP" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="bed_state_des" label="床位状态" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="state_time" label="故障时间"  min-width="180" show-overflow-tooltip sortable></el-table-column>
+            </el-table>
+          </div>
+          <div class="t-bd t-b2" v-show="tabState == 2">
+            <el-table :data="alarmArr" style="width: 100%" border
+                      :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
+              <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip  sortable></el-table-column>
+              <el-table-column prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="sche_begin_time" label="计划入寓时间"  min-width="180" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="sche_end_time" label="计划出寓时间"  min-width="180" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="workshop_des" label="车间" min-width="100" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="fleet_des" label="车队" min-width="100" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="group_des" label="指导组" min-width="100" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="apart_des" label="公寓" min-width="100" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="room_des" label="房间" min-width="100" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="bed_state_des" label="床位状态" min-width="120" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="alarm_state_des" label="报警类型" min-width="150" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="alarm_time" label="报警时间"  min-width="180" show-overflow-tooltip sortable></el-table-column>
+            </el-table>
+          </div>
+          <div class="t-bd t-b3" v-show="tabState == 3">
+            <el-table :data="normalArr" style="width: 100%" border
+                      :default-sort="{prop: 'create_time', order: 'descending'}" max-height="500">
+              <el-table-column min-width="100" prop="cust_id" label="工号" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="100" prop="cust_name" label="姓名" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="180" prop="sche_begin_time" label="计划入寓时间" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="180" prop="sche_end_time" label="计划出寓时间"  show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="100" prop="workshop_des" label="车间" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="100" prop="fleet_des" label="车队" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="100" prop="group_des" label="指导组" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="100" prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="100" prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="100" prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="120" prop="bed_state_des" label="床位状态" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column min-width="180" prop="state_time" label="监控时间" show-overflow-tooltip sortable></el-table-column>
+            </el-table>
+          </div>
+          <div class="t-bd t-b4" v-show="tabState == 4">
+            <el-table :data="downArr" style="width: 100%" border
+                      :default-sort="{prop: 'create_time', order: 'descending'}">
+              <el-table-column prop="apart_des" label="公寓" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="room_des" label="房间" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="bed_des" label="床位" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="device_no" label="设备号" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="device_ip" label="设备IP" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="bed_state_des" label="床位状态" show-overflow-tooltip sortable></el-table-column>
+              <el-table-column prop="state_time" label="监控时间"  min-width="180"  show-overflow-tooltip sortable></el-table-column>
+            </el-table>
+          </div>
         </div>
       </div>
     </div>
@@ -103,6 +105,7 @@
         alarmArr: [],
         normalArr: [],
         downArr: [],
+        t_loading:true
       }
     },
     mounted () {
@@ -110,14 +113,11 @@
       this.requestData();
       var timer = null;
       timer = setInterval(update, 1000 * 60 * 5)
-      console.log('bed-state:begin')
       function update() {
         if (window.location.hash.indexOf('bed_state') > 0) {
           _this.requestData()
-          console.log('刷新'+new Date())
         } else {
           clearInterval(timer)
-          console.log('bed-state:end')
         }
       }
     },
@@ -126,8 +126,8 @@
         window.open(P_MONITOR + 'bed_state_excel.php');
       },
       requestData(){
-        console.log('更新'+new Date())
         this.$resource(P_MONITOR + 'bed_state').get().then((response) => {
+          this.t_loading = false
           let r_data = response.body.data;
           // 处理数据
           this.breakArr = r_data.breaky

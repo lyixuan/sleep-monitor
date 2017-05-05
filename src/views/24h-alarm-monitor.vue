@@ -2,6 +2,7 @@
   <div class="h-alert-monitor">
     <s-navi :nData="navi_text"></s-navi>
 
+    <div style="width: 100%;height: 100%;" v-loading.body="t_loading">
     <div class="chart">
       <div class="c-h">报警状态统计图</div>
       <div class="c-b">
@@ -50,6 +51,7 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
 </template>
 
@@ -72,7 +74,8 @@
 
         currentPage: 1,
         pageSize: 10,
-        totalNum: 0
+        totalNum: 0,
+        t_loading:true
       }
     },
     mounted () {
@@ -98,6 +101,7 @@
           current_page: this.currentPage
         };
         this.$resource(P_MONITOR + 'alarm_24monitor').get(params).then((response) => {
+          this.t_loading = false
           let r_data = response.body.data;
 
           // 处理数据

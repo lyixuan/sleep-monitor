@@ -1,107 +1,107 @@
 <template>
   <div class="alarm-search">
     <s-navi :nData="navi_text"></s-navi>
-    <div class="condition">
-      <div class="bg-blue">检索条件</div>
+    <div style="width: 100%;height: 100%;" v-loading.body="t_loading">
+      <div class="condition">
+        <div class="bg-blue">检索条件</div>
 
-      <div class="condition0">
-        <div class="fl" style="margin-top: 5px;">时间范围：</div>
-        <el-date-picker class="date_p fl" v-model="date_range" size="small" type="daterange"
-                        placeholder="选择日期范围" :editable="false" :clearable="false"></el-date-picker>
-      </div>
-
-      <div class="condition1">
-        <div class="fl">报警类型：</div>
-        <el-checkbox class="fl" v-model="checkAll" @change="handleCheckAllChange">全选
-        </el-checkbox>
-        <el-checkbox-group class="fl" v-model="checked" @change="handleChecked">
-          <el-checkbox v-for="type in types" :label="type.id" :key="type.id">{{type.des}}</el-checkbox>
-        </el-checkbox-group>
-      </div>
-
-      <div class="condition2">
-        <div class="fl">检索方式：</div>
-        <el-radio-group v-model="radio">
-          <el-radio :label="0">全部</el-radio>
-          <el-radio :label="1">个人检索</el-radio>
-          <el-radio :label="2">床位检索</el-radio>
-          <el-radio :label="3">分级检索</el-radio>
-        </el-radio-group>
-      </div>
-
-      <div class="bg-blue">检索内容</div>
-
-      <div class="condition3">
-        <div class="fl c3f" v-show="0==radio">时间范围：</div>
-        <div class="fl c3f" v-show="1==radio">个人检索：</div>
-        <div class="fl c3f" v-show="2==radio">床位检索：</div>
-        <div class="fl c3f" v-show="3==radio">分级检索：</div>
-        <div class="c3-1" v-show="1==radio">
-          <el-input class="m-input" size="small" placeholder="请输入工号或姓名" v-model="cust_info"></el-input>
+        <div class="condition0">
+          <div class="fl" style="margin-top: 5px;">时间范围：</div>
+          <el-date-picker class="date_p fl" v-model="date_range" size="small" type="daterange"
+                          placeholder="选择日期范围" :editable="false" :clearable="false"></el-date-picker>
         </div>
 
-        <div class="c3-2" v-show="2==radio">
-          <el-autocomplete class="m-input" size="small" v-model="bed_id" :fetch-suggestions="querySearchAsync"
-                           placeholder="请输入床位号"
-                           @select="handleSelect"></el-autocomplete>
+        <div class="condition1">
+          <div class="fl">报警类型：</div>
+          <el-checkbox class="fl" v-model="checkAll" @change="handleCheckAllChange">全选
+          </el-checkbox>
+          <el-checkbox-group class="fl" v-model="checked" @change="handleChecked">
+            <el-checkbox v-for="type in types" :label="type.id" :key="type.id">{{type.des}}</el-checkbox>
+          </el-checkbox-group>
         </div>
 
-        <div class="c3-3" v-show="3==radio">
-          <el-cascader :options="levels" change-on-select class="m-cas" size="small"
-                       @change="handleChange"></el-cascader>
+        <div class="condition2">
+          <div class="fl">检索方式：</div>
+          <el-radio-group v-model="radio">
+            <el-radio :label="0">全部</el-radio>
+            <el-radio :label="1">个人检索</el-radio>
+            <el-radio :label="2">床位检索</el-radio>
+            <el-radio :label="3">分级检索</el-radio>
+          </el-radio-group>
         </div>
 
-        <el-button type="primary" class="m-btn" @click="search">开始检索</el-button>
-      </div>
-    </div>
+        <div class="bg-blue">检索内容</div>
 
-    <div style="clear: both"></div>
-    <div class="table">
-      <div class="t-h">检索详情 <span class="export" @click="exportExcel">导出Excel</span></div>
-      <div class="t-b">
-        <div class="t-bd">
-          <el-table :data="alarmArr" style="width: 100%" border
-                    :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
-            <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="sche_begin_time" label="计划入寓时间" min-width="180" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="sche_end_time" label="计划出寓时间" min-width="180" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="workshop_des" label="车间" min-width="100" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="fleet_des" label="车队" min-width="100" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="group_des" label="指导组" min-width="100" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="apart_des" label="公寓" min-width="100" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="room_des" label="房间" min-width="100" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="alarm_state_des" label="报警类型" min-width="150" show-overflow-tooltip
-                             sortable></el-table-column>
-            <el-table-column prop="alarm_time" label="报警时间" min-width="180" show-overflow-tooltip
-                             sortable></el-table-column>
-          </el-table>
+        <div class="condition3">
+          <div class="fl c3f" v-show="0==radio">时间范围：</div>
+          <div class="fl c3f" v-show="1==radio">个人检索：</div>
+          <div class="fl c3f" v-show="2==radio">床位检索：</div>
+          <div class="fl c3f" v-show="3==radio">分级检索：</div>
+          <div class="c3-1" v-show="1==radio">
+            <el-input class="m-input" size="small" placeholder="请输入工号或姓名" v-model="cust_info"></el-input>
+          </div>
 
-          <el-pagination class="m-paging"
-                         @size-change="handleSizeChange"
-                         @current-change="handleCurrentChange"
-                         :current-page="currentPage"
-                         :page-sizes="[10, 20, 30]"
-                         :page-size="pageSize"
-                         layout="total, sizes, prev, pager, next"
-                         :total="totalNum">
-          </el-pagination>
+          <div class="c3-2" v-show="2==radio">
+            <el-autocomplete class="m-input" size="small" v-model="bed_id" :fetch-suggestions="querySearchAsync"
+                             placeholder="请输入床位号"
+                             @select="handleSelect"></el-autocomplete>
+          </div>
+
+          <div class="c3-3" v-show="3==radio">
+            <el-cascader :options="levels" change-on-select class="m-cas" size="small"
+                         @change="handleChange"></el-cascader>
+          </div>
+
+          <el-button type="primary" class="m-btn" @click="search">开始检索</el-button>
         </div>
       </div>
-    </div>
+      <div style="clear: both"></div>
+      <div class="table">
+        <div class="t-h">检索详情 <span class="export" @click="exportExcel">导出Excel</span></div>
+        <div class="t-b">
+          <div class="t-bd">
+            <el-table :data="alarmArr" style="width: 100%" border
+                      :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
+              <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="sche_begin_time" label="计划入寓时间" min-width="180" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="sche_end_time" label="计划出寓时间" min-width="180" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="workshop_des" label="车间" min-width="100" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="fleet_des" label="车队" min-width="100" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="group_des" label="指导组" min-width="100" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="apart_des" label="公寓" min-width="100" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="room_des" label="房间" min-width="100" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="alarm_state_des" label="报警类型" min-width="150" show-overflow-tooltip
+                               sortable></el-table-column>
+              <el-table-column prop="alarm_time" label="报警时间" min-width="180" show-overflow-tooltip
+                               sortable></el-table-column>
+            </el-table>
 
-    <div>
-
+            <el-pagination class="m-paging"
+                           @size-change="handleSizeChange"
+                           @current-change="handleCurrentChange"
+                           :current-page="currentPage"
+                           :page-sizes="[10, 20, 30]"
+                           :page-size="pageSize"
+                           layout="total, sizes, prev, pager, next"
+                           :total="totalNum">
+            </el-pagination>
+          </div>
+        </div>
+      </div>
+      <div>
+      </div>
     </div>
   </div>
 </template>
@@ -146,7 +146,8 @@
 
         currentPage: 1,
         pageSize: 10,
-        totalNum: 0
+        totalNum: 0,
+        t_loading:true
       }
     },
     mounted () {
@@ -225,12 +226,17 @@
       },
       requestData(params){
         this.$resource(P_MONITOR + 'alarm_search').save({}, params).then((response) => {
-          let r_data = response.body.data;
-          // 处理数据
-          this.alarmArr = r_data.alarm_data
+          this.t_loading = false
+          if(response.body.code == 200){
+            let r_data = response.body.data;
+            // 处理数据
+            this.alarmArr = r_data.alarm_data
 
-          this.paging(r_data.paging)
+            this.paging(r_data.paging)
 
+          } else {
+            this.alertMsg("error", response.body.msg?response.body.msg:'服务器端错误' )
+          }
         }, (response) => {
         })
       },

@@ -22,11 +22,11 @@
       </el-table>
     </el-popover>
 
-    <div class="box">
+    <div class="box" v-loading.body="t_loading">
       <div class="left">
         <div class="row1">
           <div class="l-h h1">楼层信息</div>
-          <transition-group v-on:before-enter="beforeEnter" v-on:enter="enter">
+          <transition-group>
             <div class="l-c" :class="{active:floor_active==item.floor_id}" v-for="item in floors" :key="item"
                  @click="changeFloor(item.floor_id)">
               <img src="../assets/img-dash/floor1.png" v-if="floor_active==item.floor_id"/>
@@ -184,7 +184,8 @@
           xA: [],
           yA: []
         },
-        echart_bar: []
+        echart_bar: [],
+        t_loading:true
       }
     },
     mounted () {
@@ -203,13 +204,13 @@
     methods: {
       requestData(){
         this.$resource(P_MONITOR + 'dashboard').get().then((response) => {
+          this.t_loading=false
           let r_data = response.body.data;
           // 存储原始数据
           this.return_data = r_data;
           // 处理数据
           this.getFloors(r_data.floors);
           this.getTotal(r_data.total);
-          this.getAlarm(r_data.apart_event);
           this.getPie(r_data.total);
           this.getBar(r_data.floors);
           // 图表渲染
@@ -217,7 +218,16 @@
 
           // 更新时间
           this.navi_text.subTitle = '(更新时间:' + (new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes() ) ) + '   提示:数据每5分钟更新一次)'
-
+          this.requestData2()
+        })
+      },
+      requestData2(){
+        this.$resource(P_MONITOR + 'dashboard_apart').get().then((response) => {
+          let r_data = response.body.data;
+          // 存储原始数据
+          this.return_data = r_data;
+          // 处理数据 --报警改为了入寓
+          this.getAlarm(r_data.apart_event);
         })
       },
       getFloors(floors){

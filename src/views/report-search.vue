@@ -1,6 +1,7 @@
 <template>
   <div class="report-search">
-    <s-navi :nData="navi_text"></s-navi>
+  <s-navi :nData="navi_text"></s-navi>
+  <div style="width: 100%;height: 100%;" v-loading.body="t_loading">
     <div class="condition">
       <div class="bg-blue">检索条件</div>
 
@@ -55,7 +56,6 @@
         <el-button type="primary" class="m-btn" @click="search">开始检索</el-button>
       </div>
     </div>
-
     <div style="clear: both"></div>
     <div class="table">
       <div class="t-h">检索详情 <span class="export" @click="exportExcel">导出Excel</span></div>
@@ -114,11 +114,8 @@
         </div>
       </div>
     </div>
-
-    <div>
-
-    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -161,7 +158,9 @@
 
         currentPage: 1,
         pageSize: 10,
-        totalNum: 0
+        totalNum: 0,
+
+        t_loading: true
       }
     },
     mounted () {
@@ -239,10 +238,16 @@
       },
       requestData(params){
         this.$resource(P_MONITOR + 'report_search').save({}, params).then((response) => {
-          let r_data = response.body.data;
-          // 处理数据
-          this.reportArr = r_data.report_data
-          this.paging(r_data.paging)
+          this.t_loading = false
+          if(response.body.code == 200){
+            let r_data = response.body.data;
+            // 处理数据
+            this.reportArr = r_data.report_data
+            this.paging(r_data.paging)
+          } else {
+            this.alertMsg("error", response.body.msg?response.body.msg:'服务器端错误' )
+          }
+
         }, (response) => {
         })
       },
