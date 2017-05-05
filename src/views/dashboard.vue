@@ -238,13 +238,13 @@
             floor_des: floors[key].floor_des
           })
         }
-        this.changeFloor(floors[Object.getOwnPropertyNames(floors)[0]].floor_id)
+
+        this.changeFloor(floors[Object.keys(floors)[0]].floor_id)
       },
       getTotal(total){
         this.total = total;
       },
       getAlarm(alarm){
-        console.log(alarm)
         this.alarm = alarm;
       },
       changeFloor(floor_id){
@@ -252,6 +252,7 @@
         this.getFloorDetail(floor_id, this.return_data.floors)
       },
       getFloorDetail(floor_id, return_floors){
+
         let f_detail = return_floors['floor_' + floor_id];
         this.floor_detail = {
           floor_id: f_detail.floor_id,
