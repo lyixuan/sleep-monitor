@@ -224,8 +224,6 @@
       requestData2(){
         this.$resource(P_MONITOR + 'dashboard_apart').get().then((response) => {
           let r_data = response.body.data;
-          // 存储原始数据
-          this.return_data = r_data;
           // 处理数据 --报警改为了入寓
           this.getAlarm(r_data.apart_event);
         })
@@ -249,6 +247,7 @@
       },
       changeFloor(floor_id){
         this.floor_active = floor_id;
+        console.log(this.return_data)
         this.getFloorDetail(floor_id, this.return_data.floors)
       },
       getFloorDetail(floor_id, return_floors){

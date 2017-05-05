@@ -59,7 +59,7 @@
             <td class="cont">{{report.relax_info.in_duration}}</td>
           </tr>
         </table>
-        <div class="pingu">睡眠评估: {{report.assess_state}}</div>
+        <div class="pingu">睡眠评估: {{report.assess_state_des}}</div>
 
         <div class="nt">一、起居事件</div>
         <div class="border-table">

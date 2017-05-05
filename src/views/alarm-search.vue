@@ -1,7 +1,7 @@
 <template>
   <div class="alarm-search">
     <s-navi :nData="navi_text"></s-navi>
-    <div style="width: 100%;height: 100%;" v-loading.body="t_loading">
+    <div style="width: 100%;height: 100%;">
       <div class="condition">
         <div class="bg-blue">检索条件</div>
 
