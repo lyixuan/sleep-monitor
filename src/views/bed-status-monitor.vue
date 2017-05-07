@@ -13,7 +13,7 @@
 
       <div class="table">
         <div class="t-h">床位状态监控详情 <span class="export" @click="exportExcel">导出Excel</span></div>
-        <div class="t-b">
+        <div class="t-b" v-loading.body="tb_loading">
           <div class="t-tb">
             <span @click="changeTab(1)">故障 <i :class="{'active':tabState == 1}"></i></span>
             <span @click="changeTab(2)">报警 <i :class="{'active':tabState == 2}"></i></span>
@@ -89,7 +89,7 @@
   import SNavi from '../components/Navi.vue'
   var echarts = require('echarts');
   export default {
-    name: 'bed-monitor',
+
     components: {
       SNavi
     },
@@ -105,7 +105,8 @@
         alarmArr: [],
         normalArr: [],
         downArr: [],
-        t_loading:true
+        t_loading:true,
+        tb_loading:true
       }
     },
     mounted () {
@@ -121,13 +122,29 @@
         }
       }
     },
+  beforeDestroy: function () {
+    this.$el.innerHTML='';
+    for(let k in this.$data){
+      delete this.$data[k]
+    }
+  },
     methods: {
       exportExcel(){
         window.open(P_MONITOR + 'bed_state_excel.php');
       },
       requestData(){
-        this.$resource(P_MONITOR + 'bed_state').get().then((response) => {
+        this.$resource(P_MONITOR + 'bed_state_total').get().then((response) => {
           this.t_loading = false
+          let r_data = response.body.data;
+          // 图表渲染
+          this.createBar(r_data.bed_info)
+          this.createPie(r_data.bed_info)
+          this.requestData2()
+        })
+      },
+      requestData2(){
+        this.$resource(P_MONITOR + 'bed_state').get().then((response) => {
+          this.tb_loading = false
           let r_data = response.body.data;
           // 处理数据
           this.breakArr = r_data.breaky
@@ -135,16 +152,12 @@
           this.normalArr = r_data.normal
           this.downArr = r_data.empty
 
-
-          // 图表渲染
-          this.createBar(r_data.bed_info)
-          this.createPie(r_data.bed_info)
-
           // 更新时间
           this.navi_text.subTitle = '(更新时间:' + (new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes() ) ) + '   提示:数据每5分钟更新一次)'
 
         })
       },
+
       fatherEvt(){
         this.requestData()
       },

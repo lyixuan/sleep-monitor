@@ -201,8 +201,11 @@
         }
       }
     },
-    beforeDestory(){
-      console.log('-------------------bd')
+    beforeDestroy: function () {
+      this.$el.innerHTML='';
+      for(let k in this.$data){
+        delete this.$data[k]
+      }
     },
     methods: {
       requestData(){

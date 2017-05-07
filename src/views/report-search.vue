@@ -36,7 +36,7 @@
         <div class="fl c3f" v-show="1==radio">个人检索：</div>
         <div class="fl c3f" v-show="2==radio">床位检索：</div>
         <div class="fl c3f" v-show="3==radio">分级检索：</div>
-        <div class="fl c3f" v-show="0==radio">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class="fl c3f" v-show="0==radio">时间范围：</div>
         <div v-show="1==radio">
           <el-input class="m-input" size="small" placeholder="请输入工号或姓名" v-model="cust_info"></el-input>
         </div>
@@ -60,7 +60,7 @@
     <div class="table">
       <div class="t-h">检索详情 <span class="export" @click="exportExcel">导出Excel</span></div>
       <div class="t-b">
-        <div class="t-bd">
+        <div class="t-bd" v-loading.body="tb_loading">
           <el-table :data="reportArr" style="width: 100%" border
                     :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
             <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip
@@ -160,7 +160,7 @@
         pageSize: 10,
         totalNum: 0,
 
-        t_loading: true
+        tb_loading: true
       }
     },
     mounted () {
@@ -168,6 +168,12 @@
       this.date_range = [this.formatDate(new  Date(a)), this.formatDate(new Date())]
       this.search();
       this.getLevels();
+    },
+    beforeDestroy: function () {
+      this.$el.innerHTML='';
+      for(let k in this.$data){
+        delete this.$data[k]
+      }
     },
     methods: {
       exportExcel(){
@@ -238,7 +244,7 @@
       },
       requestData(params){
         this.$resource(P_MONITOR + 'report_search').save({}, params).then((response) => {
-          this.t_loading = false
+          this.tb_loading = false
           if(response.body.code == 200){
             let r_data = response.body.data;
             // 处理数据
