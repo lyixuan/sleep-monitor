@@ -160,7 +160,7 @@
         pageSize: 10,
         totalNum: 0,
 
-        tb_loading: true
+        tb_loading: false
       }
     },
     mounted () {
@@ -243,6 +243,7 @@
         this.requestData(params)
       },
       requestData(params){
+        this.tb_loading = true
         this.$resource(P_MONITOR + 'report_search').save({}, params).then((response) => {
           this.tb_loading = false
           if(response.body.code == 200){

@@ -61,7 +61,7 @@
           <div class="l-c-3-1" v-popover:popover>
             详情
           </div>
-          <table>
+          <table v-loading.body="tb_loading">
             <tr style="font-weight: 600">
               <td>时间</td>
               <td>姓名</td>
@@ -185,7 +185,8 @@
           yA: []
         },
         echart_bar: [],
-        t_loading:true
+        t_loading:true,
+        tb_loading:false
       }
     },
     mounted () {
@@ -228,7 +229,9 @@
         })
       },
       requestData2(){
+        this.tb_loading = true
         this.$resource(P_MONITOR + 'dashboard_apart').get().then((response) => {
+          this.tb_loading = false
           let r_data = response.body.data;
           // 处理数据 --报警改为了入寓
           this.getAlarm(r_data.apart_event);

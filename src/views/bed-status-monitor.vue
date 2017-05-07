@@ -106,7 +106,7 @@
         normalArr: [],
         downArr: [],
         t_loading:true,
-        tb_loading:true
+        tb_loading:false
       }
     },
     mounted () {
@@ -143,6 +143,7 @@
         })
       },
       requestData2(){
+        this.tb_loading = true
         this.$resource(P_MONITOR + 'bed_state').get().then((response) => {
           this.tb_loading = false
           let r_data = response.body.data;
