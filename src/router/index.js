@@ -18,5 +18,10 @@ export default new Router({
     {path: '/sleep_24monitor', component: HSleepMonitor},
     {path: '/alarm_search', component: AlertSearch},
     {path: '/report_search', component: ReportSearch},
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+      console.log('abc')
+    // return 期望滚动到哪个的位置
+    return { x: 0, y: 0 }
+  }
 })

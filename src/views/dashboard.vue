@@ -201,6 +201,9 @@
         }
       }
     },
+    beforeDestory(){
+      console.log('-------------------bd')
+    },
     methods: {
       requestData(){
         this.$resource(P_MONITOR + 'dashboard').get().then((response) => {
@@ -247,7 +250,6 @@
       },
       changeFloor(floor_id){
         this.floor_active = floor_id;
-        console.log(this.return_data)
         this.getFloorDetail(floor_id, this.return_data.floors)
       },
       getFloorDetail(floor_id, return_floors){
