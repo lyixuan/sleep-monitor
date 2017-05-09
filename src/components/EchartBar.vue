@@ -61,7 +61,7 @@
             itemStyle: {
               normal: {
                 color: function (params) {
-                  var colorList = ['#91C7AE', '#C23531', '#D48265', '#2F4554'];
+                  var colorList = ['#91C7AE', '#F3AD0D',  '#2986CC','#C23531'];
                   return colorList[params.dataIndex]
                 }
               }

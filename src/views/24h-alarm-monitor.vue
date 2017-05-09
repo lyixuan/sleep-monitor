@@ -308,7 +308,7 @@
               "stack": "总数",
               "itemStyle": {
                 "normal": {
-                  "color": "#91c7ae",
+                  "color": "#228FBD",
                   "barBorderRadius": 0,
                   "label": {
                     "show": true,

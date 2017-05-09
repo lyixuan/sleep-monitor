@@ -3,8 +3,8 @@
     <div class="wrap">
       <div class="wrap-in">
         <h1><img :src="report.info.logo_path" width="50"
-                 style="vertical-align: text-bottom;margin-right: 10px;"/>{{report.info.depot_des}}机务段</h1>
-        <div class="subTitle">司乘人员睡眠监测总结报告</div>
+                 style="vertical-align: text-bottom;margin-right: 10px;"/>{{report.info.depot_des}}</h1>
+        <div class="subTitle">{{report.info.sub_depot_des}}</div>
         <div class="dep">个人信息:</div>
         <table>
           <tr>
@@ -139,7 +139,8 @@
         report: {
           info: {
             logo: "",
-            locomotive_depot: ""
+            locomotive_depot: "",
+            sub_depot_des:""
           },
           people_info: {},
           relax_info: {},
@@ -159,7 +160,7 @@
         this.$resource(P_BASE + 'print_report.php').get({report_id: id}).then((response) => {
           this.report = response.body.data;
         })
-      },
+      }
     }
 
   }

@@ -1,10 +1,13 @@
 <template>
   <div class="header">
     <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-      <el-menu-item index="2"><i style="vertical-align: text-bottom; "><img :src="logo_url"  class="h_logo"
-                                                                   height="30">
-        <img src="../assets/img-com/logo-wenzi.png" height="30"
-             class="h_logo_text">[{{apart_name}}机务段]</i></el-menu-item>
+      <div class="app-name">
+        <img :src="logo_url" height="30" class="h_logo"/>
+        <span class="app-name-text">{{app_name}}</span> <span class="app-sub-name">[{{depot_des}}]</span>
+      </div>
+      <el-menu-item index="2" style="display: none;">
+
+      </el-menu-item>
       <el-submenu index="1">
         <template slot="title">{{s_name}}</template>
         <el-menu-item index="1-1">系统配置</el-menu-item>
@@ -21,7 +24,8 @@
       return {
         activeIndex: '1',
         s_name: '未登录',
-        apart_name: '未知',
+        depot_des: '未知',
+        app_name:'',
         logo_url: 'x.png'
       }
     },
@@ -33,7 +37,8 @@
         let u_session = JSON.parse(window.sessionStorage.getItem('u_session'))
         if (u_session) {
           this.s_name = u_session.user_name
-          this.apart_name = u_session.apart_name
+          this.depot_des = u_session.depot_des
+          this.app_name = u_session.app_name
           this.logo_url = u_session.logo_url
         } else {
           var url = window.location.href.substring(0, window.location.href.indexOf(window.location.pathname) + 1) + "login.php";
@@ -67,16 +72,27 @@
     z-index: 1000;
   }
 
+  .app-name{
+    height: 50px;
+    float: left;
+    cursor: pointer;
+  }
+  .app-name-text{
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 5px;
+    font-size: 20px;
+    color: #eee;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+  .app-sub-name{
+    display: inline-block;
+    color: #cecece;
+  }
   .h_logo {
-    vertical-align: middle;
-    margin-left: -10px;
+    float: left;
     margin-right: 5px;
+    margin-left: 10px;
+    margin-top: 10px;
   }
-
-  .h_logo_text {
-    vertical-align: middle;
-    margin-right: 5px;
-    margin-top: -3px;
-  }
-
 </style>

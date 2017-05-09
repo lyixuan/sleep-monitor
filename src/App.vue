@@ -51,8 +51,9 @@
 
   #view-wrap {
     width: 100%;
-    padding: 56px 6px 36px 166px;
+    padding: 56px 10px 36px 170px;
     box-sizing: border-box;
+    overflow-y: hidden;
   }
 
   .view-content {

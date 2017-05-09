@@ -1,7 +1,7 @@
 <template>
   <div id="login">
-    <div class="head"><img src="./assets/img-com/logo.png" height="55"
-                           style="vertical-align: middle;margin-top: -10px;margin-right: 10px;"/>司乘人员睡眠监测管理系统
+    <div class="head"><img src="./assets/img-com/logo.png" height="65"
+                           style="vertical-align: middle;margin-top: -10px;margin-right: 10px;"/>{{app_name}}
     </div>
     <div class="content">
       <div class="pic"><img src="./assets/img-com/train.png"/></div>
@@ -32,11 +32,20 @@
       return {
         user_id: '',
         password: '',
+        app_name: '智能睡眠检测系统',
         isShow: false
       }
     },
+    mounted(){
+      this.getInit()
+    },
     methods: {
-
+      getInit(){
+        this.$resource(P_LOGIN + 'init.php').get().then((response) => {
+          let r_data = response.body.data;
+          this.app_name = r_data.app_name
+        })
+      },
       submit(){
 
         let param = {
@@ -78,7 +87,7 @@
     line-height: 180px;
     border-bottom: 1px solid #E8EAEB;
     color: #2291C6;
-    font-size: 30px;
+    font-size: 35px;
     padding-left: 100px;
     box-sizing: border-box;
   }

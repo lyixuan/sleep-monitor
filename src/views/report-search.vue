@@ -63,9 +63,9 @@
         <div class="t-bd" v-loading.body="tb_loading">
           <el-table :data="reportArr" style="width: 100%" border
                     :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
-            <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip
+            <el-table-column fixed prop="cust_id" label="工号" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
+            <el-table-column fixed prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="sche_begin_time" label="计划入寓时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
@@ -93,9 +93,9 @@
                              sortable></el-table-column>
             <el-table-column prop="sleep_per" label="睡眠占比" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="assess_state_des" label="睡眠评估" min-width="120" show-overflow-tooltip
+            <el-table-column fixed="right" prop="assess_state_des" label="睡眠评估" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column label="报告预览" width="100">
+            <el-table-column fixed="right"  label="报告预览" width="100">
               <template scope="scope">
                 <el-button @click="reportPrint(scope.row)" type="text" size="small">生成报告</el-button>
               </template>

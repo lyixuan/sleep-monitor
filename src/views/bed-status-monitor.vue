@@ -206,7 +206,7 @@
             itemStyle: {
               normal: {
                 color: function (params) {
-                  var colorList = ['#D48265', '#91C7AE', '#C23531', '#2F4554'];
+                  var colorList = ['#2986CC','#91C7AE', '#C23531', '#F3AD0D'];
                   return colorList[params.dataIndex]
                 }
               }
@@ -292,6 +292,10 @@
                 }
               }
             }
+          ],
+          color: [
+            '#C23531',
+            '#91C7AE'
           ]
         };
 

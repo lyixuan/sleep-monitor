@@ -2,11 +2,26 @@
   <div class="dashboard">
     <s-navi :nData="navi_text" class="dashboard-navi" v-on:custevt="fatherEvt"></s-navi>
 
-    <el-popover
-      ref="popover"
-      placement="right"
-      width="800"
-      trigger="click">
+    <!--<el-popover-->
+      <!--ref="popover"-->
+      <!--placement="right"-->
+      <!--width="800"-->
+      <!--trigger="click">-->
+      <!--<el-table :data="alarm">-->
+        <!--<el-table-column min-width="100"  property="cust_id" label="工号"></el-table-column>-->
+        <!--<el-table-column min-width="100"  property="cust_name" label="姓名"></el-table-column>-->
+        <!--<el-table-column min-width="180" show-overflow-tooltip property="sche_begin_time" label="计划入寓时间"></el-table-column>-->
+        <!--<el-table-column min-width="180" show-overflow-tooltip property="sche_end_time" label="计划出寓时间"></el-table-column>-->
+        <!--<el-table-column min-width="100" show-overflow-tooltip property="workshop_des" label="车间"></el-table-column>-->
+        <!--<el-table-column min-width="100" show-overflow-tooltip property="fleet_des" label="车队"></el-table-column>-->
+        <!--<el-table-column min-width="100" show-overflow-tooltip property="group_des" label="指导组"></el-table-column>-->
+        <!--<el-table-column min-width="100" show-overflow-tooltip property="apart_des" label="公寓"></el-table-column>-->
+        <!--<el-table-column min-width="100" show-overflow-tooltip property="room_des" label="房间"></el-table-column>-->
+        <!--<el-table-column min-width="100" show-overflow-tooltip property="bed_des" label="床位"></el-table-column>-->
+        <!--<el-table-column min-width="100" show-overflow-tooltip property="depot_des" label="机务段"></el-table-column>-->
+      <!--</el-table>-->
+    <!--</el-popover>-->
+    <el-dialog title="入寓信息" v-model="dialogTableVisible">
       <el-table :data="alarm">
         <el-table-column min-width="100"  property="cust_id" label="工号"></el-table-column>
         <el-table-column min-width="100"  property="cust_name" label="姓名"></el-table-column>
@@ -20,7 +35,8 @@
         <el-table-column min-width="100" show-overflow-tooltip property="bed_des" label="床位"></el-table-column>
         <el-table-column min-width="100" show-overflow-tooltip property="depot_des" label="机务段"></el-table-column>
       </el-table>
-    </el-popover>
+    </el-dialog>
+
 
     <div class="box" v-loading.body="t_loading">
       <div class="left">
@@ -58,7 +74,7 @@
           <div class="l-c-3">
             (近24小时)
           </div>
-          <div class="l-c-3-1" v-popover:popover>
+          <div class="l-c-3-1" @click="dialogTableVisible = true">
             详情
           </div>
           <table v-loading.body="tb_loading">
@@ -186,7 +202,8 @@
         },
         echart_bar: [],
         t_loading:true,
-        tb_loading:false
+        tb_loading:false,
+        dialogTableVisible:false
       }
     },
     mounted () {
@@ -212,6 +229,7 @@
       requestData(){
         this.$resource(P_MONITOR + 'dashboard').get().then((response) => {
           this.t_loading=false
+          console.log(response.body)
           let r_data = response.body.data;
           // 存储原始数据
           this.return_data = r_data;
@@ -308,7 +326,7 @@
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
           },
-          color: ['#91C7AE', '#C23531', '#D48265', '#2F4554'],
+          color: ['#91C7AE', '#F3AD0D',  '#2986CC','#C23531'],
           legend: {
             x: 'center',
             y: 'bottom',
@@ -407,14 +425,14 @@
 
   .left .row1 {
     min-height: 200px;
-    border-top: 1px solid #20C3A9;
+    border-top: 2px solid #20C3A9;
     padding-bottom: 10px;
   }
 
   .left .row2 {
     height: 170px;
     margin-top: 5px;
-    border-top: 1px solid #FFAD30;
+    border-top: 2px solid #FFAD30;
   }
 
   .left .row3 {
@@ -423,7 +441,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     margin-top: 5px;
-    border-top: 1px solid #E73D3D;
+    border-top: 2px solid #E73D3D;
     padding-bottom: 10px;
     padding-right: 2px;
     padding-left: 2px;
@@ -436,7 +454,7 @@
   .right .row1 {
     min-height: 300px;
     overflow: hidden;
-    border-top: 1px solid #88C657;
+    border-top: 2px solid #88C657;
   }
 
   .right .row2 {
@@ -445,7 +463,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     margin-top: 5px;
-    border-top: 1px solid #2D9BF5;
+    border-top: 2px solid #2D9BF5;
   }
 
   /*center */
@@ -453,7 +471,7 @@
   .center .row1 {
     height: 40px;
     line-height: 40px;
-    border-top: 1px solid #87C556;
+    border-top: 2px solid #87C556;
     background: #fff;
   }
 
@@ -557,13 +575,15 @@
   }
 
   .red-color {
-    background: #FF4949;
+    /*background: #FF4949;*/
+    background: #C6242F;
     color: #fff;
     border: none;
   }
 
   .yellow-color {
-    background: #F7BA2A;
+    /*background: #F7BA2A;*/
+    background: #F3AD0D;
     color: #fff;
     border: none;
   }
@@ -585,7 +605,7 @@
     position: absolute;
     right: 0;
     font-size: 16px;
-    color: #C23531;
+    color: #444;
     font-weight: bold;
     transform: rotate(45deg);
     -ms-transform: rotate(45deg); /* IE 9 */
@@ -595,7 +615,8 @@
   }
 
   .text-tip2 {
-    color: #FF4949;
+    /*color: #FF4949;*/
+    color: #444;
   }
 
   /*left-con*/
