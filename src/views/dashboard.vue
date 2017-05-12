@@ -21,7 +21,7 @@
         <!--<el-table-column min-width="100" show-overflow-tooltip property="depot_des" label="机务段"></el-table-column>-->
       <!--</el-table>-->
     <!--</el-popover>-->
-    <el-dialog title="入寓信息" v-model="dialogTableVisible">
+    <el-dialog title="入寓信息" v-model="dialogTableVisible" size="large">
       <el-table :data="alarm">
         <el-table-column min-width="100"  property="cust_id" label="工号"></el-table-column>
         <el-table-column min-width="100"  property="cust_name" label="姓名"></el-table-column>

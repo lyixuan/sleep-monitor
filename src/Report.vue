@@ -180,7 +180,7 @@
 
   .wrap {
     width: 210mm;
-    height: 297mm;
+    min-height: 297mm;
     margin: 0 auto;
     border: 2px solid red;
     padding: 1px;
@@ -188,7 +188,7 @@
 
   .wrap-in {
     width: 100%;
-    height: 100%;
+    min-height: 297mm;
     border: 1px solid red;
     box-sizing: border-box;
     padding: 10px;
