@@ -16,8 +16,8 @@
         <div class="t-bd">
           <el-table :data="alarmArr" style="width: 100%" border
                     :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
-            <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
+            <el-table-column fixed prop="cust_id" label="工号" min-width="100" show-overflow-tooltip sortable></el-table-column>
+            <el-table-column fixed prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="sche_begin_time" label="计划入寓时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
@@ -34,9 +34,9 @@
             <el-table-column prop="room_des" label="房间" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="bed_des" label="床位" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="alarm_state_des" label="报警类型" min-width="150" show-overflow-tooltip
+            <el-table-column fixed="right" prop="alarm_state_des" label="报警类型" min-width="150" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="alarm_time" label="报警时间" min-width="180" show-overflow-tooltip
+            <el-table-column fixed="right" prop="alarm_time" label="报警时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
           </el-table>
           <el-pagination class="m-paging"

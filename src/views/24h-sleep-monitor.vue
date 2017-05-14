@@ -17,8 +17,8 @@
         <div class="t-bd">
           <el-table :data="sleepArr" style="width: 100%" border
                     :default-sort="{prop: 'alarm_time', order: 'descending'}" max-height="500">
-            <el-table-column prop="cust_id" label="工号" min-width="100" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
+            <el-table-column fixed prop="cust_id" label="工号" min-width="100" show-overflow-tooltip sortable></el-table-column>
+            <el-table-column fixed prop="cust_name" label="姓名" min-width="100" show-overflow-tooltip
                              sortable></el-table-column>
             <el-table-column prop="sche_begin_time" label="计划入寓时间" min-width="180" show-overflow-tooltip
                              sortable></el-table-column>
@@ -43,9 +43,9 @@
                              sortable></el-table-column>
             <el-table-column prop="sleep_duration" label="睡眠时长" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="sleep_per" label="睡眠占比" min-width="120" show-overflow-tooltip
+            <el-table-column fixed="right"  prop="sleep_per" label="睡眠占比" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>
-            <el-table-column prop="assess_state_des" label="睡眠评估" min-width="120" show-overflow-tooltip
+            <el-table-column fixed="right"  prop="assess_state_des" label="睡眠评估" min-width="120" show-overflow-tooltip
                              sortable></el-table-column>
           </el-table>
 

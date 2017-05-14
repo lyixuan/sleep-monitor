@@ -94,8 +94,8 @@
             </tr>
             <tr v-for="item in report.sleep_stat">
               <td>{{item.state}}</td>
-              <td>{{item.in_bed_duration}}</td>
               <td>{{item.out_bed_duration}}</td>
+              <td>{{item.in_bed_duration}}</td>
               <td>{{item.sleep_duration}}</td>
             </tr>
           </table>
