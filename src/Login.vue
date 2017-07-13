@@ -1,7 +1,8 @@
 <template>
   <div id="login">
-    <div class="head"><img src="./assets/img-com/logo.png" height="65"
-                           style="vertical-align: middle;margin-top: -10px;margin-right: 10px;"/>{{app_name}}
+    <div class="head">
+      <!--<img src="./assets/img-com/logo.png" height="65" style="vertical-align: middle;margin-top: -10px;margin-right: 10px;"/>-->
+      {{app_name}}
     </div>
     <div class="content">
       <div class="pic"><img src="./assets/img-com/train.png"/></div>

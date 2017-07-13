@@ -10,7 +10,7 @@
       </el-menu-item>
       <el-submenu index="1">
         <template slot="title">{{s_name}}</template>
-        <el-menu-item index="1-1">系统配置</el-menu-item>
+        <el-menu-item index="1-1">修改密码</el-menu-item>
         <el-menu-item index="1-2" @click="logout">退出</el-menu-item>
       </el-submenu>
     </el-menu>

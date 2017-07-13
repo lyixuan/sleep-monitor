@@ -7,8 +7,11 @@
 
       <div class="condition0">
         <div class="fl" style="margin-top: 5px;">时间范围：</div>
-        <el-date-picker class="date_p fl" v-model="date_range" size="small" type="daterange"
-                        placeholder="选择日期范围" :editable="false" :clearable="false"></el-date-picker>
+        <el-date-picker
+          class="date_p fl" v-model="date_range" size="small"
+          type="datetimerange" :editable="false" :clearable="false"
+          placeholder="选择时间范围">
+        </el-date-picker>
       </div>
 
       <div class="condition1">
@@ -165,20 +168,15 @@
     },
     mounted () {
       let a = new Date().getTime() - 24 * 1000 * 60 * 60
-      this.date_range = [this.formatDate(new  Date(a)), this.formatDate(new Date())]
+      this.date_range = [(new Date(a)).Format('yyyy-MM-dd hh:mm:ss'), (new Date()).Format('yyyy-MM-dd hh:mm:ss')]
       this.search();
       this.getLevels();
     },
-    beforeDestroy: function () {
-      this.$el.innerHTML='';
-      for(let k in this.$data){
-        delete this.$data[k]
-      }
-    },
+
     methods: {
       exportExcel(){
-        let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
-        let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
+        let start = this.date_range[0] != null ?(new Date(this.date_range[0])).Format('yyyy-MM-dd hh:mm:ss')  : null
+        let end = this.date_range[1] != null ? (new Date(this.date_range[1])).Format('yyyy-MM-dd hh:mm:ss'): null
         let params = {
           sleep_type: this.checked,
           search_type: this.radio,
@@ -210,8 +208,8 @@
         return result.substr(0, result.length - 1)
       },
       search(type){
-        let start = this.date_range[0] != null ? this.formatDate(new Date(this.date_range[0])) : null
-        let end = this.date_range[1] != null ? this.formatDate(new Date(this.date_range[1])) : null
+        let start = this.date_range[0] != null ? (new Date(this.date_range[0])).Format('yyyy-MM-dd hh:mm:ss') : null
+        let end = this.date_range[1] != null ? (new Date(this.date_range[1])).Format('yyyy-MM-dd hh:mm:ss')  : null
         let params = {
           sleep_type: this.checked,
           search_type: this.radio,

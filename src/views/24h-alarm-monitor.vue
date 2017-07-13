@@ -91,12 +91,7 @@
         }
       }
     },
-    beforeDestroy: function () {
-      this.$el.innerHTML='';
-      for(let k in this.$data){
-        delete this.$data[k]
-      }
-    },
+
     methods: {
       exportExcel(){
         window.open(P_MONITOR + 'alarm_24monitor_excel.php');

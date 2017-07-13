@@ -40,6 +40,18 @@
         <span>报告检索</span>
       </div>
     </router-link>
+    <router-link to="/people_manage">
+      <div class="menu">
+        <img class="icon" src="../assets/img-com/icon-people.png"/>
+        <span>人员管理</span>
+      </div>
+    </router-link>
+    <router-link to="/options">
+      <div class="menu">
+        <img class="icon" src="../assets/img-com/icon-set.png"/>
+        <span>权限配置</span>
+      </div>
+    </router-link>
   </div>
 </template>
 

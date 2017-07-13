@@ -41,7 +41,37 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.el-popover .el-table{
-  max-height:400px;
+
+.el-popover .el-table {
+  max-height: 400px;
   overflow: auto;
+}
+
+.bedInputDialog .el-cascader {
+  width: 100%;
+}
+
+.bedInputDialog .el-date-editor.el-input {
+  width: 100%;
+}
+
+.bedInputDialog .el-dialog__body {
+  padding-right: 40px;
+}
+
+.bedInputDialog .el-input.is-disabled .el-input__inner {
+  color: #666;
+}
+
+.bedInputDialog .el-dialog__header, .actEdit .el-dialog__header {
+  text-align: center;
+}
+
+.right_card .el-checkbox {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.right_card .el-checkbox:first-child {
+  margin-left: 15px;
 }

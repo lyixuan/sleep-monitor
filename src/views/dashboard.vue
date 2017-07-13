@@ -3,30 +3,32 @@
     <s-navi :nData="navi_text" class="dashboard-navi" v-on:custevt="fatherEvt"></s-navi>
 
     <!--<el-popover-->
-      <!--ref="popover"-->
-      <!--placement="right"-->
-      <!--width="800"-->
-      <!--trigger="click">-->
-      <!--<el-table :data="alarm">-->
-        <!--<el-table-column min-width="100"  property="cust_id" label="工号"></el-table-column>-->
-        <!--<el-table-column min-width="100"  property="cust_name" label="姓名"></el-table-column>-->
-        <!--<el-table-column min-width="180" show-overflow-tooltip property="sche_begin_time" label="计划入寓时间"></el-table-column>-->
-        <!--<el-table-column min-width="180" show-overflow-tooltip property="sche_end_time" label="计划出寓时间"></el-table-column>-->
-        <!--<el-table-column min-width="100" show-overflow-tooltip property="workshop_des" label="车间"></el-table-column>-->
-        <!--<el-table-column min-width="100" show-overflow-tooltip property="fleet_des" label="车队"></el-table-column>-->
-        <!--<el-table-column min-width="100" show-overflow-tooltip property="group_des" label="指导组"></el-table-column>-->
-        <!--<el-table-column min-width="100" show-overflow-tooltip property="apart_des" label="公寓"></el-table-column>-->
-        <!--<el-table-column min-width="100" show-overflow-tooltip property="room_des" label="房间"></el-table-column>-->
-        <!--<el-table-column min-width="100" show-overflow-tooltip property="bed_des" label="床位"></el-table-column>-->
-        <!--<el-table-column min-width="100" show-overflow-tooltip property="depot_des" label="机务段"></el-table-column>-->
-      <!--</el-table>-->
+    <!--ref="popover"-->
+    <!--placement="right"-->
+    <!--width="800"-->
+    <!--trigger="click">-->
+    <!--<el-table :data="alarm">-->
+    <!--<el-table-column min-width="100"  property="cust_id" label="工号"></el-table-column>-->
+    <!--<el-table-column min-width="100"  property="cust_name" label="姓名"></el-table-column>-->
+    <!--<el-table-column min-width="180" show-overflow-tooltip property="sche_begin_time" label="计划入寓时间"></el-table-column>-->
+    <!--<el-table-column min-width="180" show-overflow-tooltip property="sche_end_time" label="计划出寓时间"></el-table-column>-->
+    <!--<el-table-column min-width="100" show-overflow-tooltip property="workshop_des" label="车间"></el-table-column>-->
+    <!--<el-table-column min-width="100" show-overflow-tooltip property="fleet_des" label="车队"></el-table-column>-->
+    <!--<el-table-column min-width="100" show-overflow-tooltip property="group_des" label="指导组"></el-table-column>-->
+    <!--<el-table-column min-width="100" show-overflow-tooltip property="apart_des" label="公寓"></el-table-column>-->
+    <!--<el-table-column min-width="100" show-overflow-tooltip property="room_des" label="房间"></el-table-column>-->
+    <!--<el-table-column min-width="100" show-overflow-tooltip property="bed_des" label="床位"></el-table-column>-->
+    <!--<el-table-column min-width="100" show-overflow-tooltip property="depot_des" label="机务段"></el-table-column>-->
+    <!--</el-table>-->
     <!--</el-popover>-->
     <el-dialog title="入寓信息" v-model="dialogTableVisible" size="large">
       <el-table :data="alarm">
-        <el-table-column min-width="100"  property="cust_id" label="工号"></el-table-column>
-        <el-table-column min-width="100"  property="cust_name" label="姓名"></el-table-column>
-        <el-table-column min-width="180" show-overflow-tooltip property="sche_begin_time" label="计划入寓时间"></el-table-column>
-        <el-table-column min-width="180" show-overflow-tooltip property="sche_end_time" label="计划出寓时间"></el-table-column>
+        <el-table-column min-width="100" property="cust_id" label="工号"></el-table-column>
+        <el-table-column min-width="100" property="cust_name" label="姓名"></el-table-column>
+        <el-table-column min-width="180" show-overflow-tooltip property="sche_begin_time"
+                         label="计划入寓时间"></el-table-column>
+        <el-table-column min-width="180" show-overflow-tooltip property="sche_end_time"
+                         label="计划出寓时间"></el-table-column>
         <el-table-column min-width="100" show-overflow-tooltip property="workshop_des" label="车间"></el-table-column>
         <el-table-column min-width="100" show-overflow-tooltip property="fleet_des" label="车队"></el-table-column>
         <el-table-column min-width="100" show-overflow-tooltip property="group_des" label="指导组"></el-table-column>
@@ -117,7 +119,7 @@
                 <div class="r-cont">
                   <div class="room-item"
                        :class="{'red-color':bed.bed_state_id == 4,'yellow-color':bed.bed_state_id == 5}"
-                       v-for="bed in room.bed" :key="bed.bed_id">
+                       v-for="bed in room.bed" :key="bed.bed_id" @click="openDetail(bed)">
                     <div class="ri-l">
                       <div class="ri-l-t">{{bed.bed_des}}</div>
                       <div class="ri-l-p">
@@ -152,6 +154,72 @@
           <s-e-b :pData="item" :sId="item.id" v-for="item in echart_bar" :key="item.id"></s-e-b>
         </div>
       </div>
+      <!--出入寓信息-->
+      <el-dialog class="bedInputDialog" title="增加入寓信息" :visible.sync="bedInputDialog">
+        <el-form :model="bedInputForm">
+          <el-form-item label="工号" :label-width="formLabelWidth" required>
+            <el-input v-model="bedInputForm.cust_id" auto-complete="on"></el-input>
+            <el-button style="margin-top:10px;" @click="getDetailByCustId()">获取人员信息</el-button>
+          </el-form-item>
+          <el-form-item label="姓名" :label-width="formLabelWidth" required>
+            <el-input v-model="bedInputForm.cust_name" auto-complete="on"></el-input>
+          </el-form-item>
+          <el-form-item label="分级" :label-width="formLabelWidth">
+            <el-cascader :options="levels" change-on-select
+                         @change="handleChange" v-model="bedInputForm.cust_level"></el-cascader>
+          </el-form-item>
+          <el-form-item label="计划入寓时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="bedInputForm.sche_in_time"
+                            type="datetime" :editable="false" :clearable="false"
+                            placeholder="选择时间">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="计划出寓时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="bedInputForm.sche_out_time"
+                            type="datetime" :editable="false" :clearable="false"
+                            placeholder="选择时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="bedInputDialog = false">取 消</el-button>
+          <el-button type="primary" @click="saveInApart()">入 寓</el-button>
+        </div>
+      </el-dialog>
+
+      <el-dialog class="bedInputDialog" title="入寓信息" :visible.sync="bedShowDialog">
+        <el-form :model="bedShowForm">
+          <el-form-item label="床位状态" :label-width="formLabelWidth">
+            <el-input v-model="bedShowForm.bed_state_des" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="工号" :label-width="formLabelWidth">
+            <el-input v-model="bedShowForm.cust_id" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="姓名" :label-width="formLabelWidth">
+            <el-input v-model="bedShowForm.cust_name" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="分级" :label-width="formLabelWidth">
+            <el-input v-model="bedShowForm.cust_level" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="计划入寓时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="bedShowForm.sche_in_time"
+                            type="datetime" :editable="false" :clearable="false"
+                            placeholder="选择时间" :disabled="true">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="计划出寓时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="bedShowForm.sche_out_time"
+                            type="datetime" :editable="false" :clearable="false"
+                            placeholder="选择时间" :disabled="true">
+            </el-date-picker>
+          </el-form-item>
+
+
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="bedShowDialog = false">关 闭</el-button>
+        </div>
+      </el-dialog>
     </div>
 
   </div>
@@ -201,16 +269,38 @@
           yA: []
         },
         echart_bar: [],
-        t_loading:true,
-        tb_loading:false,
-        dialogTableVisible:false
+        t_loading: true,
+        tb_loading: false,
+        dialogTableVisible: false,
+
+        bedInputDialog: false,
+        formLabelWidth: '120px',
+        // 分级
+        levels: [],
+        bedInputForm: {
+          cust_id: '',
+          cust_level: [],
+          cust_name: "",
+          sche_in_time: "",
+          sche_out_time: "",
+        },
+
+        bedShowDialog: false,
+        bedShowForm: {
+          cust_id: '',
+          cust_level: '',
+          cust_name: "",
+          sche_in_time: "",
+          sche_out_time: "",
+          bed_state_des: ""
+        },
       }
     },
     mounted () {
       var _this = this;
       this.requestData();
       var timer = null;
-      timer = setInterval(update, 1000 * 60 * 5)
+      timer = setInterval(update, 1000 * 60 * 5);
       function update() {
         if (window.location.hash.indexOf('dashboard') > 0) {
           _this.requestData()
@@ -218,18 +308,14 @@
           clearInterval(timer)
         }
       }
+
+      this.getLevels()
     },
-    beforeDestroy: function () {
-      this.$el.innerHTML='';
-      for(let k in this.$data){
-        delete this.$data[k]
-      }
-    },
+
     methods: {
       requestData(){
         this.$resource(P_MONITOR + 'dashboard').get().then((response) => {
-          this.t_loading=false
-          console.log(response.body)
+          this.t_loading = false
           let r_data = response.body.data;
           // 存储原始数据
           this.return_data = r_data;
@@ -326,14 +412,14 @@
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
           },
-          color: ['#91C7AE', '#F3AD0D',  '#2986CC','#C23531'],
+          color: ['#91C7AE', '#F3AD0D', '#2986CC', '#C23531'],
           legend: {
             x: 'center',
             y: 'bottom',
             data: p_data.xA,
             formatter: function (name) {
               var oa = option.series[0].data;
-              var num = oa[0].value + oa[1].value+oa[2].value+oa[3].value;
+              var num = oa[0].value + oa[1].value + oa[2].value + oa[3].value;
               for (var i = 0; i < option.series[0].data.length; i++) {
                 if (name == oa[i].name) {
                   return name + ' ' + oa[i].value + ' (' + (oa[i].value / num * 100).toFixed(2) + '%)';
@@ -383,6 +469,96 @@
       enter: function (el, done) {
         Velocity(el, {opacity: 1}, {duration: 300})
         Velocity(el, {opacity: 1}, {complete: done})
+      },
+      openDetail(bed){
+        console.log(bed)
+        let _this = this;
+        if (bed.bed_state_id == 3) {
+          // 空闲,录入
+          this.bedInputForm={
+              cust_id: "",
+              cust_level: [],
+              cust_name: "",
+              sche_in_time: "",
+              sche_out_time: "",
+          };
+          this.bedInputDialog = true;
+
+        } else {
+          // 非空闲，获取详情
+          this.$resource(P_BASE2 + 'get_in_apart_info_by_custid').get({cust_id:bed.cust_id}).then((response) => {
+            if (response.body.code == 200) {
+              _this.bedShowForm = response.body.data;
+              let cust_level='';
+              for(let i=0;i<response.body.data.cust_level.length;i++){
+                cust_level+=response.body.data.cust_level[i].name;
+                if(i<response.body.data.cust_level.length-1){
+                  cust_level+="->"
+                }
+              }
+              _this.bedShowForm.cust_level=cust_level;
+              _this.bedShowForm.bed_state_des = bed.bed_state_des;
+              _this.bedShowDialog = true;
+            } else {
+              _this.alertMsg("error", response.body.msg ? response.body.msg : '服务器端错误')
+            }
+          })
+
+
+        }
+      },
+
+      getDetailByCustId(){
+        let _this = this;
+        if (this.bedInputForm.cust_id) {
+          this.$resource(P_BASE2 + 'get_in_apart_info_by_custid').get({cust_id:this.bedInputForm.cust_id}).then((response) => {
+            if (response.body.code == 200) {
+              _this.bedInputForm = response.body.data;
+              let cust_level=[];
+              for(let i=0;i<response.body.data.cust_level.length;i++){
+                cust_level.push(response.body.data.cust_level[i].value)
+              }
+              _this.bedInputForm.cust_level=cust_level
+            } else {
+              _this.alertMsg("error", response.body.msg ? response.body.msg : '服务器端错误')
+            }
+          })
+        }else {
+          _this.alertMsg("warning", '请输入工号查询')
+        }
+
+      },
+      saveInApart(){
+        let _this = this;
+        if (this.bedInputForm.cust_id && this.bedInputForm.cust_name) {
+          this.bedInputForm.sche_in_time =new Date(this.bedInputForm.sche_in_time).Format('yyyy-MM-dd hh:mm:ss')
+          this.bedInputForm.sche_out_time =new Date(this.bedInputForm.sche_out_time).Format('yyyy-MM-dd hh:mm:ss')
+          let param= this.bedInputForm;
+          this.$resource(P_BASE2 + 'add_in_apart').save({}, param).then((response) => {
+            if (response.body.code == 200) {
+//              入寓成功
+//              关闭对话框，更新数据
+              _this.bedInputDialog = false
+            _this.requestData()
+
+            } else {
+              _this.alertMsg("error", response.body.msg ? response.body.msg : '服务器端错误')
+            }
+          }, (response) => {
+            console.log(response.body)
+          })
+        }else {
+          _this.alertMsg("warning", '请填写必填项')
+        }
+
+      },
+      handleChange(value){
+        this.bedInputForm.cust_level = value
+      },
+      getLevels(){
+        this.$resource(P_BASE + 'level_list').get().then((response) => {
+          this.levels = response.body.data;
+        })
       }
     }
   }
@@ -572,6 +748,7 @@
     margin: 5px 5px 0 5px;
     height: 50px;
     position: relative;
+    cursor: pointer;
   }
 
   .red-color {
