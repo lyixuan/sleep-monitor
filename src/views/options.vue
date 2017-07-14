@@ -38,7 +38,7 @@
           <div class="right_card">
             <div class="r_tt">菜单权限 &nbsp; [{{checkedBtnName}}]</div>
             <el-checkbox-group v-model="checkMenuList" v-loading="loading">
-              <el-checkbox :label=item.value v-for="item in menus">{{item.name}}</el-checkbox>
+              <el-checkbox :label=item.value v-for="item in menus" :key="item.value">{{item.name}}</el-checkbox>
             </el-checkbox-group>
             </p>
             <el-button type="primary" class="m-btn" @click="saveRights()">保存权限</el-button>
@@ -320,13 +320,19 @@
     color: #1c8de0;
     cursor: pointer;
   }
-
+  .set:hover{
+    color: #000080;
+  }
   .addnew {
     box-sizing: border-box;
     text-align: center;
     border: 1px solid #1c8de0;
     color: #1c8de0;
     cursor: pointer;
+  }
+  .addnew:hover{
+    background: #1c8de0;
+    color: #fff;
   }
 
   .accontMg > span {

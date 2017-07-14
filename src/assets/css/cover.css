@@ -47,7 +47,7 @@
   overflow: auto;
 }
 
-.bedInputDialog .el-cascader {
+.bedInputDialog .el-cascader,.people_m .el-cascader {
   width: 100%;
 }
 

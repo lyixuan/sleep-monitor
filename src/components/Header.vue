@@ -10,7 +10,7 @@
       </el-menu-item>
       <el-submenu index="1">
         <template slot="title">{{s_name}}</template>
-        <el-menu-item index="1-1">修改密码</el-menu-item>
+        <el-menu-item index="1-1" @click="toChange">修改密码</el-menu-item>
         <el-menu-item index="1-2" @click="logout">退出</el-menu-item>
       </el-submenu>
     </el-menu>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+  import router from '../router'
   export default {
     name: 'header',
     data () {
@@ -55,6 +56,9 @@
             this.alertMsg("error", response.status + " - " + response.url)
           }
         })
+      },
+      toChange(){
+        router.push('change_pwd')
       }
     }
   }

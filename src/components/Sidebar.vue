@@ -4,49 +4,49 @@
       <i class="el-icon-more"></i>
     </div>
 
-    <router-link to="/dashboard">
+    <router-link to="/dashboard" v-for="item in checkMenuList" v-if="item == 1" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-jiankong.png"/>
         <span>公寓监控概览</span>
       </div>
     </router-link>
-    <router-link to="/bed_state">
+    <router-link to="/bed_state" v-for="item in checkMenuList" v-if="item == 2" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-chuang.png"/>
         <span>床位状态监控</span>
       </div>
     </router-link>
-    <router-link to="/alarm_24monitor">
+    <router-link to="/alarm_24monitor" v-for="item in checkMenuList" v-if="item == 3" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-baojing.png" style="width: 22px;margin-left: -2px;"/>
         <span>24小时报警监控</span>
       </div>
     </router-link>
-    <router-link to="/sleep_24monitor">
+    <router-link to="/sleep_24monitor" v-for="item in checkMenuList" v-if="item == 4" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-shuimian.png"/>
         <span>24小时睡眠监控</span>
       </div>
     </router-link>
-    <router-link to="/alarm_search">
+    <router-link to="/alarm_search" v-for="item in checkMenuList" v-if="item == 5" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-bjjiansuo.png"/>
         <span>报警检索</span>
       </div>
     </router-link>
-    <router-link to="/report_search">
+    <router-link to="/report_search" v-for="item in checkMenuList" v-if="item == 6" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-jiansuo.png"/>
         <span>报告检索</span>
       </div>
     </router-link>
-    <router-link to="/people_manage">
+    <router-link to="/people_manage" v-for="item in checkMenuList" v-if="item == 7" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-people.png"/>
         <span>人员管理</span>
       </div>
     </router-link>
-    <router-link to="/options">
+    <router-link to="/options" v-for="item in checkMenuList" v-if="item == 8" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-set.png"/>
         <span>权限配置</span>
@@ -62,11 +62,27 @@
       return {
         rIsShow: 1,
         isClose: false,
+        checkMenuList:[]
       }
     },
     mounted(){
+        this.getMenuRights()
     },
     methods: {
+      getMenuRights(){
+        let u_session = JSON.parse(window.sessionStorage.getItem('u_session'))
+        let user_id = u_session.user_id
+        this.$resource(P_OPTIONS + 'get_account_rights').get({id: user_id}).then((response) => {
+          if (response.body.code == 200) {
+            for (let i = 0; i < response.body.data.length; i++) {
+              response.body.data[i] = response.body.data[i].toString()
+            }
+            this.checkMenuList = response.body.data
+          } else {
+            this.alertMsg("warning", '获取菜单权限有误')
+          }
+        })
+      },
       changeSidebar () {
         let view = document.getElementById("view-wrap")
         let sidebar = document.getElementById("sidebar")

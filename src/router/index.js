@@ -9,6 +9,7 @@ import AlertSearch from '../views/alarm-search.vue'
 import ReportSearch from '../views/report-search.vue'
 import Options from '../views/options.vue'
 import PeopleManage from '../views/people_manage.vue'
+import ChangePwd from '../views/change_pwd.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -22,6 +23,7 @@ export default new Router({
     {path: '/report_search', component: ReportSearch},
     {path: '/people_manage', component: PeopleManage},
     {path: '/options', component: Options},
+    {path: '/change_pwd', component: ChangePwd},
   ],
   scrollBehavior (to, from, savedPosition) {
       console.log('abc')
