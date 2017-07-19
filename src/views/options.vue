@@ -16,7 +16,7 @@
           <div class="accontMg" v-for="item in accounts" :keys="item.id">
             <span>{{item.id}}</span>
             <span>{{item.user_name}}</span>
-            <span>{{item.comment}}</span>
+            <span>{{item.user_des}}</span>
             <span>{{item.status==0?'停用':'开启'}}</span>
             <span class="set" @click="openAccountEdit(item)">编辑</span>
             <span class="set" @click="accountResetPWD(item)">重置密码</span>
@@ -58,7 +58,7 @@
           <el-input v-model="actEditForm.user_name"></el-input>
         </el-form-item>
         <el-form-item label="备注" :label-width="formLabelWidth">
-          <el-input v-model="actEditForm.comment"></el-input>
+          <el-input v-model="actEditForm.user_des"></el-input>
         </el-form-item>
         <el-form-item label="状态" :label-width="formLabelWidth">
           <el-select v-model="actEditForm.status" placeholder="请选择状态">
@@ -80,7 +80,7 @@
           <el-input v-model="actAddForm.user_name"></el-input>
         </el-form-item>
         <el-form-item label="备注" :label-width="formLabelWidth">
-          <el-input v-model="actAddForm.comment"></el-input>
+          <el-input v-model="actAddForm.user_des"></el-input>
         </el-form-item>
         <el-form-item label="状态" :label-width="formLabelWidth">
           <el-select v-model="actAddForm.status" placeholder="请选择状态">
@@ -129,13 +129,13 @@
         actEditForm: {
           id: '',
           user_name: '',
-          comment: '',
+          user_des: '',
           status: ''
         },
         actAddDialog: false,
         actAddForm: {
           user_name: '',
-          comment: '',
+          user_des: '',
           status: '1'
         },
         actResetDialog: false,
@@ -175,7 +175,7 @@
         this.actEditForm = {
           id: item.id,
           user_name: item.user_name,
-          comment: item.comment,
+          user_des: item.user_des,
           status: item.status
         };
         this.actEditDialog = true
@@ -199,7 +199,7 @@
       openAccountAdd(){
         this.actAddForm = {
           user_name: '',
-          comment: '',
+          user_des: '',
           status: '1'
         };
         this.actAddDialog = true

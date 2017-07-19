@@ -22,10 +22,19 @@
 
         <div class="bg-blue" style="margin-top: 20px;">人员管理</div>
         <div class="condition0">
-          <el-table max-height="500"
-                    :data="custs" border
-                    style="width: 100%"
-                    :default-sort="{prop: 'cust_id', order: 'descending'}">
+          <div class="people_search">
+            搜索：
+            <el-cascader :options="levels" change-on-select class="m-cas" size="small"
+                         @change="peopleHandleChange" v-model="searchForm.level" placeholder="请依次选择级别"></el-cascader>
+            <el-input class="m-input" size="small" placeholder="请输入工号或姓名" v-model="searchForm.cust_info"></el-input>
+            <el-button type="primary" class="m-btn" @click="getPeople" size="small">搜索</el-button>
+            <el-button class="m-btn" @click="clear" size="small">清除</el-button>
+          </div>
+
+          <el-table
+            :data="custs" border
+            style="width: 100%"
+            :default-sort="{prop: 'cust_id', order: 'descending'}">
             <el-table-column
               prop="cust_id"
               label="工号"
@@ -72,6 +81,15 @@
           <div class="addnew" @click="openAdd">
             + 新增人员
           </div>
+          <el-pagination class="m-paging"
+                         @size-change="handleSizeChange"
+                         @current-change="handleCurrentChange"
+                         :current-page="currentPage"
+                         :page-sizes="[10, 20, 30]"
+                         :page-size="pageSize"
+                         layout="total, sizes, prev, pager, next"
+                         :total="totalNum">
+          </el-pagination>
         </div>
 
       </div>
@@ -132,12 +150,12 @@
     <el-dialog class="actEdit people_m" title="新增机务段" :visible.sync="actJWDDialog">
       <el-form :model="actForm">
         <el-form-item label="机务段名" :label-width="formLabelWidth" required>
-          <el-input v-model="actForm.depot_des"></el-input>
+          <el-input v-model="actForm.show_name"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="actZDZDialog = false">取 消</el-button>
-        <el-button type="primary" @click="saveLV()">保 存</el-button>
+        <el-button @click="actJWDDialog = false">取 消</el-button>
+        <el-button type="primary" @click="saveLV(1)">保 存</el-button>
       </div>
     </el-dialog>
 
@@ -145,7 +163,7 @@
     <el-dialog class="actEdit people_m" title="新增车间" :visible.sync="actCJDialog">
       <el-form :model="actForm">
         <el-form-item label="车间名" :label-width="formLabelWidth" required>
-          <el-input v-model="actForm.workshop_des"></el-input>
+          <el-input v-model="actForm.show_name"></el-input>
         </el-form-item>
         <el-form-item label="所属机务段" :label-width="formLabelWidth" required>
           <el-cascader :options="level1" change-on-select
@@ -162,7 +180,7 @@
     <el-dialog class="actEdit people_m" title="新增车队" :visible.sync="actCDDialog">
       <el-form :model="actForm">
         <el-form-item label="车队名" :label-width="formLabelWidth" required>
-          <el-input v-model="actForm.fleet_des"></el-input>
+          <el-input v-model="actForm.show_name"></el-input>
         </el-form-item>
         <el-form-item label="所属车间" :label-width="formLabelWidth" required>
           <el-cascader :options="level2" change-on-select
@@ -179,7 +197,7 @@
     <el-dialog class="actEdit people_m" title="新增指导组" :visible.sync="actZDZDialog">
       <el-form :model="actForm">
         <el-form-item label="指导组名" :label-width="formLabelWidth" required>
-          <el-input v-model="actForm.group_des"></el-input>
+          <el-input v-model="actForm.show_name"></el-input>
         </el-form-item>
         <el-form-item label="所属车队" :label-width="formLabelWidth" required>
           <el-cascader :options="level3" change-on-select
@@ -236,10 +254,7 @@
         actZDZDialog: false,
         actJWDDialog: false,
         actForm: {
-          depot_des: '',
-          workshop_des: '',
-          fleet_des: '',
-          group_des: '',
+          show_name: '',
           upLevel: []
         },
         defaultProps: {
@@ -247,7 +262,14 @@
           label: 'label',
           id: 'value',
         },
-        delLV: []
+        delLV: [],
+        currentPage: 1,
+        pageSize: 10,
+        totalNum: 0,
+        searchForm: {
+          level: [],
+          cust_info: ''
+        }
       }
     },
     mounted () {
@@ -256,10 +278,25 @@
     },
 
     methods: {
-      getPeople() {
-        this.$resource(P_OPTIONS + 'all_cust').get().then((response) => {
+      getPeople(type) {
+        let params = {}
+        if (type == 1) {
+          // 点击分页
+          params.page_size = this.pageSize
+          params.current_page = this.currentPage
+        } else {
+          // 点击查询
+          this.pageSize = 10
+          this.currentPage = 1
+          params.page_size = this.pageSize
+          params.current_page = this.currentPage
+        }
+        params.level = this.searchForm.level
+        params.cust_info = this.searchForm.cust_info
+        this.$resource(P_OPTIONS + 'all_cust').save({}, params).then((response) => {
           if (response.body.code == 200) {
-            this.custs = response.body.data
+            this.custs = response.body.data.result
+            this.paging(response.body.data.paging)
           } else {
             this.alertMsg("warning", '获取人员列表失败')
           }
@@ -384,52 +421,39 @@
       },
       openJWD(){
         this.actForm = {
-          depot_des: '',
-          workshop_des: '',
-          fleet_des: '',
-          group_des: '',
+          show_name: '',
           upLevel: []
         }
         this.actJWDDialog = true;
       },
       openCJ(){
         this.actForm = {
-          depot_des: '',
-          workshop_des: '',
-          fleet_des: '',
-          group_des: '',
+          show_name: '',
           upLevel: []
         }
         this.actCJDialog = true;
       },
       openCD(){
         this.actForm = {
-          depot_des: '',
-          workshop_des: '',
-          fleet_des: '',
-          group_des: '',
+          show_name: '',
           upLevel: []
         }
         this.actCDDialog = true;
       },
       openZDZ(){
         this.actForm = {
-          depot_des: '',
-          workshop_des: '',
-          fleet_des: '',
-          group_des: '',
+          show_name: '',
           upLevel: []
         }
         this.actZDZDialog = true;
       },
 
-      saveLV(){
-          console.log(this.actForm)
-        if (!(this.actForm.workshop_des || this.actForm.fleet_des || this.actForm.group_des||this.actForm.depot_des)) {
+      saveLV(t){
+        if (!this.actForm.show_name) {
           this.alertMsg("warning", '请填写必填项');
           return
         }
-        if (!this.actForm.depot_des&&this.actForm.upLevel.length == 0) {
+        if (!t && this.actForm.upLevel.length == 0) {
           this.alertMsg("warning", '请选中所属上级');
           return
         }
@@ -469,18 +493,54 @@
         }
       },
       del(){
-          let _this=this;
-        this.$resource(P_OPTIONS + 'del_level').get({ids: this.delLV}).then((response) => {
-          if (response.body.code == 200) {
-            _this.alertMsg("success", '删除成功');
-            _this.getLevels()
-          } else {
-            _this.alertMsg("warning", '删除人员信息有误')
-          }
+        let _this = this;
+        if (this.delLV.length == 0) {
+          _this.alertMsg("warning", '请勾选删除对象');
+          return
+        } else {
+          this.$confirm('此操作将删除本级别及其下级的内容, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$resource(P_OPTIONS + 'del_level').save({}, {ids: this.delLV}).then((response) => {
+              if (response.body.code == 200) {
+                _this.alertMsg("success", '删除成功');
+                _this.getLevels()
+              } else {
+                _this.alertMsg("warning", '删除人员信息有误')
+              }
 
-        })
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
+        }
+
+      },
+      clear(){
+        this.searchForm = {
+          level: [],
+          cust_info: ''
+        }
+      },
+      handleSizeChange(val) {
+        this.pageSize = val
+        this.getPeople(1)
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getPeople(1)
+      },
+      paging(p){
+        this.totalNum = p.total_num;
+      },
+      peopleHandleChange(value){
+        this.searchForm.level = value
       }
-
     }
   }
 </script>
@@ -558,5 +618,23 @@
   .rowbtn span:hover {
     background: #1c8de0;
     color: #fff;
+  }
+
+  .people_search {
+    margin-bottom: 10px;
+  }
+
+  .m-cas {
+    width: 400px;
+
+  }
+
+  .m-input {
+    width: 150px;
+  }
+
+  .m-btn {
+    float: right;
+    margin-right: 3px;
   }
 </style>

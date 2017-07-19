@@ -63,7 +63,13 @@
           this.alertMsg("warning", '新密码两次输入不一致')
           return
         }
-        this.$resource(P_OPTIONS + 'change_pwd').get().then((response) => {
+        let u_session = JSON.parse(window.sessionStorage.getItem('u_session'))
+        let param={
+          old_pwd:this.form.old_pwd,
+          new_pwd:this.form.new_pwd,
+          user_id:u_session.user_id
+        }
+        this.$resource(P_OPTIONS + 'change_pwd').save({}, param).then((response) => {
           if (response.body.code == 200) {
             this.$alert('修改成功，请重新登录', '提示', {
               confirmButtonText: '确定',
