@@ -43,13 +43,19 @@
     <router-link to="/people_manage" v-for="item in checkMenuList" v-if="item == 7" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-people.png"/>
-        <span>人员管理</span>
+        <span>司乘人员管理</span>
+      </div>
+    </router-link>
+    <router-link to="/level_manage" v-for="item in checkMenuList" v-if="item == 7" :key="item">
+      <div class="menu">
+        <img class="icon" src="../assets/img-com/icon-level.png"/>
+        <span>级别管理</span>
       </div>
     </router-link>
     <router-link to="/options" v-for="item in checkMenuList" v-if="item == 8" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-set.png"/>
-        <span>权限配置</span>
+        <span>账号权限配置</span>
       </div>
     </router-link>
   </div>

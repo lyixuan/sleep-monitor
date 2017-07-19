@@ -119,7 +119,7 @@
                 <div class="r-cont">
                   <div class="room-item"
                        :class="{'red-color':bed.bed_state_id == 4,'yellow-color':bed.bed_state_id == 5}"
-                       v-for="bed in room.bed" :key="bed.bed_id" @click="openDetail(bed)">
+                       v-for="bed in room.bed" :key="bed.bed_id" @click="openDetail(bed,room)">
                     <div class="ri-l">
                       <div class="ri-l-t">{{bed.bed_des}}</div>
                       <div class="ri-l-p">
@@ -156,6 +156,7 @@
       </div>
       <!--出入寓信息-->
       <el-dialog class="bedInputDialog" title="增加入寓信息" :visible.sync="bedInputDialog">
+        <div style="text-align: right;color:#35A8FD;margin-bottom: 5px;margin-top: -5px;">{{bedInputForm.room_des}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{bedInputForm.bed_des}}</div>
         <el-form :model="bedInputForm">
           <el-form-item label="工号" :label-width="formLabelWidth" required>
             <el-input v-model="bedInputForm.cust_id" auto-complete="on"></el-input>
@@ -167,6 +168,9 @@
           <el-form-item label="分级" :label-width="formLabelWidth">
             <el-cascader :options="levels" change-on-select
                          @change="handleChange" v-model="bedInputForm.cust_level"></el-cascader>
+          </el-form-item>
+          <el-form-item label="车次或班次" :label-width="formLabelWidth" required>
+            <el-input v-model="bedInputForm.train_des" auto-complete="on"></el-input>
           </el-form-item>
           <el-form-item label="计划入寓时间" :label-width="formLabelWidth">
             <el-date-picker v-model="bedInputForm.sche_in_time"
@@ -180,6 +184,7 @@
                             placeholder="选择时间">
             </el-date-picker>
           </el-form-item>
+
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="bedInputDialog = false">取 消</el-button>
@@ -188,6 +193,7 @@
       </el-dialog>
 
       <el-dialog class="bedInputDialog" title="入寓信息" :visible.sync="bedShowDialog">
+        <div style="text-align: right;color:#35A8FD;margin-bottom: 5px;margin-top: -5px;">{{bedShowForm.room_des}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{bedShowForm.bed_des}}</div>
         <el-form :model="bedShowForm">
           <el-form-item label="床位状态" :label-width="formLabelWidth">
             <el-input v-model="bedShowForm.bed_state_des" :disabled="true"></el-input>
@@ -201,6 +207,9 @@
           <el-form-item label="分级" :label-width="formLabelWidth">
             <el-input v-model="bedShowForm.cust_level" :disabled="true"></el-input>
           </el-form-item>
+          <el-form-item label="车次或班次" :label-width="formLabelWidth" >
+            <el-input v-model="bedShowForm.train_des" auto-complete="on" :disabled="true"></el-input>
+          </el-form-item>
           <el-form-item label="计划入寓时间" :label-width="formLabelWidth">
             <el-date-picker v-model="bedShowForm.sche_in_time"
                             type="datetime" :editable="false" :clearable="false"
@@ -209,6 +218,15 @@
           </el-form-item>
           <el-form-item label="计划出寓时间" :label-width="formLabelWidth">
             <el-date-picker v-model="bedShowForm.sche_out_time"
+                            type="datetime" :editable="false" :clearable="false"
+                            placeholder="选择时间" :disabled="true">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="报警类型" :label-width="formLabelWidth">
+            <el-input v-model="bedShowForm.alarm_state_des" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="报警时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="bedShowForm.alarm_time"
                             type="datetime" :editable="false" :clearable="false"
                             placeholder="选择时间" :disabled="true">
             </el-date-picker>
@@ -283,6 +301,9 @@
           cust_name: "",
           sche_in_time: "",
           sche_out_time: "",
+          bed_des: "",
+          room_des: "",
+          train_des:''
         },
 
         bedShowDialog: false,
@@ -292,7 +313,12 @@
           cust_name: "",
           sche_in_time: "",
           sche_out_time: "",
-          bed_state_des: ""
+          bed_state_des: "",
+          bed_des: "",
+          room_des: "",
+          train_des:'',
+          alarm_state_des:'',
+          alarm_time:''
         },
       }
     },
@@ -470,8 +496,7 @@
         Velocity(el, {opacity: 1}, {duration: 300})
         Velocity(el, {opacity: 1}, {complete: done})
       },
-      openDetail(bed){
-        console.log(bed)
+      openDetail(bed,room){
         let _this = this;
         if (bed.bed_state_id == 3) {
           // 空闲,录入
@@ -481,9 +506,11 @@
               cust_name: "",
               sche_in_time: "",
               sche_out_time: "",
+              train_des: "",
+              room_des : room.room_des,
+              bed_des : bed.bed_des
           };
           this.bedInputDialog = true;
-
         } else {
           // 非空闲，获取详情
           this.$resource(P_BASE2 + 'get_in_apart_info_by_custid').get({cust_id:bed.cust_id}).then((response) => {
@@ -498,6 +525,8 @@
               }
               _this.bedShowForm.cust_level=cust_level;
               _this.bedShowForm.bed_state_des = bed.bed_state_des;
+              _this.bedShowForm.room_des = room.room_des;
+              _this.bedShowForm.bed_des = bed.bed_des;
               _this.bedShowDialog = true;
             } else {
               _this.alertMsg("error", response.body.msg ? response.body.msg : '服务器端错误')
@@ -530,7 +559,7 @@
       },
       saveInApart(){
         let _this = this;
-        if (this.bedInputForm.cust_id && this.bedInputForm.cust_name) {
+        if (this.bedInputForm.cust_id && this.bedInputForm.cust_name&& this.bedInputForm.train_des) {
           this.bedInputForm.sche_in_time =new Date(this.bedInputForm.sche_in_time).Format('yyyy-MM-dd hh:mm:ss')
           this.bedInputForm.sche_out_time =new Date(this.bedInputForm.sche_out_time).Format('yyyy-MM-dd hh:mm:ss')
           let param= this.bedInputForm;
@@ -539,7 +568,7 @@
 //              入寓成功
 //              关闭对话框，更新数据
               _this.bedInputDialog = false
-            _this.requestData()
+              _this.requestData()
 
             } else {
               _this.alertMsg("error", response.body.msg ? response.body.msg : '服务器端错误')

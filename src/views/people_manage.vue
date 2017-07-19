@@ -1,26 +1,9 @@
 <template>
   <div class="report-search">
-    <s-navi :nData="navi_text"></s-navi>
+    <!--<s-navi :nData="navi_text"></s-navi>-->
     <div style="width: 100%;height: 100%;">
       <div class="condition">
-        <div class="bg-blue">级别设置</div>
-        <div class="condition0 c1">
-          <div class="rowbtn">
-            <span @click="openJWD">新增机务段</span>
-            <span @click="openCJ">新增车间</span>
-            <span @click="openCD">新增车队</span>
-            <span @click="openZDZ">新增指导组</span>
-            <span @click="del">删除选中分级</span>
-          </div>
-          <el-tree
-            :data="levels"
-            :props="defaultProps"
-            show-checkbox
-            @check-change="handleCheckChange">
-          </el-tree>
-        </div>
-
-        <div class="bg-blue" style="margin-top: 20px;">人员管理</div>
+        <div class="bg-blue">司乘人员管理</div>
         <div class="condition0">
           <div class="people_search">
             搜索：
@@ -143,72 +126,6 @@
       </div>
     </el-dialog>
 
-    <!--*******************************************-->
-
-
-    <!--机务段dialog-->
-    <el-dialog class="actEdit people_m" title="新增机务段" :visible.sync="actJWDDialog">
-      <el-form :model="actForm">
-        <el-form-item label="机务段名" :label-width="formLabelWidth" required>
-          <el-input v-model="actForm.show_name"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="actJWDDialog = false">取 消</el-button>
-        <el-button type="primary" @click="saveLV(1)">保 存</el-button>
-      </div>
-    </el-dialog>
-
-    <!--车间dialog-->
-    <el-dialog class="actEdit people_m" title="新增车间" :visible.sync="actCJDialog">
-      <el-form :model="actForm">
-        <el-form-item label="车间名" :label-width="formLabelWidth" required>
-          <el-input v-model="actForm.show_name"></el-input>
-        </el-form-item>
-        <el-form-item label="所属机务段" :label-width="formLabelWidth" required>
-          <el-cascader :options="level1" change-on-select
-                       @change="handleChange2" v-model="actForm.upLevel"></el-cascader>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="actCJDialog = false">取 消</el-button>
-        <el-button type="primary" @click="saveLV()">保 存</el-button>
-      </div>
-    </el-dialog>
-
-    <!--车对dialog-->
-    <el-dialog class="actEdit people_m" title="新增车队" :visible.sync="actCDDialog">
-      <el-form :model="actForm">
-        <el-form-item label="车队名" :label-width="formLabelWidth" required>
-          <el-input v-model="actForm.show_name"></el-input>
-        </el-form-item>
-        <el-form-item label="所属车间" :label-width="formLabelWidth" required>
-          <el-cascader :options="level2" change-on-select
-                       @change="handleChange2" v-model="actForm.upLevel"></el-cascader>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="actCDDialog = false">取 消</el-button>
-        <el-button type="primary" @click="saveLV()">保 存</el-button>
-      </div>
-    </el-dialog>
-
-    <!--指导组dialog-->
-    <el-dialog class="actEdit people_m" title="新增指导组" :visible.sync="actZDZDialog">
-      <el-form :model="actForm">
-        <el-form-item label="指导组名" :label-width="formLabelWidth" required>
-          <el-input v-model="actForm.show_name"></el-input>
-        </el-form-item>
-        <el-form-item label="所属车队" :label-width="formLabelWidth" required>
-          <el-cascader :options="level3" change-on-select
-                       @change="handleChange2" v-model="actForm.upLevel"></el-cascader>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="actZDZDialog = false">取 消</el-button>
-        <el-button type="primary" @click="saveLV()">保 存</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -246,17 +163,6 @@
         delId: '',
         // 分级
         levels: [],
-        level1: [],
-        level2: [],
-        level3: [],
-        actCJDialog: false,
-        actCDDialog: false,
-        actZDZDialog: false,
-        actJWDDialog: false,
-        actForm: {
-          show_name: '',
-          upLevel: []
-        },
         defaultProps: {
           children: 'children',
           label: 'label',
@@ -307,40 +213,6 @@
         this.$resource(P_BASE + 'level_list').get().then((response) => {
           if (response.body.code == 200) {
             this.levels = response.body.data
-            this.level1 = []
-            this.level2 = []
-            this.level3 = []
-            for (let i = 0; i < response.body.data.length; i++) {
-              this.level1.push({value: response.body.data[i].value, label: response.body.data[i].label})
-            }
-            for (let i = 0; i < response.body.data.length; i++) {
-              this.level2.push({value: response.body.data[i].value, label: response.body.data[i].label})
-              this.level2[i]['children'] = []
-              for (let j = 0; j < response.body.data[i].children.length; j++) {
-                this.level2[i].children.push({
-                  value: response.body.data[i].children[j].value,
-                  label: response.body.data[i].children[j].label
-                })
-              }
-
-            }
-            for (let i = 0; i < response.body.data.length; i++) {
-              this.level3.push({value: response.body.data[i].value, label: response.body.data[i].label})
-              this.level3[i]['children'] = []
-              for (let j = 0; j < response.body.data[i].children.length; j++) {
-                this.level3[i].children.push({
-                  value: response.body.data[i].children[j].value,
-                  label: response.body.data[i].children[j].label
-                })
-                this.level3[i].children[j]['children'] = []
-                for (let k = 0; k < response.body.data[i].children[j].children.length; k++) {
-                  this.level3[i].children[j].children.push({
-                    value: response.body.data[i].children[j].children[k].value,
-                    label: response.body.data[i].children[j].children[k].label
-                  })
-                }
-              }
-            }
           } else {
             this.alertMsg("warning", '获取级别列表失败')
           }
@@ -419,107 +291,12 @@
 
         })
       },
-      openJWD(){
-        this.actForm = {
-          show_name: '',
-          upLevel: []
-        }
-        this.actJWDDialog = true;
-      },
-      openCJ(){
-        this.actForm = {
-          show_name: '',
-          upLevel: []
-        }
-        this.actCJDialog = true;
-      },
-      openCD(){
-        this.actForm = {
-          show_name: '',
-          upLevel: []
-        }
-        this.actCDDialog = true;
-      },
-      openZDZ(){
-        this.actForm = {
-          show_name: '',
-          upLevel: []
-        }
-        this.actZDZDialog = true;
-      },
-
-      saveLV(t){
-        if (!this.actForm.show_name) {
-          this.alertMsg("warning", '请填写必填项');
-          return
-        }
-        if (!t && this.actForm.upLevel.length == 0) {
-          this.alertMsg("warning", '请选中所属上级');
-          return
-        }
-        let _this = this;
-        this.$resource(P_OPTIONS + 'add_level').save({}, this.actForm).then((response) => {
-          if (response.body.code == 200) {
-            _this.alertMsg("success", '保存成功');
-            _this.actCJDialog = false;
-            _this.actCDDialog = false;
-            _this.actZDZDialog = false;
-            _this.actJWDDialog = false;
-            _this.getLevels()
-          } else {
-            _this.alertMsg("error", response.body.msg ? response.body.msg : '服务器端错误')
-          }
-        }, (response) => {
-          console.log(response.body)
-        })
-      },
 
       handleChange(value){
         this.actAddForm.levels = value
       },
       handleChange2(value){
         this.actForm.upLevel = value
-      },
-      handleCheckChange(data, checked, indeterminate) {
-        if (checked) {
-          this.delLV.push(data.value)
-        }
-        if (!checked) {
-          for (var i = 0; i < this.delLV.length; i++) {
-            if (this.delLV[i] == data.value) {
-              this.delLV.splice(i, 1);
-            }
-          }
-        }
-      },
-      del(){
-        let _this = this;
-        if (this.delLV.length == 0) {
-          _this.alertMsg("warning", '请勾选删除对象');
-          return
-        } else {
-          this.$confirm('此操作将删除本级别及其下级的内容, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.$resource(P_OPTIONS + 'del_level').save({}, {ids: this.delLV}).then((response) => {
-              if (response.body.code == 200) {
-                _this.alertMsg("success", '删除成功');
-                _this.getLevels()
-              } else {
-                _this.alertMsg("warning", '删除人员信息有误')
-              }
-
-            })
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消删除'
-            });
-          });
-        }
-
       },
       clear(){
         this.searchForm = {
