@@ -222,18 +222,10 @@
                             placeholder="选择时间" :disabled="true">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="报警类型" :label-width="formLabelWidth">
-            <el-input v-model="bedShowForm.alarm_state_des" :disabled="true"></el-input>
+          <el-form-item label="报警记录" :label-width="formLabelWidth">
+            <div class="alarm" v-for="item in bedShowForm.alarm"><span>{{item.alarm_time}}</span><span>{{item.alarm_state_des}}</span></div>
           </el-form-item>
-          <el-form-item label="报警时间" :label-width="formLabelWidth">
-            <el-date-picker v-model="bedShowForm.alarm_time"
-                            type="datetime" :editable="false" :clearable="false"
-                            placeholder="选择时间" :disabled="true">
-            </el-date-picker>
-          </el-form-item>
-
-
-        </el-form>
+           </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="bedShowDialog = false">关 闭</el-button>
         </div>
@@ -303,7 +295,9 @@
           sche_out_time: "",
           bed_des: "",
           room_des: "",
-          train_des:''
+          train_des:'',
+          bed_id:'',
+          room_id:''
         },
 
         bedShowDialog: false,
@@ -317,8 +311,8 @@
           bed_des: "",
           room_des: "",
           train_des:'',
-          alarm_state_des:'',
-          alarm_time:''
+          alarm:[]
+
         },
       }
     },
@@ -507,7 +501,9 @@
               sche_in_time: "",
               sche_out_time: "",
               train_des: "",
+              room_id : room.room_id,
               room_des : room.room_des,
+              bed_id : bed.bed_id,
               bed_des : bed.bed_des
           };
           this.bedInputDialog = true;
@@ -536,18 +532,21 @@
 
         }
       },
-
       getDetailByCustId(){
         let _this = this;
         if (this.bedInputForm.cust_id) {
           this.$resource(P_BASE2 + 'get_in_apart_info_by_custid').get({cust_id:this.bedInputForm.cust_id}).then((response) => {
             if (response.body.code == 200) {
-              _this.bedInputForm = response.body.data;
               let cust_level=[];
               for(let i=0;i<response.body.data.cust_level.length;i++){
                 cust_level.push(response.body.data.cust_level[i].value)
               }
               _this.bedInputForm.cust_level=cust_level
+              _this.bedInputForm.cust_id = response.body.data.cust_id;
+              _this.bedInputForm.cust_name = response.body.data.cust_name;
+              _this.bedInputForm.sche_in_time = response.body.data.sche_in_time;
+              _this.bedInputForm.sche_out_time = response.body.data.sche_out_time;
+              _this.bedInputForm.train_des = response.body.data.train_des;
             } else {
               _this.alertMsg("error", response.body.msg ? response.body.msg : '服务器端错误')
             }
@@ -562,6 +561,10 @@
         if (this.bedInputForm.cust_id && this.bedInputForm.cust_name&& this.bedInputForm.train_des) {
           this.bedInputForm.sche_in_time =new Date(this.bedInputForm.sche_in_time).Format('yyyy-MM-dd hh:mm:ss')
           this.bedInputForm.sche_out_time =new Date(this.bedInputForm.sche_out_time).Format('yyyy-MM-dd hh:mm:ss')
+          if(this.bedInputForm.sche_in_time>=this.bedInputForm.sche_out_time){
+            _this.alertMsg("warning", '出寓时间应该晚于入寓时间')
+              return
+          }
           let param= this.bedInputForm;
           this.$resource(P_BASE2 + 'add_in_apart').save({}, param).then((response) => {
             if (response.body.code == 200) {
@@ -969,5 +972,13 @@
 
   .fade-list-leave-active {
     transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+
+  .alarm{
+    color: #C23531;
+  }
+  .alarm span{
+    display: inline-block;
+    width: 200px;
   }
 </style>
