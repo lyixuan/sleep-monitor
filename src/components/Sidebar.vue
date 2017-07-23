@@ -78,7 +78,7 @@
       getMenuRights(){
         let u_session = JSON.parse(window.sessionStorage.getItem('u_session'))
         let user_id = u_session.user_id
-        this.$resource(P_OPTIONS + 'get_account_rights').get({id: user_id}).then((response) => {
+        this.$resource(P_OPTIONS + 'get_account_rights').get({user_id: user_id}).then((response) => {
           if (response.body.code == 200) {
             for (let i = 0; i < response.body.data.length; i++) {
               response.body.data[i] = response.body.data[i].toString()

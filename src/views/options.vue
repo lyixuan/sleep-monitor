@@ -12,7 +12,7 @@
             <span>操作</span>
             <span>操作</span>
           </div>
-          <div class="accontMg" v-for="item in accounts" :keys="item.id">
+          <div class="accontMg" v-for="item in accounts" :keys="item.user_id">
             <span>{{item.user_id}}</span>
             <span>{{item.user_name}}</span>
             <span>{{item.status==0?'停用':'开启'}}</span>
@@ -241,7 +241,7 @@
         this.loading = true
         this.checkedBtnId = item.user_id;
         this.checkedBtnName = item.user_name;
-        this.$resource(P_OPTIONS + 'get_account_rights').get({user_id: item.id}).then((response) => {
+        this.$resource(P_OPTIONS + 'get_account_rights').get({user_id: item.user_id}).then((response) => {
           if (response.body.code == 200) {
             for (let i = 0; i < response.body.data.length; i++) {
               response.body.data[i] = response.body.data[i].toString()
