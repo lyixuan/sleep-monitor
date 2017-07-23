@@ -88,7 +88,7 @@
           <el-input v-model="actAddForm.cust_name"></el-input>
         </el-form-item>
         <el-form-item label="分级" :label-width="formLabelWidth" required>
-          <el-cascader :options="levels" change-on-select
+          <el-cascader :options="levels" change-on-select  v-model="actAddForm.levels"
                        @change="handleChange" placeholder="请依次选择级别"></el-cascader>
         </el-form-item>
       </el-form>

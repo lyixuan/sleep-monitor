@@ -66,8 +66,7 @@
         let u_session = JSON.parse(window.sessionStorage.getItem('u_session'))
         let param={
           old_pwd:this.form.old_pwd,
-          new_pwd:this.form.new_pwd,
-          user_id:u_session.user_id
+          new_pwd:this.form.new_pwd
         }
         this.$resource(P_OPTIONS + 'change_pwd').save({}, param).then((response) => {
           if (response.body.code == 200) {
