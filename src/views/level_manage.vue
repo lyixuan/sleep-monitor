@@ -168,7 +168,7 @@
 
     methods: {
       getLevels() {
-        this.$resource(P_BASE + 'level_list').get().then((response) => {
+        this.$resource(P_BASE2 + 'level_list').get().then((response) => {
           if (response.body.code == 200) {
             this.levels = response.body.data
             this.level1 = []
@@ -180,28 +180,34 @@
             for (let i = 0; i < response.body.data.length; i++) {
               this.level2.push({value: response.body.data[i].value, label: response.body.data[i].label})
               this.level2[i]['children'] = []
-              for (let j = 0; j < response.body.data[i].children.length; j++) {
-                this.level2[i].children.push({
-                  value: response.body.data[i].children[j].value,
-                  label: response.body.data[i].children[j].label
-                })
+              if(response.body.data[i].children){
+                for (let j = 0; j < response.body.data[i].children.length; j++) {
+                  this.level2[i].children.push({
+                    value: response.body.data[i].children[j].value,
+                    label: response.body.data[i].children[j].label
+                  })
+                }
               }
 
             }
             for (let i = 0; i < response.body.data.length; i++) {
               this.level3.push({value: response.body.data[i].value, label: response.body.data[i].label})
               this.level3[i]['children'] = []
-              for (let j = 0; j < response.body.data[i].children.length; j++) {
-                this.level3[i].children.push({
-                  value: response.body.data[i].children[j].value,
-                  label: response.body.data[i].children[j].label
-                })
-                this.level3[i].children[j]['children'] = []
-                for (let k = 0; k < response.body.data[i].children[j].children.length; k++) {
-                  this.level3[i].children[j].children.push({
-                    value: response.body.data[i].children[j].children[k].value,
-                    label: response.body.data[i].children[j].children[k].label
+              if(response.body.data[i].children){
+                for (let j = 0; j < response.body.data[i].children.length; j++) {
+                  this.level3[i].children.push({
+                    value: response.body.data[i].children[j].value,
+                    label: response.body.data[i].children[j].label
                   })
+                  this.level3[i].children[j]['children'] = []
+                  if(response.body.data[i].children[j].children){
+                    for (let k = 0; k < response.body.data[i].children[j].children.length; k++) {
+                      this.level3[i].children[j].children.push({
+                        value: response.body.data[i].children[j].children[k].value,
+                        label: response.body.data[i].children[j].children[k].label
+                      })
+                    }
+                  }
                 }
               }
             }
