@@ -11,6 +11,8 @@ import Options from '../views/options.vue'
 import PeopleManage from '../views/people_manage.vue'
 import ChangePwd from '../views/change_pwd.vue'
 import LevelManage from '../views/level_manage.vue'
+import Schedule from '../views/schedule.vue'
+import Classes from '../views/classes.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -26,6 +28,8 @@ export default new Router({
     {path: '/options', component: Options},
     {path: '/change_pwd', component: ChangePwd},
     {path: '/level_manage', component: LevelManage},
+    {path: '/schedule', component: Schedule},
+    {path: '/classes', component: Classes},
   ],
   scrollBehavior (to, from, savedPosition) {
       console.log('abc')

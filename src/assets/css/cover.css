@@ -47,6 +47,10 @@
   overflow: auto;
 }
 
+.el-dialog__body {
+  padding-right: 40px;
+}
+
 .bedInputDialog .el-cascader,.people_m .el-cascader {
   width: 100%;
 }

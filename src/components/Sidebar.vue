@@ -46,6 +46,18 @@
         <span>司乘人员管理</span>
       </div>
     </router-link>
+    <router-link to="/classes" v-for="item in checkMenuList" v-if="item == 10" :key="item">
+      <div class="menu">
+        <img class="icon" src="../assets/img-com/icon-classes.png"/>
+        <span>排班设计</span>
+      </div>
+    </router-link>
+    <router-link to="/schedule" v-for="item in checkMenuList" v-if="item == 11" :key="item">
+      <div class="menu">
+        <img class="icon" src="../assets/img-com/icon-paiban.png"/>
+        <span>今日排班</span>
+      </div>
+    </router-link>
     <router-link to="/level_manage" v-for="item in checkMenuList" v-if="item == 8" :key="item">
       <div class="menu">
         <img class="icon" src="../assets/img-com/icon-level.png"/>
