@@ -32,8 +32,8 @@ module.exports = {
     proxyTable: {
       '/api': {
         // target: 'http://47.104.176.145:9000/mockjsdata/6/',
-        // target: 'http://47.94.196.240/',
-        target: 'http://192.168.1.207/',
+        target: 'http://47.94.196.240/',
+        // target: 'http://192.168.1.207/',
         changeOrigin: true,
       },
     },

@@ -2,7 +2,7 @@
   <div class="report-search">
     <div style="width: 100%;height: 100%;">
       <div class="condition">
-        <div class="bg-blue">排班设计</div>
+        <div class="bg-blue">排班设计  <span style="color: #666;font-size: 12px;margin-left: 20px;">tips:【排班顺序】：系统将自动按照排班顺序轮班，每日更换轮班时间为13点。</span></div>
         <el-button type="primary" class="m-btn" @click="openAdd" size="small">新增排班</el-button>
         <div class="condition0">
           <el-table :data="classes" border style="width: 100%" v-loading="tableLoading1" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading">

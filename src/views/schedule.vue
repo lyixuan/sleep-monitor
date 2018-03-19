@@ -2,11 +2,11 @@
   <div class="report-search">
     <div style="width: 100%;height: 100%;">
       <div class="condition">
-        <div class="bg-blue">今日排班</div>
+        <div class="bg-blue">今日排班 <span style="color: #666;font-size: 12px;margin-left: 20px;">tips：增加、编辑、删除今日排班人员，只会暂时改变今日排班，不会影响排班设计。</span></div>
         <div class="rowbtn">
           <span class="activeClass">今日排班：{{todayClassName}}</span>
-          <!--<span class="activeClass c2" @click="openAdd2">今日排班增员</span>-->
           <span class="activeClass c2" @click="openClassChange">更换今日排班</span>
+          <span class="activeClass c2" @click="openAdd2" v-show="todayClassId">增员</span>
         </div>
         <div class="condition0">
           <el-table :data="peoples" style="width: 100%" border v-loading="tableLoading1" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading">
@@ -278,7 +278,7 @@
       },
       openAdd2(){
         this.actAddForm2 = {
-          class_id: this.activeClassId,
+          class_id: this.todayClassId,
           cust_id: '',
           cust_name: '',
           apart_id: '',
