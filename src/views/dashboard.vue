@@ -2,40 +2,21 @@
   <div class="dashboard">
     <s-navi :nData="navi_text" class="dashboard-navi" v-on:custevt="fatherEvt"></s-navi>
 
-    <!--<el-popover-->
-    <!--ref="popover"-->
-    <!--placement="right"-->
-    <!--width="800"-->
-    <!--trigger="click">-->
-    <!--<el-table :data="alarm">-->
-    <!--<el-table-column min-width="100"  property="cust_id" label="工号"></el-table-column>-->
-    <!--<el-table-column min-width="100"  property="cust_name" label="姓名"></el-table-column>-->
-    <!--<el-table-column min-width="180" show-overflow-tooltip property="sche_begin_time" label="计划入寓时间"></el-table-column>-->
-    <!--<el-table-column min-width="180" show-overflow-tooltip property="sche_end_time" label="计划出寓时间"></el-table-column>-->
-    <!--<el-table-column min-width="100" show-overflow-tooltip property="workshop_des" label="车间"></el-table-column>-->
-    <!--<el-table-column min-width="100" show-overflow-tooltip property="fleet_des" label="车队"></el-table-column>-->
-    <!--<el-table-column min-width="100" show-overflow-tooltip property="group_des" label="指导组"></el-table-column>-->
-    <!--<el-table-column min-width="100" show-overflow-tooltip property="apart_des" label="公寓"></el-table-column>-->
-    <!--<el-table-column min-width="100" show-overflow-tooltip property="room_des" label="房间"></el-table-column>-->
-    <!--<el-table-column min-width="100" show-overflow-tooltip property="bed_des" label="床位"></el-table-column>-->
-    <!--<el-table-column min-width="100" show-overflow-tooltip property="depot_des" label="机务段"></el-table-column>-->
-    <!--</el-table>-->
-    <!--</el-popover>-->
     <el-dialog title="入寓信息" v-model="dialogTableVisible" size="large">
       <el-table :data="alarm">
-        <el-table-column min-width="100" property="cust_id" label="工号"></el-table-column>
-        <el-table-column min-width="100" property="cust_name" label="姓名"></el-table-column>
-        <el-table-column min-width="180" show-overflow-tooltip property="sche_begin_time"
+        <el-table-column min-width="80" property="cust_id" label="工号"></el-table-column>
+        <el-table-column min-width="80" property="cust_name" label="姓名"></el-table-column>
+        <el-table-column min-width="120" show-overflow-tooltip property="sche_begin_time"
                          label="计划入寓时间"></el-table-column>
-        <el-table-column min-width="180" show-overflow-tooltip property="sche_end_time"
+        <el-table-column min-width="120" show-overflow-tooltip property="sche_end_time"
                          label="计划出寓时间"></el-table-column>
-        <el-table-column min-width="100" show-overflow-tooltip property="workshop_des" label="车间"></el-table-column>
-        <el-table-column min-width="100" show-overflow-tooltip property="fleet_des" label="车队"></el-table-column>
-        <el-table-column min-width="100" show-overflow-tooltip property="group_des" label="指导组"></el-table-column>
-        <el-table-column min-width="100" show-overflow-tooltip property="apart_des" label="公寓"></el-table-column>
-        <el-table-column min-width="100" show-overflow-tooltip property="room_des" label="房间"></el-table-column>
-        <el-table-column min-width="100" show-overflow-tooltip property="bed_des" label="床位"></el-table-column>
-        <el-table-column min-width="100" show-overflow-tooltip property="depot_des" label="机务段"></el-table-column>
+        <el-table-column min-width="80" show-overflow-tooltip property="workshop_des" label="车间"></el-table-column>
+        <el-table-column min-width="80" show-overflow-tooltip property="fleet_des" label="车队"></el-table-column>
+        <el-table-column min-width="80" show-overflow-tooltip property="group_des" label="指导组"></el-table-column>
+        <el-table-column min-width="80" show-overflow-tooltip property="apart_des" label="公寓"></el-table-column>
+        <el-table-column min-width="80" show-overflow-tooltip property="room_des" label="房间"></el-table-column>
+        <el-table-column min-width="80" show-overflow-tooltip property="bed_des" label="床位"></el-table-column>
+        <el-table-column min-width="80" show-overflow-tooltip property="depot_des" label="机务段"></el-table-column>
       </el-table>
     </el-dialog>
 
@@ -55,46 +36,35 @@
           </transition-group>
         </div>
 
-        <div class="row2">
-          <div class="l-h h2">详情统计</div>
-          <div class="l-c-2">
-            总共床位: <i>{{total.bed_sum}}</i>张
-          </div>
-          <div class="l-c-2">
-            运行床位: <i>{{total.bed_run}}</i>张
-          </div>
-          <div class="l-c-2">
-            空闲床位: <i>{{total.bed_empty}}</i>张
-          </div>
-          <div class="l-c-2">
-            故障床位: <i>{{total.bed_break}}</i>张
-          </div>
-        </div>
 
-        <div class="row3">
-          <div class="l-h h3">入寓信息</div>
-          <div class="l-c-3">
-            (近24小时)
-          </div>
-          <div class="l-c-3-1" @click="dialogTableVisible = true">
-            详情
-          </div>
-          <table v-loading.body="tb_loading">
-            <tr style="font-weight: 600">
-              <td>时间</td>
-              <td>姓名</td>
-              <td>床位</td>
-            </tr>
-            <tr v-if="alarm.length == 0">
-              <td colspan="3">暂无数据</td>
-            </tr>
-            <tr v-else v-for="item in alarm">
-              <td :title="item.alarm_time">{{(item.sche_begin_time).substr(11,5)}}</td>
-              <td :title="item.cust_name">{{item.cust_name}}</td>
-              <td :title="item.bed_id">{{item.bed_id}}</td>
-            </tr>
-          </table>
+        <div class="row2">
+          <div class="r-h h5">楼层床位信息</div>
+          <s-e-b :pData="item" :sId="item.id" v-for="item in echart_bar" :key="item.id"></s-e-b>
         </div>
+        <!--<div class="row3">-->
+          <!--<div class="l-h h3">入寓信息</div>-->
+          <!--<div class="l-c-3">-->
+            <!--(近24小时)-->
+          <!--</div>-->
+          <!--<div class="l-c-3-1" @click="dialogTableVisible = true">-->
+            <!--详情-->
+          <!--</div>-->
+          <!--<table v-loading.body="tb_loading">-->
+            <!--<tr style="font-weight: 600">-->
+              <!--<td>时间</td>-->
+              <!--<td>姓名</td>-->
+              <!--<td>床位</td>-->
+            <!--</tr>-->
+            <!--<tr v-if="alarm.length == 0">-->
+              <!--<td colspan="3">暂无数据</td>-->
+            <!--</tr>-->
+            <!--<tr v-else v-for="item in alarm">-->
+              <!--<td :title="item.alarm_time">{{(item.sche_begin_time).substr(11,5)}}</td>-->
+              <!--<td :title="item.cust_name">{{item.cust_name}}</td>-->
+              <!--<td :title="item.bed_id">{{item.bed_id}}</td>-->
+            <!--</tr>-->
+          <!--</table>-->
+        <!--</div>-->
       </div>
       <el-row class="center">
         <el-col :span="24">
@@ -149,9 +119,24 @@
           <div class="r-h h4">床位总体信息</div>
           <div id="pie" style="width: 200px;height: 280px;"></div>
         </div>
+        <!--<div class="row2">-->
+          <!--<div class="r-h h5">楼层床位信息</div>-->
+          <!--<s-e-b :pData="item" :sId="item.id" v-for="item in echart_bar" :key="item.id"></s-e-b>-->
+        <!--</div>-->
         <div class="row2">
-          <div class="r-h h5">楼层床位信息</div>
-          <s-e-b :pData="item" :sId="item.id" v-for="item in echart_bar" :key="item.id"></s-e-b>
+        <div class="l-h h2">详情统计</div>
+        <div class="l-c-2">
+        总共床位: <i>{{total.bed_sum}}</i>张
+        </div>
+        <div class="l-c-2">
+        运行床位: <i>{{total.bed_run}}</i>张
+        </div>
+        <div class="l-c-2">
+        空闲床位: <i>{{total.bed_empty}}</i>张
+        </div>
+        <div class="l-c-2">
+        故障床位: <i>{{total.bed_break}}</i>张
+        </div>
         </div>
       </div>
       <!--出入寓信息-->
@@ -627,7 +612,7 @@
     min-width: 650px;
   }
 
-  .left .row1, .left .row2, .left .row3 {
+  .left .row1, .right .row2, .left .row3 {
     background: #fff;
   }
 
@@ -637,7 +622,7 @@
     padding-bottom: 10px;
   }
 
-  .left .row2 {
+  .right .row2 {
     height: 170px;
     margin-top: 5px;
     border-top: 2px solid #FFAD30;
@@ -655,7 +640,7 @@
     padding-left: 2px;
   }
 
-  .right .row1, .right .row2 {
+  .right .row1, .left .row2 {
     background: #fff;
   }
 
@@ -665,7 +650,7 @@
     border-top: 2px solid #88C657;
   }
 
-  .right .row2 {
+  .left .row2 {
     min-height: 415px;
     max-height: 465px;
     overflow-y: auto;
@@ -981,4 +966,5 @@
     display: inline-block;
     width: 200px;
   }
+
 </style>

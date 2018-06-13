@@ -79,3 +79,7 @@
 .right_card .el-checkbox:first-child {
   margin-left: 15px;
 }
+
+.el-dialog--large{
+  width: 70%;
+}
