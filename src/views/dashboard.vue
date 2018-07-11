@@ -169,7 +169,18 @@
                             placeholder="选择时间">
             </el-date-picker>
           </el-form-item>
-
+          <el-form-item label="实际入寓时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="bedInputForm.fact_in_time"
+                            type="datetime" :editable="false" :clearable="false"
+                            placeholder="选择时间">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="实际出寓时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="bedInputForm.fact_out_time"
+                            type="datetime" :editable="false" :clearable="false"
+                            placeholder="选择时间">
+            </el-date-picker>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="bedInputDialog = false">取 消</el-button>
@@ -203,6 +214,18 @@
           </el-form-item>
           <el-form-item label="计划出寓时间" :label-width="formLabelWidth">
             <el-date-picker v-model="bedShowForm.sche_out_time"
+                            type="datetime" :editable="false" :clearable="false"
+                            placeholder="选择时间" :disabled="true">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="实际入寓时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="bedShowForm.fact_in_time"
+                            type="datetime" :editable="false" :clearable="false"
+                            placeholder="选择时间" :disabled="true">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="实际出寓时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="bedShowForm.fact_out_time"
                             type="datetime" :editable="false" :clearable="false"
                             placeholder="选择时间" :disabled="true">
             </el-date-picker>
@@ -278,6 +301,8 @@
           cust_name: "",
           sche_in_time: "",
           sche_out_time: "",
+          fact_in_time: "",
+          fact_out_time: "",
           bed_des: "",
           room_des: "",
           train_des:'',
@@ -292,6 +317,8 @@
           cust_name: "",
           sche_in_time: "",
           sche_out_time: "",
+          fact_in_time: "",
+          fact_out_time: "",
           bed_state_des: "",
           bed_des: "",
           room_des: "",
@@ -485,6 +512,8 @@
               cust_name: "",
               sche_in_time: "",
               sche_out_time: "",
+              fact_in_time: "",
+              fact_out_time: "",
               train_des: "",
               room_id : room.room_id,
               room_des : room.room_des,
@@ -531,6 +560,8 @@
               _this.bedInputForm.cust_name = response.body.data.cust_name;
               _this.bedInputForm.sche_in_time = response.body.data.sche_in_time;
               _this.bedInputForm.sche_out_time = response.body.data.sche_out_time;
+              _this.bedInputForm.fact_in_time = response.body.data.fact_in_time;
+              _this.bedInputForm.fact_out_time = response.body.data.fact_out_time;
               _this.bedInputForm.train_des = response.body.data.train_des;
             } else {
               _this.alertMsg("error", response.body.msg ? response.body.msg : '服务器端错误')
@@ -546,9 +577,15 @@
         if (this.bedInputForm.cust_id && this.bedInputForm.cust_name&& this.bedInputForm.train_des) {
           this.bedInputForm.sche_in_time =new Date(this.bedInputForm.sche_in_time).Format('yyyy-MM-dd hh:mm:ss')
           this.bedInputForm.sche_out_time =new Date(this.bedInputForm.sche_out_time).Format('yyyy-MM-dd hh:mm:ss')
-          if(this.bedInputForm.sche_in_time>=this.bedInputForm.sche_out_time){
+          this.bedInputForm.fact_in_time =new Date(this.bedInputForm.fact_in_time).Format('yyyy-MM-dd hh:mm:ss')
+          this.bedInputForm.fact_out_time =new Date(this.bedInputForm.fact_out_time).Format('yyyy-MM-dd hh:mm:ss')
+          if(this.bedInputForm.sche_in_time>this.bedInputForm.sche_out_time){
             _this.alertMsg("warning", '出寓时间应该晚于入寓时间')
               return
+          }
+          if(this.bedInputForm.fact_in_time>this.bedInputForm.fact_out_time){
+            _this.alertMsg("warning", '出寓时间应该晚于入寓时间')
+            return
           }
           let param= this.bedInputForm;
           this.$resource(P_BASE2 + 'add_in_apart').save({}, param).then((response) => {
@@ -966,5 +1003,6 @@
     display: inline-block;
     width: 200px;
   }
+
 
 </style>

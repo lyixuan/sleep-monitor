@@ -83,3 +83,8 @@
 .el-dialog--large{
   width: 70%;
 }
+
+
+.bedInputDialog .el-form-item, .bedInputDialog .el-form-item {
+  margin-bottom: 15px;
+}
